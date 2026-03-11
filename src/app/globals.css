@@ -1,0 +1,362 @@
+@import "tailwindcss";
+
+/* ============================================
+   FOODIE — Warm Beige + Golden Yellow Theme
+   Marketplace for families & home cooks
+   ============================================ */
+
+:root,
+[data-theme="light"],
+html {
+  --bg-base: #f4efe6;
+  --bg-surface: #ffffff;
+  --bg-surface-alt: #ebe5d9;
+  --bg-subtle: #faf8f4;
+  --bg-nav: rgba(244, 239, 230, 0.92);
+
+  --bg-dark: #121212;
+  --bg-dark-surface: #1e1e1e;
+  --bg-hero-gradient: linear-gradient(180deg, #f4efe6 0%, #ebe5d9 100%);
+
+  --text-heading: #121212;
+  --text-body: #404040;
+  --text-muted: #737373;
+  --text-inverse: #f4efe6;
+  --text-inverse-muted: #b3b3b3;
+
+  --border-light: #e5ded3;
+  --border-medium: #d6ccbc;
+  --border-warm: #ffb800;
+  --border-dark: #121212;
+
+  --brand-primary: #ffb800;
+  --brand-primary-hover: #e0a200;
+  --brand-secondary: #ff8c00;
+  --brand-success: #22c55e;
+
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.12);
+  --shadow-hover: 0 25px 40px -10px rgba(0, 0, 0, 0.15);
+}
+
+html[data-theme="dark"] {
+  --bg-base: #0a0a0a;
+  --bg-surface: #161616;
+  --bg-surface-alt: #1e1e1e;
+  --bg-subtle: #111111;
+  --bg-nav: rgba(10, 10, 10, 0.92);
+  --bg-dark: #000000;
+  --bg-dark-surface: #0e0e0e;
+  --bg-hero-gradient: linear-gradient(160deg, #161616 0%, #0a0a0a 100%);
+
+  --text-heading: #ffffff;
+  --text-body: #d4d4d4;
+  --text-muted: #a3a3a3;
+  --text-inverse: #000000;
+  --text-inverse-muted: #333333;
+
+  --border-light: #1e1e1e;
+  --border-medium: #2a2a2a;
+  --border-warm: #ffb800;
+  --border-dark: #0a0a0a;
+
+  --brand-primary: #ffc436;
+  --brand-primary-hover: #ffb800;
+  --brand-secondary: #ff9d2e;
+  --brand-success: #4ade80;
+
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.8);
+  --shadow-hover: 0 25px 40px -10px rgba(255, 184, 0, 0.15);
+}
+
+/* ─── Reset ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+  -webkit-tap-highlight-color: transparent;
+  background-color: var(--bg-base);
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-body);
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ─── Typography ─── */
+.heading-font {
+  font-family: "Outfit", sans-serif;
+}
+
+/* ─── Grids ─── */
+.auto-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .auto-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.auto-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .auto-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .auto-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.auto-grid-4 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 640px) {
+  .auto-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .auto-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ─── Buttons ─── */
+.btn-primary {
+  background: var(--brand-primary);
+  color: #121212;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 700;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  padding: 12px 28px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: var(--brand-primary-hover);
+  box-shadow: 0 8px 20px rgba(255, 184, 0, 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-icon-rounded {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--brand-primary);
+  color: #121212;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.btn-icon-rounded:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(255, 184, 0, 0.3);
+}
+
+.btn-nav {
+  background: none;
+  border: none;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  color: var(--text-heading);
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.btn-nav:hover {
+  color: var(--brand-primary);
+}
+
+.nav-link {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+  font-weight: 600;
+}
+
+.nav-link:hover {
+  color: var(--brand-primary);
+}
+
+/* ─── Cards ─── */
+.card {
+  background-color: var(--bg-surface);
+  border-radius: 24px;
+  overflow: hidden;
+  border: none;
+  box-shadow: var(--shadow-md);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+.image-card {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background-color: var(--bg-subtle);
+}
+
+.image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image-card:hover img {
+  transform: scale(1.05);
+}
+
+.image-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 55%);
+  pointer-events: none;
+}
+
+/* ─── Scroll-Reveal Animations (Fluidity) ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered children */
+.reveal-stagger>.reveal:nth-child(1) {
+  transition-delay: 0s;
+}
+
+.reveal-stagger>.reveal:nth-child(2) {
+  transition-delay: 0.1s;
+}
+
+.reveal-stagger>.reveal:nth-child(3) {
+  transition-delay: 0.2s;
+}
+
+.reveal-stagger>.reveal:nth-child(4) {
+  transition-delay: 0.3s;
+}
+
+.reveal-stagger>.reveal:nth-child(5) {
+  transition-delay: 0.4s;
+}
+
+/* Parallax float effect */
+@keyframes float-gentle {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.float {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+/* ─── Scroll Snap ─── */
+.snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
+
+/* ─── Parallax Background ─── */
+.parallax-bg {
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@supports (-webkit-touch-callout: none) {
+
+  /* iOS doesn't support background-attachment: fixed, fallback */
+  .parallax-bg {
+    background-attachment: scroll;
+  }
+}
