@@ -7,6 +7,7 @@ import {
     COMPLEXITY_TIME,
     TRAVEL_FEE,
     MAX_GUESTS,
+    MAX_DISH_QUANTITY,
     estimateHours,
     getGroceryFee,
     getGuestTime,
@@ -46,11 +47,14 @@ export default function BookingWidget({
     const [groceryDelivery, setGroceryDelivery] = useState(false);
     const [notes, setNotes] = useState("");
 
+    // Individual dishes can't be booked until the cook has set an hourly rate
+    const canPickDishes = pricePerHour > 0;
+
     // Helpers
     const handleDishQuantity = (id: string, delta: number) => {
         setSelectedDishes(prev => {
             const current = prev[id] || 0;
-            const next = Math.max(0, current + delta);
+            const next = Math.min(MAX_DISH_QUANTITY, Math.max(0, current + delta));
             const newState = { ...prev };
             if (next === 0) {
                 delete newState[id];
@@ -123,6 +127,7 @@ export default function BookingWidget({
         if (!isDateAvailable(date)) return alert("The cook is not available on this day of the week.");
         if (locationType === "client_home" && !address) return alert("Please provide your address.");
         if (orderType === "menu" && !selectedMenuId) return alert("Please select a Set Menu.");
+        if (orderType === "dishes" && !canPickDishes) return alert("This cook hasn't set an hourly rate yet — please choose a Set Menu instead.");
         if (orderType === "dishes" && Object.keys(selectedDishes).length === 0) return alert("Please select at least one dish.");
 
         setIsSubmitting(true);
@@ -274,7 +279,13 @@ export default function BookingWidget({
                         </div>
                     )}
 
-                    {orderType === "dishes" && (
+                    {orderType === "dishes" && !canPickDishes && (
+                        <p style={{ fontSize: "14px", color: "var(--text-muted)", textAlign: "center", padding: "20px 8px" }}>
+                            This cook hasn&apos;t set an hourly rate yet, so individual dishes can&apos;t be booked. Choose a Set Menu instead.
+                        </p>
+                    )}
+
+                    {orderType === "dishes" && canPickDishes && (
                         <>
                             <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxHeight: "240px", overflowY: "auto", paddingRight: "8px" }}>
                                 {dishes.length === 0 ? (

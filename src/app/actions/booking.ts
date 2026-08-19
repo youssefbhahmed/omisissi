@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import {
     TRAVEL_FEE,
     MAX_GUESTS,
+    MAX_DISH_QUANTITY,
     estimateHours,
     getGroceryFee,
     parseSelectedDishes,
@@ -93,8 +94,14 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
         bookedMenuId = menu.id;
         totalPrice = Number(menu.price) + travelFee + groceryFee;
     } else {
-        const selected = dishesStr ? parseSelectedDishes(dishesStr) : null;
-        if (!selected) return { error: "Please select at least one dish." };
+        const trimmedDishes = (dishesStr || "").trim();
+        if (!trimmedDishes || trimmedDishes === "{}") {
+            return { error: "Please select at least one dish." };
+        }
+        const selected = parseSelectedDishes(trimmedDishes);
+        if (!selected) {
+            return { error: `Invalid dish selection — you can order between 1 and ${MAX_DISH_QUANTITY} of each dish.` };
+        }
 
         const dishIds = Object.keys(selected);
         const { data: cookDishes } = await supabase
@@ -217,14 +224,22 @@ export async function updateBookingStatus(formData: FormData): Promise<ActionRes
         return { error: "You do not have permission to update this booking." };
     }
 
-    const { error: updateError } = await supabase
+    // Compare-and-swap on the status we validated against, so a concurrent
+    // change (e.g. the family cancelling while the cook accepts) fails
+    // instead of silently overwriting it.
+    const { data: updatedRows, error: updateError } = await supabase
         .from('bookings')
         .update({ status: newStatus })
-        .eq('id', bookingId);
+        .eq('id', bookingId)
+        .eq('status', booking.status)
+        .select('id');
 
     if (updateError) {
         console.error("Error updating booking status:", updateError);
         return { error: "Failed to update booking. " + updateError.message };
+    }
+    if (!updatedRows || updatedRows.length === 0) {
+        return { error: "This booking was just updated by someone else. Please refresh and try again." };
     }
 
     revalidatePath("/dashboard/cook/bookings");

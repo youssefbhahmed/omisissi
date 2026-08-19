@@ -72,6 +72,6 @@ src/
     booking.ts        # pricing + availability rules (shared client/server)
     types.ts          # DB row shapes used across the app
     supabase/         # Supabase client factories (browser + server)
-  middleware.ts       # Supabase session refresh + /dashboard auth gate
+  proxy.ts            # Supabase session refresh + /dashboard auth gate
 supabase/             # SQL: migrations, legacy scripts, cleanup
 ```

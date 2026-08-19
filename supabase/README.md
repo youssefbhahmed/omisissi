@@ -6,7 +6,7 @@ All SQL for the Foodie app lives here.
 
 | Path | What it is |
 | --- | --- |
-| `legacy/` | The original ad-hoc scripts, kept for reference. They were applied to the existing Supabase project in roughly this order: `phase4_dishes_menus.sql` → `storage_setup.sql` → `phase5_bookings.sql` → `add_guests_column.sql` → `add_dish_complexity.sql` → `fix_address_column.sql` → `fix_latlng_columns.sql` → `complete_geospatial_fix.sql` (+ optional seed scripts). |
+| `legacy/` | The original ad-hoc scripts, kept for reference. They were applied to the existing Supabase project in roughly this order: `phase4_dishes_menus.sql` → `storage_setup.sql` → `phase5_bookings.sql` → `add_guests_column.sql` → `add_dish_complexity.sql` → `fix_address_column.sql` → `fix_latlng_columns.sql` → `complete_geospatial_fix.sql` (+ optional seed scripts). ⚠️ `complete_geospatial_fix.sql` is not schema-only: besides the required `ALTER TABLE`s it also seeds three demo cook accounts with the publicly-committed password `password123`. |
 | `migrations/` | New, ordered migrations. Run everything here against your project. |
 | `cleanup_test_accounts.sql` | **Destructive.** Deletes the demo accounts seeded with the publicly-committed password `password123`. Run it before going to production. |
 
@@ -57,7 +57,13 @@ All SQL for the Foodie app lives here.
    ```
 
 3. Run the `legacy/` scripts in the order listed above (skip the seed and
-   `mock_coordinates` scripts unless you want demo data — and if you run them,
-   run `cleanup_test_accounts.sql` before production).
+   `mock_coordinates` scripts unless you want demo data). Note that
+   `complete_geospatial_fix.sql` — which IS required for its `ALTER TABLE`
+   statements — also seeds three demo cook accounts with the
+   publicly-committed password `password123`. Either run only its
+   `ALTER TABLE` / `DROP FUNCTION` section, or run the whole file and then
+   `cleanup_test_accounts.sql`.
 4. Run every file in `migrations/` in filename order. This is required — it
    contains the RLS policies and the storage-ownership fixes.
+5. Before production: run `cleanup_test_accounts.sql` if any seed script was
+   ever executed against this database.

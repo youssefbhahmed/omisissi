@@ -10,7 +10,7 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
     const router = useRouter();
     const [actioningId, setActioningId] = useState<string | null>(null);
 
-    const handleStatusUpdate = async (bookingId: string, newStatus: "accepted" | "declined") => {
+    const handleStatusUpdate = async (bookingId: string, newStatus: "accepted" | "declined" | "completed") => {
         setActioningId(bookingId);
         try {
             const formData = new FormData();
@@ -183,6 +183,16 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                                             <div style={{ fontWeight: 800, fontSize: "16px", color: "var(--text-heading)" }}>{booking.total_price} TND</div>
                                             <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>Total Payout</div>
                                         </div>
+                                        {booking.status === "accepted" && (
+                                            <button
+                                                onClick={() => handleStatusUpdate(booking.id, "completed")}
+                                                disabled={actioningId === booking.id}
+                                                className="btn-nav"
+                                                style={{ padding: "8px 14px", border: "1px solid var(--border-medium)", borderRadius: "10px", fontSize: "13px", fontWeight: 600, color: "var(--brand-success)", cursor: "pointer" }}
+                                            >
+                                                {actioningId === booking.id ? "..." : "Mark Completed"}
+                                            </button>
+                                        )}
                                         <div style={{
                                             backgroundColor: sColor.bg, color: sColor.color,
                                             padding: "6px 12px", borderRadius: "99px",
