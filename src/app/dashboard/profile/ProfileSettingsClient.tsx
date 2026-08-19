@@ -59,9 +59,32 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                 </p>
             </div>
 
+            {/* Mobile tab bar */}
+            <div className="flex md:hidden" style={{ gap: "8px", marginBottom: "24px", overflowX: "auto", paddingBottom: "4px" }}>
+                {[
+                    { key: "personal", label: isCook ? "Public Profile" : "Personal Info" },
+                    ...(isCook ? [{ key: "availability", label: "Schedule" }] : []),
+                    { key: "security", label: "Security" },
+                ].map((tab) => (
+                    <button
+                        key={tab.key}
+                        onClick={() => setActiveTab(tab.key)}
+                        style={{
+                            padding: "10px 16px", borderRadius: "99px", whiteSpace: "nowrap",
+                            border: `1.5px solid ${activeTab === tab.key ? "var(--brand-primary)" : "var(--border-medium)"}`,
+                            backgroundColor: activeTab === tab.key ? "var(--brand-primary)" : "var(--bg-surface)",
+                            color: activeTab === tab.key ? "white" : "var(--text-body)",
+                            fontSize: "14px", fontWeight: 700, cursor: "pointer",
+                        }}
+                    >
+                        {tab.label}
+                    </button>
+                ))}
+            </div>
+
             <div style={{ display: "flex", gap: "32px", alignItems: "flex-start" }}>
-                {/* Sidebar Nav */}
-                <div style={{ width: "240px", flexShrink: 0, display: "flex", flexDirection: "column", gap: "8px", position: "sticky", top: "100px" }} className="hidden md:flex">
+                {/* Sidebar Nav (desktop) */}
+                <div style={{ width: "240px", flexShrink: 0, flexDirection: "column", gap: "8px", position: "sticky", top: "100px" }} className="hidden md:flex">
                     <button
                         onClick={() => setActiveTab("personal")}
                         style={{ display: "flex", alignItems: "center", gap: "12px", width: "100%", padding: "12px 16px", borderRadius: "12px", backgroundColor: activeTab === "personal" ? "var(--bg-surface)" : "transparent", border: `1px solid ${activeTab === "personal" ? "var(--border-medium)" : "transparent"}`, color: activeTab === "personal" ? "var(--brand-primary)" : "var(--text-muted)", fontWeight: activeTab === "personal" ? 700 : 600, cursor: "pointer", textAlign: "left" }}

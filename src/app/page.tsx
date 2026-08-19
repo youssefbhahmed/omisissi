@@ -151,7 +151,7 @@ export default function LandingPage() {
             <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)" }}>foodie</span>
           </div>
 
-          <nav style={{ display: "flex", gap: "28px", fontSize: "14px" }} className="hidden md:flex">
+          <nav style={{ gap: "28px", fontSize: "14px" }} className="hidden md:flex">
             <a href="#how-it-works" className="nav-link">How it Works</a>
             <a href="#cooks" className="nav-link">Our Cooks</a>
             <a href="#families" className="nav-link">For Families</a>
@@ -161,7 +161,7 @@ export default function LandingPage() {
 
           <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
             <ThemeToggle />
-            <Link href="/login" className="btn-nav" style={{ textDecoration: "none" }}>Log In</Link>
+            <Link href="/login" className="btn-nav hidden sm:block" style={{ textDecoration: "none" }}>Log In</Link>
             <Link href="/signup" className="btn-primary" style={{ padding: "10px 20px", textDecoration: "none" }}>Get Started <ArrowRight size={16} /></Link>
           </div>
         </div>

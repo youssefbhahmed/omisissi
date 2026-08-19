@@ -26,15 +26,15 @@ export default function DashboardNavbar() {
                     <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)" }}>foodie</span>
                 </Link>
 
-                <nav style={{ display: "flex", gap: "32px", height: "100%" }} className="hidden md:flex">
+                <nav style={{ display: "flex", gap: "24px", height: "100%" }}>
                     <NavLink href="/dashboard/discover">
-                        <Search size={18} /> Discover Cooks
+                        <Search size={18} /> <span className="hidden md:inline">Discover Cooks</span>
                     </NavLink>
                     <NavLink href="/dashboard/family">
-                        <Calendar size={18} /> My Bookings
+                        <Calendar size={18} /> <span className="hidden md:inline">My Bookings</span>
                     </NavLink>
                     <NavLink href="/dashboard/profile">
-                        <User size={18} /> Profile
+                        <User size={18} /> <span className="hidden md:inline">Profile</span>
                     </NavLink>
                 </nav>
 

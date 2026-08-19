@@ -21,7 +21,7 @@ export default function LoginPage() {
     return (
         <div style={{ minHeight: "100vh", display: "flex", backgroundColor: "var(--bg-base)" }}>
             {/* Left Panel - Image */}
-            <div style={{ flex: 1, position: "relative", display: "none" }} className="md:block">
+            <div style={{ flex: 1, position: "relative" }} className="hidden md:block">
                 <div style={{ position: "absolute", inset: 0, backgroundImage: "url('/hero-feast.png')", backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.9)" }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(0,0,0,0) 0%, var(--bg-base) 100%)" }} />
             </div>

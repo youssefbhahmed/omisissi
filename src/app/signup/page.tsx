@@ -30,7 +30,7 @@ export default function SignupPage() {
     return (
         <div style={{ minHeight: "100vh", display: "flex", backgroundColor: "var(--bg-base)" }}>
             {/* Left Panel - Image */}
-            <div style={{ flex: 1, position: "relative", display: "none" }} className="md:block">
+            <div style={{ flex: 1, position: "relative" }} className="hidden md:block">
                 <img
                     src={roleType === "family" ? "/family-tunisian.png" : "/cook-tunisian.png"}
                     alt="Signup background"

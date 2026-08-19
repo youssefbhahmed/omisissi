@@ -163,7 +163,7 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                             const familyName = booking.partner?.full_name || "Family";
 
                             return (
-                                <div key={booking.id} className="card flex-col md:flex-row gap-4 items-start md:items-center" style={{ padding: "20px", backgroundColor: "var(--bg-base)", border: "1px solid var(--border-light)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <div key={booking.id} className="card flex flex-col md:flex-row gap-4 items-start md:items-center md:justify-between" style={{ padding: "20px", backgroundColor: "var(--bg-base)", border: "1px solid var(--border-light)" }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                                         <div style={{ width: "48px", height: "48px", borderRadius: "12px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-medium)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)" }}>
                                             <Calendar size={20} />
@@ -179,7 +179,7 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                                     </div>
 
                                     <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                                        <div style={{ textAlign: "right", display: "none" }} className="md:block">
+                                        <div style={{ textAlign: "right" }} className="hidden md:block">
                                             <div style={{ fontWeight: 800, fontSize: "16px", color: "var(--text-heading)" }}>{booking.total_price} TND</div>
                                             <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>Total Payout</div>
                                         </div>

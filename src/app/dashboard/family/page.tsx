@@ -129,7 +129,7 @@ export default async function FamilyBookingsPage() {
                                     </div>
                                 </div>
 
-                                <div style={{ padding: "20px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", backgroundColor: "var(--bg-base)" }} className="md:grid-cols-1">
+                                <div style={{ padding: "20px", gap: "24px", backgroundColor: "var(--bg-base)" }} className="grid grid-cols-1 md:grid-cols-2">
                                     <div>
                                         <h4 style={{ fontSize: "13px", textTransform: "uppercase", fontWeight: 700, color: "var(--text-muted)", margin: "0 0 12px 0", letterSpacing: "0.5px" }}>Order Details</h4>
                                         <div style={{ padding: "16px", borderRadius: "12px", border: "1px solid var(--border-light)", backgroundColor: "var(--bg-surface)" }}>

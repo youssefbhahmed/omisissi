@@ -68,7 +68,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                 </Link>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: "40px" }} className="md:grid-cols-1">
+            <div style={{ gap: "40px" }} className="grid grid-cols-1 lg:grid-cols-[1fr_340px]">
                 {/* Left Column */}
                 <div>
                     <div style={{ position: "relative", height: "320px", borderRadius: "24px", overflow: "hidden", marginBottom: "32px", border: "1px solid var(--border-light)" }}>

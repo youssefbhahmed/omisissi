@@ -51,7 +51,7 @@ export default async function CookDashboard() {
                 </div>
             )}
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 3fr", gap: "32px" }} className="md:grid-cols-1">
+            <div style={{ gap: "32px" }} className="grid grid-cols-1 md:grid-cols-[1fr_3fr]">
                 {/* Quick Stats */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                     <div className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)" }}>

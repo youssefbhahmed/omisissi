@@ -19,18 +19,18 @@ export default function CookDashboardLayout({ children }: { children: React.Reac
                         <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)" }}>foodie <span style={{ color: "var(--brand-primary)", fontSize: "14px" }}>Cook</span></span>
                     </Link>
 
-                    <nav style={{ display: "flex", gap: "32px", height: "100%" }} className="hidden md:flex">
+                    <nav style={{ display: "flex", gap: "20px", height: "100%" }}>
                         <NavLink href="/dashboard/cook/dishes">
-                            <Utensils size={18} /> My Dishes
+                            <Utensils size={18} /> <span className="hidden md:inline">My Dishes</span>
                         </NavLink>
                         <NavLink href="/dashboard/cook/menus">
-                            <Library size={18} /> Set Menus
+                            <Library size={18} /> <span className="hidden md:inline">Set Menus</span>
                         </NavLink>
                         <NavLink href="/dashboard/cook/bookings">
-                            <Clock size={18} /> Bookings
+                            <Clock size={18} /> <span className="hidden md:inline">Bookings</span>
                         </NavLink>
                         <NavLink href="/dashboard/cook/profile">
-                            <Settings size={18} /> Cook Profile
+                            <Settings size={18} /> <span className="hidden md:inline">Cook Profile</span>
                         </NavLink>
                     </nav>
 
