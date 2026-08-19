@@ -8,14 +8,21 @@ import { signup } from "@/app/actions/auth";
 export default function SignupPage() {
     const [roleType, setRoleType] = useState<"family" | "cook">("family");
     const [error, setError] = useState<string | null>(null);
+    const [message, setMessage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
     async function handleSubmit(formData: FormData) {
         setLoading(true);
+        setError(null);
+        setMessage(null);
         formData.append("roleType", roleType);
         const res = await signup(formData);
         if (res?.error) {
             setError(res.error);
+            setLoading(false);
+        } else if (res && "message" in res && res.message) {
+            // Email confirmation is required before the first login
+            setMessage(res.message);
             setLoading(false);
         }
     }
@@ -56,7 +63,7 @@ export default function SignupPage() {
                             }}
                         >
                             <User size={24} color={roleType === "family" ? "var(--brand-primary)" : "var(--text-muted)"} />
-                            <span style={{ fontWeight: 700, color: roleType === "family" ? "var(--brand-primary)" : "var(--text-muted)" }}>I'm a Family</span>
+                            <span style={{ fontWeight: 700, color: roleType === "family" ? "var(--brand-primary)" : "var(--text-muted)" }}>I&apos;m a Family</span>
                         </button>
                         <button
                             onClick={() => setRoleType("cook")}
@@ -76,6 +83,11 @@ export default function SignupPage() {
                         {error && (
                             <div style={{ padding: "12px", backgroundColor: "rgba(220, 38, 38, 0.1)", color: "#dc2626", borderRadius: "8px", fontSize: "14px", fontWeight: 500 }}>
                                 {error}
+                            </div>
+                        )}
+                        {message && (
+                            <div style={{ padding: "12px", backgroundColor: "rgba(34, 197, 94, 0.1)", color: "var(--brand-success)", borderRadius: "8px", fontSize: "14px", fontWeight: 500 }}>
+                                {message}
                             </div>
                         )}
 

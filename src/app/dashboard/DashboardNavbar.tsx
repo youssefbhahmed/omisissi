@@ -6,6 +6,7 @@ import { ChefHat, Search, Calendar, User, LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { NavLink } from "@/components/ui/NavLink";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { logout } from "@/app/actions/auth";
 
 export default function DashboardNavbar() {
     const pathname = usePathname();
@@ -39,7 +40,7 @@ export default function DashboardNavbar() {
 
                 <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                     <ThemeToggle />
-                    <form action="/auth/logout" method="POST">
+                    <form action={logout}>
                         <button type="submit" className="btn-nav" style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--text-muted)" }}>
                             <LogOut size={18} /> <span className="hidden md:inline">Log Out</span>
                         </button>

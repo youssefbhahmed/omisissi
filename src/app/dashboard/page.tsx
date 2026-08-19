@@ -26,7 +26,7 @@ export default async function FamilyDashboard() {
                     <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, margin: "0 0 8px 0", color: "var(--text-heading)" }}>
                         Welcome back, {profile?.full_name?.split(' ')[0] || 'Family'}! 👋
                     </h1>
-                    <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>Here's what's cooking this week.</p>
+                    <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>Here&apos;s what&apos;s cooking this week.</p>
                 </div>
                 <Link href="/dashboard/discover" className="btn-primary" style={{ padding: "12px 24px", textDecoration: "none" }}>
                     <Search size={18} /> Find a Cook
@@ -39,7 +39,7 @@ export default async function FamilyDashboard() {
                 </div>
                 <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>No upcoming bookings</h3>
                 <p style={{ color: "var(--text-muted)", marginBottom: "24px", maxWidth: "400px", margin: "0 auto 24px auto", lineHeight: 1.6 }}>
-                    You don't have any meals scheduled yet. Browse our verified home cooks and book your first dinner!
+                    You don&apos;t have any meals scheduled yet. Browse our verified home cooks and book your first dinner!
                 </p>
                 <Link href="/dashboard/discover" className="btn-primary" style={{ padding: "14px 28px", textDecoration: "none", display: "inline-flex" }}>
                     Browse Cooks Near You <ArrowRight size={18} />

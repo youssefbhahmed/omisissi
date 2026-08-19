@@ -1,28 +1,36 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Plus, Check, Trash2, Library, Utensils, DollarSign } from "lucide-react";
 import { createMenu, deleteMenu } from "@/app/actions/menus";
+import type { Dish, MenuWithDishes } from "@/lib/types";
 
-export default function MenusClient({ initialMenus, availableDishes }: { initialMenus: any[], availableDishes: any[] }) {
-    const [menus, setMenus] = useState(initialMenus);
+export default function MenusClient({ menus, availableDishes }: { menus: MenuWithDishes[], availableDishes: Dish[] }) {
+    const router = useRouter();
     const [isAdding, setIsAdding] = useState(false);
-    
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+
     // Form State
     const [selectedDishIds, setSelectedDishIds] = useState<string[]>([]);
-    
+
     const toggleDish = (id: string) => {
         setSelectedDishIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
     };
 
     const handleDelete = async (id: string) => {
         if (!confirm("Are you sure you want to delete this menu package?")) return;
-        
-        const res = await deleteMenu(id);
-        if (res.success) {
-            setMenus(prev => prev.filter(m => m.id !== id));
-        } else {
-            alert(res.error);
+
+        setDeletingId(id);
+        try {
+            const res = await deleteMenu(id);
+            if (res.error) {
+                alert(res.error);
+            } else {
+                router.refresh();
+            }
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -59,11 +67,12 @@ export default function MenusClient({ initialMenus, availableDishes }: { initial
                             return;
                         }
                         const res = await createMenu(formData, selectedDishIds);
-                        if (res.success) {
-                            setIsAdding(false);
-                            window.location.reload(); 
-                        } else {
+                        if (res.error) {
                             alert(res.error);
+                        } else {
+                            setIsAdding(false);
+                            setSelectedDishIds([]);
+                            router.refresh();
                         }
                     }} style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
                         
@@ -106,7 +115,7 @@ export default function MenusClient({ initialMenus, availableDishes }: { initial
                                 </div>
                             ) : (
                                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "16px" }}>
-                                    {availableDishes.map((dish: any) => {
+                                    {availableDishes.map((dish) => {
                                         const isSelected = selectedDishIds.includes(dish.id);
                                         return (
                                             <div 
@@ -129,7 +138,7 @@ export default function MenusClient({ initialMenus, availableDishes }: { initial
                                                     </div>
                                                 )}
                                                 <div style={{ height: "120px", width: "100%", position: "relative" }}>
-                                                    <img src={dish.image_url} alt={dish.name} style={{ width: "100%", height: "100%", objectFit: "cover", filter: isSelected ? "brightness(0.9)" : "none" }} />
+                                                    <img src={dish.image_url || "/hero-tunisian-food.png"} alt={dish.name} style={{ width: "100%", height: "100%", objectFit: "cover", filter: isSelected ? "brightness(0.9)" : "none" }} />
                                                     {isSelected && <div style={{ position: "absolute", inset: 0, backgroundColor: "var(--brand-primary)", opacity: 0.1 }}></div>}
                                                 </div>
                                                 <div style={{ padding: "12px" }}>
@@ -171,7 +180,7 @@ export default function MenusClient({ initialMenus, availableDishes }: { initial
                                         <div style={{ fontSize: "24px", fontWeight: 800, color: "var(--brand-primary)" }}>
                                             {menu.price} TND
                                         </div>
-                                        <button onClick={() => handleDelete(menu.id)} style={{ padding: "8px", background: "none", border: "none", color: "var(--danger)", cursor: "pointer", borderRadius: "8px", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 600 }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--bg-subtle)"} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}>
+                                        <button onClick={() => handleDelete(menu.id)} disabled={deletingId === menu.id} style={{ padding: "8px", background: "none", border: "none", color: "var(--danger)", cursor: "pointer", borderRadius: "8px", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 600, opacity: deletingId === menu.id ? 0.5 : 1 }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--bg-subtle)"} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}>
                                             <Trash2 size={16} /> Delete
                                         </button>
                                     </div>
@@ -182,10 +191,10 @@ export default function MenusClient({ initialMenus, availableDishes }: { initial
                                         <Utensils size={14} /> Included in this package:
                                     </div>
                                     <div style={{ display: "flex", gap: "12px", overflowX: "auto", paddingBottom: "12px" }}>
-                                        {(menu.dishes || []).map((dish: any) => (
+                                        {(menu.dishes || []).map((dish) => (
                                             <div key={dish.id} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px", backgroundColor: "var(--bg-base)", border: "1px solid var(--border-light)", borderRadius: "10px", flexShrink: 0, width: "220px" }}>
                                                 <div style={{ width: "48px", height: "48px", borderRadius: "8px", overflow: "hidden", flexShrink: 0 }}>
-                                                    <img src={dish.image_url} alt={dish.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                                    <img src={dish.image_url || "/hero-tunisian-food.png"} alt={dish.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                                 </div>
                                                 <div style={{ overflow: "hidden" }}>
                                                     <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", color: "var(--text-muted)" }}>{dish.category}</div>

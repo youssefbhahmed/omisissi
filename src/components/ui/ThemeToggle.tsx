@@ -1,17 +1,19 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
 
-export function ThemeToggle() {
-    const [mounted, setMounted] = useState(false);
-    const [theme, setTheme] = useState<"light" | "dark" | null>(null);
+const emptySubscribe = () => () => {};
 
-    useEffect(() => {
-        setMounted(true);
-        const savedTheme = (document.documentElement.getAttribute("data-theme") as "light" | "dark") || "light";
-        setTheme(savedTheme);
-    }, []);
+export function ThemeToggle() {
+    // false while server-rendering/hydrating, true after — lets us defer the
+    // theme-dependent icon without a setState-in-effect cascade.
+    const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
+    const [theme, setTheme] = useState<"light" | "dark">(() =>
+        typeof document !== "undefined"
+            ? ((document.documentElement.getAttribute("data-theme") as "light" | "dark") || "light")
+            : "light"
+    );
 
     const toggleTheme = () => {
         const newTheme = theme === "light" ? "dark" : "light";

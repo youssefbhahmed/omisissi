@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, Check, Trash2, Search, ArrowRight, Utensils, Image as ImageIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Plus, Check, Trash2, Utensils, Image as ImageIcon } from "lucide-react";
 import { addDish, deleteDish } from "@/app/actions/dishes";
+import type { Dish } from "@/lib/types";
 
-export default function DishesClient({ initialDishes }: { initialDishes: any[] }) {
-    const [dishes, setDishes] = useState(initialDishes);
+export default function DishesClient({ dishes }: { dishes: Dish[] }) {
+    const router = useRouter();
     const [isAdding, setIsAdding] = useState(false);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     // Form State
     const [activeTags, setActiveTags] = useState<string[]>([]);
@@ -23,11 +26,16 @@ export default function DishesClient({ initialDishes }: { initialDishes: any[] }
     const handleDelete = async (id: string) => {
         if (!confirm("Are you sure you want to delete this dish?")) return;
 
-        const res = await deleteDish(id);
-        if (res.success) {
-            setDishes(prev => prev.filter(d => d.id !== id));
-        } else {
-            alert(res.error);
+        setDeletingId(id);
+        try {
+            const res = await deleteDish(id);
+            if (res.error) {
+                alert(res.error);
+            } else {
+                router.refresh();
+            }
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -64,12 +72,12 @@ export default function DishesClient({ initialDishes }: { initialDishes: any[] }
                         formData.append("complexity", complexity.toString());
                         formData.append("dietary_tags", JSON.stringify(activeTags));
                         const res = await addDish(formData);
-                        if (res.success) {
-                            setIsAdding(false);
-                            // Normally we'd rely on revalidatePath, but we can optimistically reload
-                            window.location.reload();
-                        } else {
+                        if (res.error) {
                             alert(res.error);
+                        } else {
+                            setIsAdding(false);
+                            setActiveTags([]);
+                            router.refresh();
                         }
                     }} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
 
@@ -189,7 +197,7 @@ export default function DishesClient({ initialDishes }: { initialDishes: any[] }
                     {dishes.length === 0 ? (
                         <div style={{ padding: "64px 24px", textAlign: "center", backgroundColor: "var(--bg-surface)", borderRadius: "16px", border: "1px dashed var(--border-medium)" }}>
                             <Utensils size={40} color="var(--text-muted)" style={{ margin: "0 auto 16px auto", opacity: 0.5 }} />
-                            <h3 style={{ margin: "0 0 8px 0", fontSize: "18px", fontWeight: 700 }}>You haven't added any dishes yet.</h3>
+                            <h3 style={{ margin: "0 0 8px 0", fontSize: "18px", fontWeight: 700 }}>You haven&apos;t added any dishes yet.</h3>
                             <p style={{ margin: "0 0 24px 0", color: "var(--text-muted)", fontSize: "15px" }}>Build your a la carte menu by adding your specialties.</p>
                             <button onClick={() => setIsAdding(true)} className="btn-primary" style={{ padding: "12px 24px", display: "inline-block" }}>Add Your First Dish</button>
                         </div>
@@ -197,7 +205,7 @@ export default function DishesClient({ initialDishes }: { initialDishes: any[] }
                         dishes.map(dish => (
                             <div key={dish.id} className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", display: "flex", gap: "24px", alignItems: "flex-start" }}>
                                 <div style={{ width: "120px", height: "120px", borderRadius: "12px", overflow: "hidden", flexShrink: 0, backgroundColor: "var(--bg-base)" }}>
-                                    <img src={dish.image_url} alt={dish.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                    <img src={dish.image_url || "/hero-tunisian-food.png"} alt={dish.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                 </div>
                                 <div style={{ flex: 1 }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -212,7 +220,7 @@ export default function DishesClient({ initialDishes }: { initialDishes: any[] }
                                             </div>
                                             <p style={{ margin: "0 0 16px 0", color: "var(--text-body)", fontSize: "15px", lineHeight: 1.5 }}>{dish.description}</p>
                                         </div>
-                                        <button onClick={() => handleDelete(dish.id)} style={{ padding: "8px", background: "none", border: "none", color: "var(--danger)", cursor: "pointer", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--bg-subtle)"} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}>
+                                        <button onClick={() => handleDelete(dish.id)} disabled={deletingId === dish.id} style={{ padding: "8px", background: "none", border: "none", color: "var(--danger)", cursor: "pointer", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", opacity: deletingId === dish.id ? 0.5 : 1 }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--bg-subtle)"} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}>
                                             <Trash2 size={18} />
                                         </button>
                                     </div>

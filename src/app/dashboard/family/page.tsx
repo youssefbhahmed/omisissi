@@ -2,6 +2,8 @@ import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Clock, CheckCircle, XCircle, MapPin, ChefHat, Calendar } from "lucide-react";
+import CancelBookingButton from "./CancelBookingButton";
+import type { BookingListItem } from "@/lib/types";
 
 export default async function FamilyBookingsPage() {
     const supabase = await createClient();
@@ -22,14 +24,16 @@ export default async function FamilyBookingsPage() {
         redirect("/dashboard/profile");
     }
 
-    // Fetch all bookings for this family
+    // Fetch all bookings for this family. The cook's profile is fetched in a
+    // second query because the bookings FKs reference auth.users, which
+    // PostgREST cannot traverse to embed public.profiles.
     const { data: rawBookings } = await supabase
         .from('bookings')
         .select(`
             *,
-            cook_profile:profiles!bookings_cook_id_fkey(full_name, avatar_url),
             menu:menus(name),
             dishes:booking_dishes(
+                dish_id,
                 quantity,
                 dish:dishes(name)
             )
@@ -37,7 +41,16 @@ export default async function FamilyBookingsPage() {
         .eq('family_id', user.id)
         .order('created_at', { ascending: false });
 
-    const bookings = rawBookings || [];
+    const bookings = (rawBookings || []) as BookingListItem[];
+
+    const cookIds = [...new Set(bookings.map((b) => b.cook_id))];
+    const { data: cookProfiles } = cookIds.length > 0
+        ? await supabase.from('profiles').select('id, full_name, avatar_url').in('id', cookIds)
+        : { data: [] };
+
+    for (const booking of bookings) {
+        booking.partner = cookProfiles?.find((p) => p.id === booking.cook_id) ?? null;
+    }
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -76,17 +89,17 @@ export default async function FamilyBookingsPage() {
                     </div>
                     <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, margin: "0 0 12px 0", color: "var(--text-heading)" }}>No bookings yet</h3>
                     <p style={{ margin: "0 0 24px 0", color: "var(--text-muted)", maxWidth: "400px", marginLeft: "auto", marginRight: "auto" }}>
-                        You haven't requested any home-cooked meals yet. Head over to the discover page to find a cook near you.
+                        You haven&apos;t requested any home-cooked meals yet. Head over to the discover page to find a cook near you.
                     </p>
                     <a href="/dashboard/discover" className="btn-primary" style={{ display: "inline-flex", textDecoration: "none" }}>Discover Cooks</a>
                 </div>
             ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                    {bookings.map((booking: any) => {
+                    {bookings.map((booking) => {
                         const sColor = getStatusColor(booking.status);
-                        const cookName = booking.cook_profile?.full_name || "Unknown Cook";
-                        const cookAvatar = booking.cook_profile?.avatar_url || "/hero-tunisian-food-1.png";
-                        
+                        const cookName = booking.partner?.full_name || "Unknown Cook";
+                        const cookAvatar = booking.partner?.avatar_url || "/hero-tunisian-food-1.png";
+
                         return (
                             <div key={booking.id} className="card" style={{ backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", overflow: "hidden" }}>
                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px", borderBottom: "1px solid var(--border-light)" }}>
@@ -97,21 +110,25 @@ export default async function FamilyBookingsPage() {
                                         <div>
                                             <h3 style={{ margin: "0 0 4px 0", fontWeight: 700, fontSize: "18px", color: "var(--text-heading)" }}>{cookName}</h3>
                                             <span style={{ fontSize: "13px", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "4px" }}>
-                                                <Calendar size={14} /> 
-                                                {new Date(booking.scheduled_date).toLocaleDateString()} at {booking.scheduled_time} ({booking.duration_hours}h)
+                                                <Calendar size={14} />
+                                                {new Date(booking.scheduled_date).toLocaleDateString()} at {booking.scheduled_time}
+                                                {Number(booking.duration_hours) > 0 && ` (${booking.duration_hours}h)`}
                                             </span>
                                         </div>
                                     </div>
-                                    <div style={{ 
-                                        backgroundColor: sColor.bg, color: sColor.color, 
-                                        padding: "6px 12px", borderRadius: "99px", 
-                                        fontSize: "13px", fontWeight: 700, textTransform: "uppercase",
-                                        display: "flex", alignItems: "center", gap: "6px"
-                                    }}>
-                                        <StatusIcon status={booking.status} /> {booking.status}
+                                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                                        {booking.status === "pending" && <CancelBookingButton bookingId={booking.id} />}
+                                        <div style={{
+                                            backgroundColor: sColor.bg, color: sColor.color,
+                                            padding: "6px 12px", borderRadius: "99px",
+                                            fontSize: "13px", fontWeight: 700, textTransform: "uppercase",
+                                            display: "flex", alignItems: "center", gap: "6px"
+                                        }}>
+                                            <StatusIcon status={booking.status} /> {booking.status}
+                                        </div>
                                     </div>
                                 </div>
-                                
+
                                 <div style={{ padding: "20px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", backgroundColor: "var(--bg-base)" }} className="md:grid-cols-1">
                                     <div>
                                         <h4 style={{ fontSize: "13px", textTransform: "uppercase", fontWeight: 700, color: "var(--text-muted)", margin: "0 0 12px 0", letterSpacing: "0.5px" }}>Order Details</h4>
@@ -122,8 +139,8 @@ export default async function FamilyBookingsPage() {
                                                 </div>
                                             ) : booking.dishes && booking.dishes.length > 0 ? (
                                                 <ul style={{ margin: 0, paddingLeft: "20px", color: "var(--text-body)", fontSize: "14px" }}>
-                                                    {booking.dishes.map((d: any, i: number) => (
-                                                        <li key={i}>{d.quantity}x {d.dish?.name || "Dish"}</li>
+                                                    {booking.dishes.map((d) => (
+                                                        <li key={d.dish_id}>{d.quantity}x {d.dish?.name || "Dish"}</li>
                                                     ))}
                                                 </ul>
                                             ) : (

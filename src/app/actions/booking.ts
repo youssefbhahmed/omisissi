@@ -2,8 +2,19 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import {
+    TRAVEL_FEE,
+    MAX_GUESTS,
+    estimateHours,
+    getGroceryFee,
+    parseSelectedDishes,
+    weekdayName,
+} from "@/lib/booking";
+import { normalizeStringArray, type BookingStatus } from "@/lib/types";
 
-export async function submitBooking(formData: FormData) {
+type ActionResult = { error: string } | { success: true; bookingId?: string };
+
+export async function submitBooking(formData: FormData): Promise<ActionResult> {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -14,81 +25,150 @@ export async function submitBooking(formData: FormData) {
     const cookId = formData.get("cookId") as string;
     const date = formData.get("date") as string;
     const time = formData.get("time") as string;
-    const duration = parseFloat(formData.get("duration") as string) || 2;
-    const guestsCount = parseInt(formData.get("guests") as string) || 4;
+    const guests = parseInt(formData.get("guests") as string, 10);
     const locationType = formData.get("locationType") as string;
-    const address = formData.get("address") as string;
+    const address = ((formData.get("address") as string) || "").trim();
     const orderType = formData.get("orderType") as string;
     const menuId = formData.get("menuId") as string;
     const dishesStr = formData.get("dishes") as string;
     const groceryDelivery = formData.get("groceryDelivery") === "true";
-    const notes = formData.get("notes") as string;
-    const totalPrice = parseFloat(formData.get("totalPrice") as string) || 0;
+    const notes = ((formData.get("notes") as string) || "").trim().slice(0, 2000);
 
-    // 1. Create the main Booking Record
-    const bookingData: any = {
-        family_id: user.id,
-        cook_id: cookId,
-        scheduled_date: date,
-        scheduled_time: time,
-        duration_hours: duration,
-        guests: guestsCount,
-        location: locationType,
-        total_price: totalPrice,
-        grocery_delivery: groceryDelivery,
-        notes: notes || null,
-        status: "pending"
-    };
-
-    if (locationType === "client_home" && address) {
-        bookingData.address = address;
+    // --- Validate the request shape ---
+    if (!cookId) return { error: "Missing cook." };
+    if (cookId === user.id) return { error: "You cannot book yourself." };
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return { error: "Please select a valid date." };
+    if (date < new Date().toISOString().slice(0, 10)) return { error: "The date must be in the future." };
+    if (!/^\d{2}:\d{2}/.test(time)) return { error: "Please select a valid time." };
+    if (!Number.isInteger(guests) || guests < 1 || guests > MAX_GUESTS) {
+        return { error: `Guests must be between 1 and ${MAX_GUESTS}.` };
+    }
+    if (locationType !== "client_home" && locationType !== "cook_home") {
+        return { error: "Please choose a valid location." };
+    }
+    if (locationType === "client_home" && !address) {
+        return { error: "Please provide your address." };
+    }
+    if (orderType !== "menu" && orderType !== "dishes") {
+        return { error: "Please choose a set menu or pick dishes." };
     }
 
-    if (orderType === "menu" && menuId) {
-        bookingData.menu_id = menuId;
-    }
-
-    const { data: booking, error: bookingError } = await supabase
-        .from('bookings')
-        .insert(bookingData)
-        .select()
+    // --- Load the cook and check availability ---
+    const { data: cookDetails } = await supabase
+        .from('cook_details')
+        .select('price_per_session, available_days')
+        .eq('id', cookId)
         .single();
 
-    if (bookingError) {
-        console.error("Booking error:", bookingError);
-        return { error: "Failed to submit booking request. " + bookingError.message };
+    if (!cookDetails) {
+        return { error: "This cook is not available for bookings." };
     }
 
-    // 2. If it's an A La Carte order, insert the selected dishes into booking_dishes
-    if (orderType === "alacarte" && dishesStr) {
-        try {
-            const dishes = JSON.parse(dishesStr);
-            const dishInserts = Object.keys(dishes).map(dishId => ({
-                booking_id: booking.id,
-                dish_id: dishId,
-                quantity: dishes[dishId]
-            }));
+    const availableDays = normalizeStringArray(cookDetails.available_days);
+    if (availableDays.length === 0) {
+        return { error: "This cook has not set their availability yet." };
+    }
+    if (!availableDays.includes(weekdayName(date))) {
+        return { error: `The cook is not available on ${weekdayName(date)}s.` };
+    }
 
-            if (dishInserts.length > 0) {
-                const { error: dishError } = await supabase
-                    .from('booking_dishes')
-                    .insert(dishInserts);
+    // --- Compute the price server-side (never trust the client's number) ---
+    const travelFee = locationType === "client_home" ? TRAVEL_FEE : 0;
+    const groceryFee = groceryDelivery ? getGroceryFee(guests) : 0;
 
-                if (dishError) {
-                    console.error("Booking dishes error:", dishError);
-                    // Non-fatal, but ideally we'd rollback. For Foodie IV we log it.
-                }
-            }
-        } catch (e) {
-            console.error("Error parsing dishes:", e);
+    let durationHours = 0;
+    let totalPrice = 0;
+    let dishInserts: { booking_id?: string; dish_id: string; quantity: number }[] = [];
+    let bookedMenuId: string | null = null;
+
+    if (orderType === "menu") {
+        if (!menuId) return { error: "Please select a set menu." };
+        const { data: menu } = await supabase
+            .from('menus')
+            .select('id, price')
+            .eq('id', menuId)
+            .eq('cook_id', cookId)
+            .single();
+        if (!menu) return { error: "That menu does not belong to this cook." };
+        bookedMenuId = menu.id;
+        totalPrice = Number(menu.price) + travelFee + groceryFee;
+    } else {
+        const selected = dishesStr ? parseSelectedDishes(dishesStr) : null;
+        if (!selected) return { error: "Please select at least one dish." };
+
+        const dishIds = Object.keys(selected);
+        const { data: cookDishes } = await supabase
+            .from('dishes')
+            .select('id, complexity')
+            .in('id', dishIds)
+            .eq('cook_id', cookId);
+
+        if (!cookDishes || cookDishes.length !== dishIds.length) {
+            return { error: "One or more selected dishes do not belong to this cook." };
+        }
+
+        const pricePerHour = Number(cookDetails.price_per_session);
+        if (!Number.isFinite(pricePerHour) || pricePerHour <= 0) {
+            return { error: "This cook has not set an hourly rate yet." };
+        }
+
+        durationHours = estimateHours(selected, cookDishes, guests);
+        const cookTimeFee = Math.round(pricePerHour * durationHours * 10) / 10;
+        totalPrice = cookTimeFee + travelFee + groceryFee;
+
+        dishInserts = dishIds.map((dishId) => ({
+            dish_id: dishId,
+            quantity: selected[dishId],
+        }));
+    }
+
+    // --- Create the booking ---
+    const { data: booking, error: bookingError } = await supabase
+        .from('bookings')
+        .insert({
+            family_id: user.id,
+            cook_id: cookId,
+            scheduled_date: date,
+            scheduled_time: time,
+            duration_hours: durationHours,
+            guests,
+            location: locationType,
+            address: locationType === "client_home" ? address : null,
+            menu_id: bookedMenuId,
+            total_price: totalPrice,
+            grocery_delivery: groceryDelivery,
+            notes: notes || null,
+            status: "pending",
+        })
+        .select('id')
+        .single();
+
+    if (bookingError || !booking) {
+        console.error("Booking error:", bookingError);
+        return { error: "Failed to submit booking request. " + (bookingError?.message ?? "") };
+    }
+
+    if (dishInserts.length > 0) {
+        const { error: dishError } = await supabase
+            .from('booking_dishes')
+            .insert(dishInserts.map((d) => ({ ...d, booking_id: booking.id })));
+
+        if (dishError) {
+            console.error("Booking dishes error:", dishError);
+            // Roll back so we never store a paid booking with no order lines.
+            await supabase.from('bookings').delete().eq('id', booking.id);
+            return { error: "Failed to save your dish selection. Please try again." };
         }
     }
 
     revalidatePath("/dashboard/family");
+    revalidatePath("/dashboard/cook/bookings");
     return { success: true, bookingId: booking.id };
 }
 
-export async function updateBookingStatus(formData: FormData) {
+const COOK_STATUSES: BookingStatus[] = ["accepted", "declined", "completed"];
+
+export async function updateBookingStatus(formData: FormData): Promise<ActionResult> {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -97,28 +177,46 @@ export async function updateBookingStatus(formData: FormData) {
     }
 
     const bookingId = formData.get("bookingId") as string;
-    const newStatus = formData.get("status") as "accepted" | "declined" | "completed" | "cancelled";
+    const newStatus = formData.get("status") as BookingStatus;
 
     if (!bookingId || !newStatus) {
         return { error: "Missing required fields." };
     }
 
-    // Verify this cook owns this booking before updating
-    const { data: existingBooking, error: fetchError } = await supabase
+    const { data: booking, error: fetchError } = await supabase
         .from('bookings')
-        .select('cook_id')
+        .select('cook_id, family_id, status')
         .eq('id', bookingId)
         .single();
 
-    if (fetchError || !existingBooking) {
+    if (fetchError || !booking) {
         return { error: "Booking not found." };
     }
 
-    if (existingBooking.cook_id !== user.id) {
+    const isCook = booking.cook_id === user.id;
+    const isFamily = booking.family_id === user.id;
+
+    if (isCook) {
+        if (!COOK_STATUSES.includes(newStatus)) {
+            return { error: "Invalid status." };
+        }
+        if ((newStatus === "accepted" || newStatus === "declined") && booking.status !== "pending") {
+            return { error: "This request has already been handled." };
+        }
+        if (newStatus === "completed" && booking.status !== "accepted") {
+            return { error: "Only accepted bookings can be completed." };
+        }
+    } else if (isFamily) {
+        if (newStatus !== "cancelled") {
+            return { error: "You can only cancel your own bookings." };
+        }
+        if (booking.status !== "pending") {
+            return { error: "Only pending requests can be cancelled." };
+        }
+    } else {
         return { error: "You do not have permission to update this booking." };
     }
 
-    // Perform the update
     const { error: updateError } = await supabase
         .from('bookings')
         .update({ status: newStatus })
@@ -130,5 +228,6 @@ export async function updateBookingStatus(formData: FormData) {
     }
 
     revalidatePath("/dashboard/cook/bookings");
+    revalidatePath("/dashboard/family");
     return { success: true };
 }

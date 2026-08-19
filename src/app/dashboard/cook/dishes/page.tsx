@@ -24,5 +24,5 @@ export default async function CookDishesPage() {
         .eq('cook_id', user.id)
         .order('created_at', { ascending: false });
 
-    return <DishesClient initialDishes={dishes || []} />;
+    return <DishesClient dishes={dishes || []} />;
 }

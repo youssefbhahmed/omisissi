@@ -2,6 +2,7 @@ import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import MenusClient from "./MenusClient";
+import type { Dish } from "@/lib/types";
 
 export default async function CookMenusPage() {
     const supabase = await createClient();
@@ -39,8 +40,8 @@ export default async function CookMenusPage() {
     // Flatten the junction nested array into a clean array of dishes for the frontend
     const menus = menusRaw?.map(m => ({
         ...m,
-        dishes: m.menu_dishes.map((md: any) => md.dishes).filter(Boolean)
+        dishes: (m.menu_dishes as { dishes: Dish | null }[]).map((md) => md.dishes).filter((d): d is Dish => Boolean(d))
     })) || [];
 
-    return <MenusClient initialMenus={menus} availableDishes={dishes || []} />;
+    return <MenusClient menus={menus} availableDishes={dishes || []} />;
 }

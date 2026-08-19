@@ -4,10 +4,8 @@ import { ChefHat, Library, Utensils, Settings, LogOut, Clock } from "lucide-reac
 import { logout } from "@/app/actions/auth";
 import { NavLink } from "@/components/ui/NavLink";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { usePathname } from "next/navigation";
 
 export default function CookDashboardLayout({ children }: { children: React.ReactNode }) {
-    const pathname = usePathname();
     return (
         <div style={{ minHeight: "100vh", backgroundColor: "var(--bg-subtle)", display: "flex", flexDirection: "column" }}>
             {/* ─── DASHBOARD NAV ─── */}

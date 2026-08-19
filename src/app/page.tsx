@@ -1,23 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   ChefHat,
   Star,
   ShieldCheck,
-  Calendar,
-  MessageCircle,
   CreditCard,
   ArrowRight,
-  ArrowUpRight,
   MapPin,
-  Users,
   ChevronRight,
   Check,
   Heart,
-  Moon,
-  Sun,
   Search,
   Utensils,
   ShoppingCart,
@@ -27,6 +21,7 @@ import {
   BookOpen,
   Smartphone,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 /* ═══════════════════════════════════════════
    DATA
@@ -140,22 +135,8 @@ function SectionHeader({ badge, title, subtitle, align = "center" }: { badge?: s
    ═══════════════════════════════════════════ */
 
 export default function LandingPage() {
-  const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark" | null>(null);
   const heroRef = useReveal();
-
-  useEffect(() => {
-    setMounted(true);
-    const savedTheme = document.documentElement.getAttribute("data-theme") as "light" | "dark" || "light";
-    setTheme(savedTheme);
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
+  const momsRef = useReveal();
 
   return (
     <div style={{ backgroundColor: "var(--bg-base)", color: "var(--text-body)", overflowX: "hidden" }}>
@@ -179,11 +160,7 @@ export default function LandingPage() {
           </nav>
 
           <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-            {mounted && (
-              <button onClick={toggleTheme} style={{ width: "36px", height: "36px", borderRadius: "50%", border: "1px solid var(--border-medium)", background: "var(--bg-surface)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }} aria-label="Toggle theme">
-                {theme === "light" ? <Moon size={16} /> : <Sun size={16} color="var(--brand-primary)" />}
-              </button>
-            )}
+            <ThemeToggle />
             <Link href="/login" className="btn-nav" style={{ textDecoration: "none" }}>Log In</Link>
             <Link href="/signup" className="btn-primary" style={{ padding: "10px 20px", textDecoration: "none" }}>Get Started <ArrowRight size={16} /></Link>
           </div>
@@ -351,7 +328,7 @@ export default function LandingPage() {
       <section id="for-moms" className="snap-section parallax-bg" style={{ position: "relative", padding: "120px 0", overflow: "hidden", backgroundImage: "url('/hero-feast.png')" }}>
         <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.72)", zIndex: 1 }} />
 
-        <div ref={useReveal()} style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 10 }}>
+        <div ref={momsRef} style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 10 }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", alignItems: "center" }}>
             <div style={{ flex: "1 1 500px" }}>
               <div className="reveal">

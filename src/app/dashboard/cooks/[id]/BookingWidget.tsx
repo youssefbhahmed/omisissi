@@ -3,38 +3,29 @@
 import React, { useState, useMemo } from "react";
 import { Clock, MapPin, ShoppingBag, Utensils, Plus, Minus, Users } from "lucide-react";
 import { submitBooking } from "../../../actions/booking";
+import {
+    COMPLEXITY_TIME,
+    TRAVEL_FEE,
+    MAX_GUESTS,
+    estimateHours,
+    getGroceryFee,
+    getGuestTime,
+    weekdayName,
+} from "@/lib/booking";
+import type { Dish, Menu } from "@/lib/types";
 
-// Complexity → prep time multiplier (hours per dish)
-const COMPLEXITY_TIME: Record<number, number> = {
-    1: 0.4,  // Easy (salads, cold dishes)
-    2: 0.8,  // Medium (standard cooking)
-    3: 1.2,  // Hard (slow-cook, multi-step)
-    4: 1.5,  // Expert (pastries, complex prep)
-};
-
-// Guest time surcharge (hours per guest, by bracket)
-function getGuestTime(guests: number): number {
-    if (guests <= 4) return 0;
-    // 5-9: 0.2h per guest above 4
-    if (guests <= 9) return (guests - 4) * 0.2;
-    // 10-15: previous bracket + 0.3h per guest above 9
-    if (guests <= 15) return (5 * 0.2) + (guests - 9) * 0.3;
-    // 16+: previous brackets + 0.4h per guest above 15
-    return (5 * 0.2) + (6 * 0.3) + (guests - 15) * 0.4;
-}
-
-export default function BookingWidget({ 
-    cookId, 
-    pricePerHour, 
-    availableDays = [], 
-    menus = [], 
-    dishes = [] 
-}: { 
-    cookId: string, 
-    pricePerHour: number, 
+export default function BookingWidget({
+    cookId,
+    pricePerHour,
+    availableDays = [],
+    menus = [],
+    dishes = []
+}: {
+    cookId: string,
+    pricePerHour: number,
     availableDays: string[],
-    menus: any[],
-    dishes: any[]
+    menus: Menu[],
+    dishes: Dish[]
 }) {
     const [step, setStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,12 +36,12 @@ export default function BookingWidget({
     const [guests, setGuests] = useState(4);
     const [locationType, setLocationType] = useState<"client_home" | "cook_home">("client_home");
     const [address, setAddress] = useState("");
-    
+
     // Order State
     const [orderType, setOrderType] = useState<"menu" | "dishes">("menu");
     const [selectedMenuId, setSelectedMenuId] = useState("");
     const [selectedDishes, setSelectedDishes] = useState<Record<string, number>>({});
-    
+
     // Extras State
     const [groceryDelivery, setGroceryDelivery] = useState(false);
     const [notes, setNotes] = useState("");
@@ -70,29 +61,22 @@ export default function BookingWidget({
         });
     };
 
-    const getDayOfWeek = (dateString: string) => {
-        if (!dateString) return "";
-        const dx = new Date(dateString);
-        return dx.toLocaleDateString("en-US", { weekday: "long" });
-    };
-
     const isDateAvailable = (dateString: string) => {
-        const day = getDayOfWeek(dateString);
-        return availableDays.includes(day);
+        return availableDays.includes(weekdayName(dateString));
     };
 
-    // --- PRICING CALCULATIONS ---
+    // --- PRICING (mirrors the server-side computation in submitBooking) ---
 
     // Total dish count
     const totalDishCount = useMemo(() => {
         return Object.values(selectedDishes).reduce((a, b) => a + b, 0);
     }, [selectedDishes]);
 
-    // Dish prep time based on complexity: sum of (quantity × complexity_time) for each selected dish
+    // Dish prep time based on complexity: sum of (quantity × complexity_time)
     const dishPrepTime = useMemo(() => {
         let total = 0;
         for (const [dishId, qty] of Object.entries(selectedDishes)) {
-            const dish = dishes.find((d: any) => d.id === dishId);
+            const dish = dishes.find((d) => d.id === dishId);
             const complexity = dish?.complexity || 2;
             total += qty * (COMPLEXITY_TIME[complexity] || 0.8);
         }
@@ -102,40 +86,37 @@ export default function BookingWidget({
     // Guest time surcharge
     const guestTime = useMemo(() => getGuestTime(guests), [guests]);
 
-    // Total estimated hours (no rounding, min 1h)
-    const estimatedHours = useMemo(() => {
-        const raw = dishPrepTime + guestTime;
-        return Math.max(1, parseFloat(raw.toFixed(1)));
-    }, [dishPrepTime, guestTime]);
+    // Total estimated hours (min 1h)
+    const estimatedHours = useMemo(
+        () => estimateHours(selectedDishes, dishes, guests),
+        [selectedDishes, dishes, guests]
+    );
 
     // Set Menu price (fixed by cook)
-    const getMenuPrice = () => {
+    const menuPrice = useMemo(() => {
         const m = menus.find(x => x.id === selectedMenuId);
-        return m ? m.price : 0;
-    };
+        return m ? Number(m.price) : 0;
+    }, [menus, selectedMenuId]);
 
-    // Travel fee: flat 10 TND if cook comes to family
-    const travelFee = locationType === "client_home" ? 10 : 0;
+    // Travel fee: flat fee if cook comes to family
+    const travelFee = locationType === "client_home" ? TRAVEL_FEE : 0;
 
     // Grocery fee: scales with number of guests
     const groceryFee = useMemo(() => {
         if (!groceryDelivery) return 0;
-        if (guests <= 4) return 40;
-        if (guests <= 8) return 60;
-        if (guests <= 15) return 85;
-        return 110;
+        return getGroceryFee(guests);
     }, [groceryDelivery, guests]);
 
     // Cook time fee (only for "Pick Dishes" mode)
-    const cookTimeFee = parseFloat((pricePerHour * estimatedHours).toFixed(1));
+    const cookTimeFee = Math.round(pricePerHour * estimatedHours * 10) / 10;
 
     // TOTAL
     const totalEstimate = useMemo(() => {
         if (orderType === "menu" && selectedMenuId) {
-            return getMenuPrice() + travelFee + groceryFee;
+            return menuPrice + travelFee + groceryFee;
         }
         return cookTimeFee + travelFee + groceryFee;
-    }, [orderType, selectedMenuId, cookTimeFee, travelFee, groceryFee]);
+    }, [orderType, selectedMenuId, menuPrice, cookTimeFee, travelFee, groceryFee]);
 
     const handleSubmit = async () => {
         if (!date || !time) return alert("Please select a date and time.");
@@ -145,30 +126,34 @@ export default function BookingWidget({
         if (orderType === "dishes" && Object.keys(selectedDishes).length === 0) return alert("Please select at least one dish.");
 
         setIsSubmitting(true);
+        try {
+            const formData = new FormData();
+            formData.append("cookId", cookId);
+            formData.append("date", date);
+            formData.append("time", time);
+            formData.append("guests", guests.toString());
+            formData.append("locationType", locationType);
+            formData.append("address", address);
+            formData.append("orderType", orderType);
+            if (selectedMenuId) formData.append("menuId", selectedMenuId);
+            formData.append("dishes", JSON.stringify(selectedDishes));
+            formData.append("groceryDelivery", groceryDelivery.toString());
+            formData.append("notes", notes);
+            // Note: price and duration are computed server-side from the cook's
+            // stored rates — the widget total is only an estimate for display.
 
-        const formData = new FormData();
-        formData.append("cookId", cookId);
-        formData.append("date", date);
-        formData.append("time", time);
-        formData.append("duration", orderType === "dishes" ? estimatedHours.toString() : "0");
-        formData.append("guests", guests.toString());
-        formData.append("locationType", locationType);
-        formData.append("address", address);
-        formData.append("orderType", orderType);
-        if (selectedMenuId) formData.append("menuId", selectedMenuId);
-        formData.append("dishes", JSON.stringify(selectedDishes));
-        formData.append("groceryDelivery", groceryDelivery.toString());
-        formData.append("notes", notes);
-        formData.append("totalPrice", totalEstimate.toString());
+            const res = await submitBooking(formData);
 
-        const res = await submitBooking(formData);
-        setIsSubmitting(false);
-
-        if (res.error) {
-            alert(res.error);
-        } else {
-            alert("Booking request sent successfully!");
-            window.location.href = "/dashboard/family";
+            if ("error" in res) {
+                alert(res.error);
+            } else {
+                alert("Booking request sent successfully!");
+                window.location.href = "/dashboard/family";
+            }
+        } catch {
+            alert("Something went wrong sending your request. Please try again.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -201,18 +186,18 @@ export default function BookingWidget({
             {step === 1 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "20px", animation: "fadeIn 0.2s" }}>
                     <h3 className="heading-font" style={{ margin: 0, fontSize: "20px", fontWeight: 800 }}>1. Date & Guests</h3>
-                    
+
                     <div>
                         <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Select Date</label>
-                        <input 
-                            type="date" 
-                            min={new Date().toISOString().split('T')[0]} 
-                            value={date} 
+                        <input
+                            type="date"
+                            min={new Date().toISOString().split('T')[0]}
+                            value={date}
                             onChange={e => setDate(e.target.value)}
-                            style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }} 
+                            style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }}
                         />
                         {date && !isDateAvailable(date) && (
-                            <p style={{ color: "var(--danger)", fontSize: "12px", marginTop: "8px" }}>Cook is not available on {getDayOfWeek(date)}s.</p>
+                            <p style={{ color: "var(--danger)", fontSize: "12px", marginTop: "8px" }}>Cook is not available on {weekdayName(date)}s.</p>
                         )}
                         <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "8px" }}>
                             Available: {availableDays.join(', ') || "No days set"}
@@ -222,11 +207,11 @@ export default function BookingWidget({
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                         <div>
                             <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Arrival Time</label>
-                            <input 
-                                type="time" 
-                                value={time} 
+                            <input
+                                type="time"
+                                value={time}
                                 onChange={e => setTime(e.target.value)}
-                                style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }} 
+                                style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }}
                             />
                         </div>
                         <div>
@@ -234,15 +219,15 @@ export default function BookingWidget({
                                 <Users size={16} /> Guests
                             </label>
                             <div style={{ display: "flex", alignItems: "center", gap: "0", border: "1px solid var(--border-medium)", borderRadius: "10px", overflow: "hidden", backgroundColor: "var(--bg-base)" }}>
-                                <button 
-                                    type="button" 
+                                <button
+                                    type="button"
                                     onClick={() => setGuests(Math.max(1, guests - 1))}
                                     style={{ width: "44px", height: "44px", border: "none", backgroundColor: "transparent", cursor: "pointer", color: "var(--text-body)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", fontWeight: 700 }}
                                 >−</button>
                                 <div style={{ flex: 1, textAlign: "center", fontSize: "18px", fontWeight: 800, color: "var(--text-heading)" }}>{guests}</div>
-                                <button 
-                                    type="button" 
-                                    onClick={() => setGuests(Math.min(30, guests + 1))}
+                                <button
+                                    type="button"
+                                    onClick={() => setGuests(Math.min(MAX_GUESTS, guests + 1))}
                                     style={{ width: "44px", height: "44px", border: "none", backgroundColor: "transparent", cursor: "pointer", color: "var(--text-body)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", fontWeight: 700 }}
                                 >+</button>
                             </div>
@@ -252,10 +237,10 @@ export default function BookingWidget({
                         </div>
                     </div>
 
-                    <button 
-                        onClick={() => setStep(2)} 
+                    <button
+                        onClick={() => setStep(2)}
                         disabled={!date || !isDateAvailable(date)}
-                        className="btn-primary" 
+                        className="btn-primary"
                         style={{ width: "100%", padding: "14px", marginTop: "12px", opacity: (!date || !isDateAvailable(date)) ? 0.5 : 1 }}
                     >
                         Next: Choose Food
@@ -267,7 +252,7 @@ export default function BookingWidget({
             {step === 2 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "20px", animation: "fadeIn 0.2s" }}>
                     <h3 className="heading-font" style={{ margin: 0, fontSize: "20px", fontWeight: 800 }}>2. Choose Food</h3>
-                    
+
                     <div style={{ display: "flex", backgroundColor: "var(--bg-base)", padding: "4px", borderRadius: "12px", border: "1px solid var(--border-light)" }}>
                         <button onClick={() => { setOrderType("menu"); setSelectedDishes({}); }} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", backgroundColor: orderType === "menu" ? "var(--bg-surface)" : "transparent", color: orderType === "menu" ? "var(--text-heading)" : "var(--text-muted)", fontWeight: 700, boxShadow: orderType === "menu" ? "0 2px 8px rgba(0,0,0,0.05)" : "none", cursor: "pointer", transition: "all 0.2s" }}>Set Menus</button>
                         <button onClick={() => { setOrderType("dishes"); setSelectedMenuId(""); }} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", backgroundColor: orderType === "dishes" ? "var(--bg-surface)" : "transparent", color: orderType === "dishes" ? "var(--text-heading)" : "var(--text-muted)", fontWeight: 700, boxShadow: orderType === "dishes" ? "0 2px 8px rgba(0,0,0,0.05)" : "none", cursor: "pointer", transition: "all 0.2s" }}>Pick Dishes</button>
@@ -277,7 +262,7 @@ export default function BookingWidget({
                         <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxHeight: "280px", overflowY: "auto", paddingRight: "8px" }}>
                             {menus.length === 0 ? (
                                 <p style={{ fontSize: "14px", color: "var(--text-muted)", textAlign: "center", padding: "20px 0" }}>No set menus available from this cook.</p>
-                            ) : menus.map((m: any) => (
+                            ) : menus.map((m) => (
                                 <div key={m.id} onClick={() => setSelectedMenuId(m.id)} style={{ padding: "16px", borderRadius: "12px", border: `2px solid ${selectedMenuId === m.id ? "var(--brand-primary)" : "var(--border-medium)"}`, backgroundColor: "var(--bg-base)", cursor: "pointer", transition: "all 0.2s" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
                                         <h4 style={{ margin: 0, fontWeight: 700, fontSize: "15px", color: "var(--text-heading)" }}>{m.name}</h4>
@@ -294,7 +279,7 @@ export default function BookingWidget({
                             <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxHeight: "240px", overflowY: "auto", paddingRight: "8px" }}>
                                 {dishes.length === 0 ? (
                                     <p style={{ fontSize: "14px", color: "var(--text-muted)", textAlign: "center", padding: "20px 0" }}>No dishes available from this cook.</p>
-                                ) : dishes.map((d: any) => {
+                                ) : dishes.map((d) => {
                                     const qty = selectedDishes[d.id] || 0;
                                     const isSelected = qty > 0;
                                     return (
@@ -344,22 +329,22 @@ export default function BookingWidget({
 
                     <div>
                         <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Location</label>
-                        <select 
-                            value={locationType} 
+                        <select
+                            value={locationType}
                             onChange={e => setLocationType(e.target.value as "client_home" | "cook_home")}
-                            style={{ width: "100%", padding: "14px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)", marginBottom: "12px" }} 
+                            style={{ width: "100%", padding: "14px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)", marginBottom: "12px" }}
                         >
                             <option value="client_home">My Home (Cook comes to me)</option>
                             <option value="cook_home">Pick Up (Cook&apos;s Home)</option>
                         </select>
-                        
+
                         {locationType === "client_home" && (
-                            <input 
-                                type="text" 
-                                placeholder="Enter your full address" 
+                            <input
+                                type="text"
+                                placeholder="Enter your full address"
                                 value={address}
                                 onChange={e => setAddress(e.target.value)}
-                                style={{ width: "100%", padding: "14px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }} 
+                                style={{ width: "100%", padding: "14px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }}
                             />
                         )}
                     </div>
@@ -369,19 +354,19 @@ export default function BookingWidget({
                         <div style={{ flex: 1 }}>
                             <div style={{ fontWeight: 700, fontSize: "14px" }}>Add Grocery Shopping</div>
                             <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
-                                Cook buys all ingredients ({guests <= 4 ? "40" : guests <= 8 ? "60" : guests <= 15 ? "85" : "110"} TND for {guests} guests)
+                                Cook buys all ingredients ({getGroceryFee(guests)} TND for {guests} guests)
                             </div>
                         </div>
                     </label>
 
                     <div>
                         <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Custom Requests / Dietary Notes</label>
-                        <textarea 
-                            rows={3} 
+                        <textarea
+                            rows={3}
                             placeholder="e.g. Please make the couscous extra spicy, no nuts..."
                             value={notes}
                             onChange={e => setNotes(e.target.value)}
-                            style={{ width: "100%", padding: "14px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)", resize: "vertical" }} 
+                            style={{ width: "100%", padding: "14px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)", resize: "vertical" }}
                         />
                     </div>
 
@@ -394,7 +379,7 @@ export default function BookingWidget({
                                 <span style={{ color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }}>
                                     <Utensils size={14} /> {menus.find(m => m.id === selectedMenuId)?.name || "Set Menu"}
                                 </span>
-                                <span style={{ fontWeight: 600 }}>{getMenuPrice()} TND</span>
+                                <span style={{ fontWeight: 600 }}>{menuPrice} TND</span>
                             </div>
                         ) : (
                             <>

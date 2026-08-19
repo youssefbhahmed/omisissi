@@ -1,24 +1,33 @@
 "use client";
 
 import React, { useState } from "react";
-import { Clock, CheckCircle, XCircle, MapPin, ChefHat, Calendar, MessageSquare, AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Clock, CheckCircle, XCircle, MapPin, Calendar, AlertCircle } from "lucide-react";
 import { updateBookingStatus } from "../../../actions/booking";
+import type { BookingListItem } from "@/lib/types";
 
-export default function BookingsClient({ pendingRequests, otherBookings }: { pendingRequests: any[], otherBookings: any[] }) {
+export default function BookingsClient({ pendingRequests, otherBookings }: { pendingRequests: BookingListItem[], otherBookings: BookingListItem[] }) {
+    const router = useRouter();
     const [actioningId, setActioningId] = useState<string | null>(null);
 
     const handleStatusUpdate = async (bookingId: string, newStatus: "accepted" | "declined") => {
         setActioningId(bookingId);
-        
-        const formData = new FormData();
-        formData.append("bookingId", bookingId);
-        formData.append("status", newStatus);
-        
-        const res = await updateBookingStatus(formData);
-        
-        setActioningId(null);
-        if (res.error) {
-            alert(res.error);
+        try {
+            const formData = new FormData();
+            formData.append("bookingId", bookingId);
+            formData.append("status", newStatus);
+
+            const res = await updateBookingStatus(formData);
+
+            if ("error" in res) {
+                alert(res.error);
+            } else {
+                router.refresh();
+            }
+        } catch {
+            alert("Something went wrong. Please try again.");
+        } finally {
+            setActioningId(null);
         }
     };
 
@@ -43,19 +52,19 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
 
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
-            
+
             {/* 1. Pending Requests */}
             {pendingRequests.length > 0 && (
                 <section>
                     <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, margin: "0 0 16px 0", color: "var(--text-heading)", display: "flex", alignItems: "center", gap: "8px" }}>
                         <AlertCircle color="var(--brand-primary)" /> Action Required ({pendingRequests.length})
                     </h2>
-                    
+
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "24px" }}>
                         {pendingRequests.map(req => {
-                            const familyName = req.family_profile?.full_name || "Family";
-                            const familyAvatar = req.family_profile?.avatar_url || "/hero-tunisian-food-1.png";
-                            
+                            const familyName = req.partner?.full_name || "Family";
+                            const familyAvatar = req.partner?.avatar_url || "/hero-tunisian-food-1.png";
+
                             return (
                                 <div key={req.id} className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "2px solid rgba(235, 171, 33, 0.3)", position: "relative" }}>
                                     <div style={{ position: "absolute", top: "24px", right: "24px", backgroundColor: "rgba(235, 171, 33, 0.1)", color: "var(--brand-primary)", padding: "4px 10px", borderRadius: "99px", fontSize: "11px", fontWeight: 700, textTransform: "uppercase" }}>
@@ -75,7 +84,8 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                                     <div style={{ backgroundColor: "var(--bg-base)", padding: "16px", borderRadius: "12px", border: "1px solid var(--border-light)", marginBottom: "20px" }}>
                                         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px", fontWeight: 600, color: "var(--text-heading)" }}>
                                             <Calendar size={16} color="var(--brand-primary)" />
-                                            {new Date(req.scheduled_date).toLocaleDateString()} &middot; {req.scheduled_time} ({req.duration_hours}h)
+                                            {new Date(req.scheduled_date).toLocaleDateString()} &middot; {req.scheduled_time}
+                                            {Number(req.duration_hours) > 0 && ` (${req.duration_hours}h)`}
                                         </div>
                                         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px", fontSize: "14px", color: "var(--text-body)" }}>
                                             <MapPin size={16} color="var(--text-muted)" />
@@ -86,15 +96,15 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                                                 </span>
                                             )}
                                         </div>
-                                        
+
                                         <div style={{ paddingTop: "12px", borderTop: "1px dashed var(--border-medium)" }}>
                                             <div style={{ fontWeight: 700, fontSize: "14px", color: "var(--text-heading)", marginBottom: "4px" }}>Order:</div>
                                             {req.menu ? (
                                                 <div style={{ fontSize: "14px", color: "var(--text-body)" }}>Set Menu: <span style={{ fontWeight: 600 }}>{req.menu.name}</span></div>
                                             ) : req.dishes && req.dishes.length > 0 ? (
                                                 <ul style={{ margin: 0, paddingLeft: "20px", color: "var(--text-body)", fontSize: "14px" }}>
-                                                    {req.dishes.map((d: any, i: number) => (
-                                                        <li key={i}>{d.quantity}x {d.dish?.name}</li>
+                                                    {req.dishes.map((d) => (
+                                                        <li key={d.dish_id}>{d.quantity}x {d.dish?.name}</li>
                                                     ))}
                                                 </ul>
                                             ) : (
@@ -115,15 +125,15 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                                     </div>
 
                                     <div style={{ display: "flex", gap: "12px" }}>
-                                        <button 
+                                        <button
                                             onClick={() => handleStatusUpdate(req.id, "declined")}
                                             disabled={actioningId === req.id}
-                                            className="btn-nav" 
+                                            className="btn-nav"
                                             style={{ flex: 1, padding: "12px", border: "1px solid var(--border-medium)", color: "var(--danger)" }}
                                         >
                                             Decline
                                         </button>
-                                        <button 
+                                        <button
                                             onClick={() => handleStatusUpdate(req.id, "accepted")}
                                             disabled={actioningId === req.id}
                                             style={{ flex: 1, padding: "12px", backgroundColor: "var(--brand-success)", color: "white", border: "none", borderRadius: "12px", fontWeight: 700, cursor: "pointer" }}
@@ -150,8 +160,8 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                     ) : (
                         otherBookings.map(booking => {
                             const sColor = getStatusColor(booking.status);
-                            const familyName = booking.family_profile?.full_name || "Family";
-                            
+                            const familyName = booking.partner?.full_name || "Family";
+
                             return (
                                 <div key={booking.id} className="card flex-col md:flex-row gap-4 items-start md:items-center" style={{ padding: "20px", backgroundColor: "var(--bg-base)", border: "1px solid var(--border-light)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
@@ -163,19 +173,19 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                                             <div style={{ fontSize: "13px", color: "var(--text-body)", display: "flex", alignItems: "center", gap: "8px" }}>
                                                 {new Date(booking.scheduled_date).toLocaleDateString()} at {booking.scheduled_time}
                                                 <span style={{ color: "var(--border-medium)" }}>•</span>
-                                                {booking.menu ? booking.menu.name : (booking.dishes ? `${booking.dishes.length} dishes` : "Cook Time Only")}
+                                                {booking.menu ? booking.menu.name : (booking.dishes && booking.dishes.length > 0 ? `${booking.dishes.length} dishes` : "Cook Time Only")}
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                                         <div style={{ textAlign: "right", display: "none" }} className="md:block">
                                             <div style={{ fontWeight: 800, fontSize: "16px", color: "var(--text-heading)" }}>{booking.total_price} TND</div>
                                             <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>Total Payout</div>
                                         </div>
-                                        <div style={{ 
-                                            backgroundColor: sColor.bg, color: sColor.color, 
-                                            padding: "6px 12px", borderRadius: "99px", 
+                                        <div style={{
+                                            backgroundColor: sColor.bg, color: sColor.color,
+                                            padding: "6px 12px", borderRadius: "99px",
                                             fontSize: "12px", fontWeight: 700, textTransform: "uppercase",
                                             display: "flex", alignItems: "center", gap: "4px", minWidth: "110px", justifyContent: "center"
                                         }}>

@@ -3,6 +3,21 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { WEEKDAYS } from "@/lib/booking";
+
+function parseStringArray(raw: string | null, maxItems: number, maxLength: number): string[] | null {
+    if (!raw) return [];
+    let parsed: unknown;
+    try {
+        parsed = JSON.parse(raw);
+    } catch {
+        return null;
+    }
+    if (!Array.isArray(parsed)) return null;
+    if (parsed.length > maxItems) return null;
+    if (!parsed.every((v) => typeof v === "string" && v.length <= maxLength)) return null;
+    return parsed as string[];
+}
 
 export async function login(formData: FormData) {
     const supabase = await createClient();
@@ -36,10 +51,17 @@ export async function signup(formData: FormData) {
 
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const fullName = formData.get("fullName") as string;
+    const fullName = ((formData.get("fullName") as string) || "").trim();
     const roleType = formData.get("roleType") as string; // 'family' or 'cook'
 
-    // We pass is_cook in the metadata to trigger the SQL function properly
+    if (!fullName) {
+        return { error: "Please enter your full name." };
+    }
+    if (roleType !== "family" && roleType !== "cook") {
+        return { error: "Please choose whether you are a family or a cook." };
+    }
+
+    // We pass is_cook in the metadata so the signup trigger assigns the role
     const { error, data } = await supabase.auth.signUp({
         email,
         password,
@@ -53,6 +75,17 @@ export async function signup(formData: FormData) {
 
     if (error) {
         return { error: error.message };
+    }
+
+    // With email confirmation enabled, Supabase reports an already-registered
+    // email as a user with no identities instead of an error.
+    if (data.user && data.user.identities && data.user.identities.length === 0) {
+        return { error: "An account with this email already exists. Try logging in instead." };
+    }
+
+    // No session means email confirmation is required before the first login.
+    if (!data.session) {
+        return { success: true, message: "Almost there! Check your inbox to confirm your email, then log in." };
     }
 
     revalidatePath("/", "layout");
@@ -98,25 +131,24 @@ export async function updateFamilyProfile(formData: FormData) {
         return { error: "Not authenticated" };
     }
 
-    const fullName = formData.get("fullName") as string;
-    const address = formData.get("address") as string;
-    const latStr = formData.get("lat") as string;
-    const lngStr = formData.get("lng") as string;
+    const fullName = ((formData.get("fullName") as string) || "").trim();
+    const address = ((formData.get("address") as string) || "").trim();
+    const lat = parseFloat(formData.get("lat") as string);
+    const lng = parseFloat(formData.get("lng") as string);
 
-    const updates: any = {
+    if (!fullName) {
+        return { error: "Please enter your full name." };
+    }
+
+    const updates: { full_name: string; address: string; lat?: number; lng?: number } = {
         full_name: fullName,
-        address: address,
+        address,
     };
 
-    // If we successfully got coordinates from the RegionPicker, save them
-    if (latStr && lngStr) {
-        const lat = parseFloat(latStr);
-        const lng = parseFloat(lngStr);
-        // Save as separate float columns for easy JS access
+    // Coordinates come from the RegionPicker when a region is selected
+    if (Number.isFinite(lat) && Number.isFinite(lng)) {
         updates.lat = lat;
         updates.lng = lng;
-        // Also save as PostGIS point for the distance RPC function
-        updates.location = `POINT(${lng} ${lat})`;
     }
 
     const { error } = await supabase
@@ -141,23 +173,37 @@ export async function updateCookProfile(formData: FormData) {
         return { error: "Not authenticated" };
     }
 
-    const fullName = formData.get("fullName") as string;
-    const address = formData.get("address") as string;
-    const latStr = formData.get("lat") as string;
-    const lngStr = formData.get("lng") as string;
-    const bio = formData.get("bio") as string;
-    const priceStr = formData.get("pricePerHour") as string;
-    const specialtiesStr = formData.get("specialties") as string;
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+    if (profile?.role !== 'cook') {
+        return { error: "Only cooks can edit a cook profile." };
+    }
 
-    // 1. Update Profile (Name & Location)
-    const profileUpdates: any = {
+    const fullName = ((formData.get("fullName") as string) || "").trim();
+    const address = ((formData.get("address") as string) || "").trim();
+    const lat = parseFloat(formData.get("lat") as string);
+    const lng = parseFloat(formData.get("lng") as string);
+    const bio = ((formData.get("bio") as string) || "").trim();
+    const price = parseFloat(formData.get("pricePerHour") as string);
+    const specialties = parseStringArray(formData.get("specialties") as string, 20, 40);
+
+    if (!fullName) {
+        return { error: "Please enter your full name." };
+    }
+    if (specialties === null) {
+        return { error: "Invalid specialties selection." };
+    }
+    if (!Number.isFinite(price) || price < 0) {
+        return { error: "Please enter a valid hourly rate." };
+    }
+
+    const hasCoords = Number.isFinite(lat) && Number.isFinite(lng);
+
+    // 1. Update the shared profile (name & location)
+    const profileUpdates: { full_name: string; address: string; lat?: number; lng?: number } = {
         full_name: fullName,
-        address: address,
+        address,
     };
-
-    if (latStr && lngStr) {
-        const lat = parseFloat(latStr);
-        const lng = parseFloat(lngStr);
+    if (hasCoords) {
         profileUpdates.lat = lat;
         profileUpdates.lng = lng;
     }
@@ -172,23 +218,31 @@ export async function updateCookProfile(formData: FormData) {
         return { error: profileError.message };
     }
 
-    // 2. Update Cook Details (Bio, Price, Specialties)
-    let specialtiesArray: string[] = [];
-    if (specialtiesStr) {
-        specialtiesArray = JSON.parse(specialtiesStr);
-    }
-
-    const detailsUpdates = {
+    // 2. Upsert cook details (bio, price, specialties — and the coordinates
+    //    Discover uses for its radius search).
+    const detailsUpdates: {
+        id: string;
+        bio: string;
+        price_per_session: number;
+        specialties: string[];
+        city: string;
+        lat?: number;
+        lng?: number;
+    } = {
+        id: user.id,
         bio,
-        price_per_session: parseFloat(priceStr) || 0,
-        specialties: specialtiesArray,
-        city: address?.split(',')[0]?.trim() || address // Simple extraction for city
+        price_per_session: price,
+        specialties,
+        city: address.split(',')[0]?.trim() || address,
     };
+    if (hasCoords) {
+        detailsUpdates.lat = lat;
+        detailsUpdates.lng = lng;
+    }
 
     const { error: detailsError } = await supabase
         .from('cook_details')
-        .update(detailsUpdates)
-        .eq('id', user.id);
+        .upsert(detailsUpdates);
 
     if (detailsError) {
         console.error("Error updating cook details:", detailsError);
@@ -196,6 +250,7 @@ export async function updateCookProfile(formData: FormData) {
     }
 
     revalidatePath("/dashboard/profile");
+    revalidatePath("/dashboard/cook/profile");
     return { success: true };
 }
 
@@ -207,16 +262,19 @@ export async function updateCookAvailability(formData: FormData) {
         return { error: "Not authenticated" };
     }
 
-    const availableDaysStr = formData.get("availableDays") as string;
-    let availableDaysArray: string[] = [];
-    if (availableDaysStr) {
-        availableDaysArray = JSON.parse(availableDaysStr);
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+    if (profile?.role !== 'cook') {
+        return { error: "Only cooks can set availability." };
+    }
+
+    const availableDays = parseStringArray(formData.get("availableDays") as string, 7, 12);
+    if (availableDays === null || !availableDays.every((d) => (WEEKDAYS as readonly string[]).includes(d))) {
+        return { error: "Invalid availability selection." };
     }
 
     const { error } = await supabase
         .from('cook_details')
-        .update({ available_days: availableDaysArray })
-        .eq('id', user.id);
+        .upsert({ id: user.id, available_days: availableDays });
 
     if (error) {
         console.error("Error updating availability:", error);
@@ -224,5 +282,6 @@ export async function updateCookAvailability(formData: FormData) {
     }
 
     revalidatePath("/dashboard/profile");
+    revalidatePath("/dashboard/cook/profile");
     return { success: true };
 }

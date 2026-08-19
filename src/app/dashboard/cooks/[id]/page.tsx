@@ -1,21 +1,10 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { MapPin, Star, Check, ArrowLeft, Clock, Calendar, ChefHat } from "lucide-react";
+import { MapPin, Check, ArrowLeft, ChefHat } from "lucide-react";
 import Link from "next/link";
 import BookingWidget from "./BookingWidget";
-
-function Stars({ n = 5 }: { n?: number }) {
-    return (
-        <div style={{ display: "flex", gap: "2px", alignItems: "center" }}>
-            {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} size={16} fill={i < Math.round(n) ? "var(--brand-primary)" : "var(--border-medium)"} color={i < Math.round(n) ? "var(--brand-primary)" : "var(--border-medium)"} />
-            ))}
-        </div>
-    );
-}
-
-const DEFAULT_DISHES = ["/hero-tunisian-feast.png", "/tunisian-mechouia.png", "/family-tunisian-dinner-1.png", "/tunisian-pastries.png"];
+import { normalizeStringArray, type Dish } from "@/lib/types";
 
 export default async function CookDetailsPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -37,13 +26,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
         redirect("/dashboard/discover");
     }
 
-    // Parse specialties safely - Supabase may return it as a string or array
-    let specialties: string[] = [];
-    if (Array.isArray(details.specialties)) {
-        specialties = details.specialties;
-    } else if (typeof details.specialties === 'string') {
-        specialties = details.specialties.replace(/[{}]/g, '').split(',').map((s: string) => s.trim()).filter(Boolean);
-    }
+    const specialties = normalizeStringArray(details.specialties);
 
     // Fetch Cook's Dishes
     const { data: rawDishes } = await supabase
@@ -52,28 +35,19 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
         .eq('cook_id', id)
         .order('created_at', { ascending: false });
 
-    // Fetch Cook's Menus
+    // Fetch Cook's Menus (menu_dishes only links menus to dishes — no quantity column)
     const { data: rawMenus } = await supabase
         .from('menus')
         .select(`
             *,
             menu_dishes(
-                quantity,
                 dishes(*)
             )
         `)
         .eq('cook_id', id)
         .order('created_at', { ascending: false });
 
-    // Ensure available days is parsed
-    let availableDays = [];
-    if (Array.isArray(details.available_days)) {
-        availableDays = details.available_days;
-    } else if (typeof details.available_days === 'string') {
-        try {
-            availableDays = JSON.parse(details.available_days);
-        } catch(e) {}
-    }
+    const availableDays = normalizeStringArray(details.available_days);
 
     const cook = {
         name: profile.full_name || "Cook",
@@ -84,9 +58,6 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
         rating: details.rating_average || 5.0,
         reviews: details.total_reviews || 0,
         pricePerHour: details.price_per_session || 0,
-        dishes: DEFAULT_DISHES,
-        completedBookings: details.total_reviews || 0,
-        joinedYear: new Date(profile.created_at).getFullYear(),
     };
 
     return (
@@ -142,7 +113,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                             </div>
                         ) : (
                             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                                {rawDishes.map((dish: any) => (
+                                {rawDishes.map((dish: Dish) => (
                                     <div key={dish.id} className="card" style={{ display: "flex", gap: "16px", padding: "0", overflow: "hidden", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", transition: "transform 0.2s, box-shadow 0.2s" }}>
                                         <div style={{ width: "140px", minHeight: "140px", flexShrink: 0, position: "relative", overflow: "hidden" }}>
                                             <img
@@ -194,7 +165,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
 
                 {/* Right Column: Booking Widget */}
                 <div>
-                     <BookingWidget 
+                     <BookingWidget
                         cookId={id}
                         pricePerHour={cook.pricePerHour}
                         availableDays={availableDays}

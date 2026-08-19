@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { MapPin, Check, Star } from "lucide-react";
 import Link from "next/link";
+import type { DiscoverCook } from "@/lib/types";
 
 function Stars({ n = 5 }: { n?: number }) {
     return (
@@ -14,26 +15,17 @@ function Stars({ n = 5 }: { n?: number }) {
     );
 }
 
-interface Cook {
-    id: string;
-    full_name: string;
-    avatar_url: string | null;
-    bio: string;
-    city: string;
-    rating_average: number;
-    total_reviews: number;
-    price_per_hour: number;
-    distanceKm: number | null;
-}
+const MIN_RADIUS_KM = 1;
+const MAX_RADIUS_KM = 25;
 
-export default function CookGrid({ cooks, hasLocation }: { cooks: Cook[]; hasLocation: boolean }) {
-    const [maxDistance, setMaxDistance] = useState(8);
+export default function CookGrid({ cooks, hasLocation }: { cooks: DiscoverCook[]; hasLocation: boolean }) {
+    const [maxDistance, setMaxDistance] = useState(10);
 
     const filtered = hasLocation
         ? cooks.filter((c) => c.distanceKm != null && c.distanceKm <= maxDistance)
         : cooks;
 
-    const sliderPercent = ((maxDistance - 1) / (8 - 1)) * 100;
+    const sliderPercent = ((maxDistance - MIN_RADIUS_KM) / (MAX_RADIUS_KM - MIN_RADIUS_KM)) * 100;
 
     return (
         <>
@@ -87,8 +79,8 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: Cook[]; hasLoc
                         }} />
                         <input
                             type="range"
-                            min={1}
-                            max={8}
+                            min={MIN_RADIUS_KM}
+                            max={MAX_RADIUS_KM}
                             step={0.5}
                             value={maxDistance}
                             onChange={(e) => setMaxDistance(Number(e.target.value))}
@@ -105,8 +97,8 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: Cook[]; hasLoc
                         />
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px", fontSize: "11px", color: "var(--text-muted)", fontWeight: 600 }}>
-                        <span>1 km</span>
-                        <span>8 km</span>
+                        <span>{MIN_RADIUS_KM} km</span>
+                        <span>{MAX_RADIUS_KM} km</span>
                     </div>
                     <style>{`
                         input[type="range"]::-webkit-slider-thumb {
@@ -146,7 +138,7 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: Cook[]; hasLoc
                 {filtered.length > 0 ? filtered.map((cook) => (
                     <Link href={`/dashboard/cooks/${cook.id}`} key={cook.id} className="card" style={{ cursor: "pointer", textDecoration: "none", color: "inherit", display: "block" }}>
                         <div style={{ position: "relative", height: "240px", overflow: "hidden" }}>
-                            <img src={cook.avatar_url || "/hero-tunisian-food-1.png"} alt={cook.full_name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }} />
+                            <img src={cook.avatar_url || "/hero-tunisian-food-1.png"} alt={cook.full_name || "Cook"} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }} />
                             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%)", pointerEvents: "none" }} />
                             <div style={{ position: "absolute", top: "12px", right: "12px", backgroundColor: "var(--brand-success)", color: "white", padding: "4px 10px", borderRadius: "99px", fontSize: "11px", fontWeight: 700, display: "flex", alignItems: "center", gap: "4px" }}>
                                 <Check size={14} strokeWidth={3} /> Verified
@@ -179,7 +171,9 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: Cook[]; hasLoc
                         <MapPin size={48} style={{ opacity: 0.2, margin: "0 auto 16px auto" }} />
                         <p style={{ fontSize: "18px", fontWeight: 600 }}>
                             {hasLocation
-                                ? `No cooks found within ${maxDistance} km. Try increasing the slider.`
+                                ? maxDistance < MAX_RADIUS_KM
+                                    ? `No cooks found within ${maxDistance} km. Try increasing the search radius.`
+                                    : `No cooks found within ${MAX_RADIUS_KM} km of your region.`
                                 : "Set your region in your profile to find cooks near you."}
                         </p>
                     </div>

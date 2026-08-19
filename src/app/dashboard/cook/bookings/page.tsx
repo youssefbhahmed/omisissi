@@ -1,8 +1,9 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { Clock, CheckCircle, XCircle, MapPin, ChefHat, Calendar, MessageSquare, AlertCircle } from "lucide-react";
+import { Calendar } from "lucide-react";
 import BookingsClient from "./BookingsClient";
+import type { BookingListItem } from "@/lib/types";
 
 export default async function CookBookingsPage() {
     const supabase = await createClient();
@@ -23,14 +24,16 @@ export default async function CookBookingsPage() {
         redirect("/dashboard/profile");
     }
 
-    // Fetch all bookings requests for this cook
+    // Fetch all booking requests for this cook. The family's profile is
+    // fetched in a second query because the bookings FKs reference
+    // auth.users, which PostgREST cannot traverse to embed public.profiles.
     const { data: rawBookings } = await supabase
         .from('bookings')
         .select(`
             *,
-            family_profile:profiles!bookings_family_id_fkey(full_name, avatar_url),
             menu:menus(name),
             dishes:booking_dishes(
+                dish_id,
                 quantity,
                 dish:dishes(name)
             )
@@ -38,10 +41,20 @@ export default async function CookBookingsPage() {
         .eq('cook_id', user.id)
         .order('created_at', { ascending: false });
 
+    const bookings = (rawBookings || []) as BookingListItem[];
+
+    const familyIds = [...new Set(bookings.map((b) => b.family_id))];
+    const { data: familyProfiles } = familyIds.length > 0
+        ? await supabase.from('profiles').select('id, full_name, avatar_url').in('id', familyIds)
+        : { data: [] };
+
+    for (const booking of bookings) {
+        booking.partner = familyProfiles?.find((p) => p.id === booking.family_id) ?? null;
+    }
+
     // Separate into pending vs active/past
-    const bookings = rawBookings || [];
-    const pendingRequests = bookings.filter((b: any) => b.status === "pending");
-    const otherBookings = bookings.filter((b: any) => b.status !== "pending");
+    const pendingRequests = bookings.filter((b) => b.status === "pending");
+    const otherBookings = bookings.filter((b) => b.status !== "pending");
 
     return (
         <div>
@@ -67,9 +80,9 @@ export default async function CookBookingsPage() {
                     </p>
                 </div>
             ) : (
-                <BookingsClient 
-                    pendingRequests={pendingRequests} 
-                    otherBookings={otherBookings} 
+                <BookingsClient
+                    pendingRequests={pendingRequests}
+                    otherBookings={otherBookings}
                 />
             )}
         </div>

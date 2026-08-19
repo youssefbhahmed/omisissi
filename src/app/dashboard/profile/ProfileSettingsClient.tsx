@@ -1,22 +1,41 @@
 "use client";
 
 import React, { useState } from "react";
-import { User, ShieldCheck, MapPin, DollarSign, ChefHat, Check, Calendar } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { User, ShieldCheck, DollarSign, Check, Calendar } from "lucide-react";
 import RegionPicker from "@/components/RegionPicker";
 import { updateFamilyProfile, updatePassword, updateCookProfile, updateCookAvailability } from "@/app/actions/auth";
+import { normalizeStringArray, type CookDetails, type Profile } from "@/lib/types";
 
-export default function ProfileSettingsClient({ profile, email, isCook, cookDetails }: { profile: any, email: string, isCook: boolean, cookDetails: any }) {
+type SaveStatus = { type: "success" | "error"; text: string } | null;
+
+function StatusBanner({ status }: { status: SaveStatus }) {
+    if (!status) return null;
+    const isError = status.type === "error";
+    return (
+        <div style={{
+            padding: "12px 16px",
+            borderRadius: "10px",
+            marginBottom: "20px",
+            fontSize: "14px",
+            fontWeight: 600,
+            backgroundColor: isError ? "rgba(220, 38, 38, 0.08)" : "rgba(34, 197, 94, 0.08)",
+            color: isError ? "#dc2626" : "var(--brand-success)",
+            border: `1px solid ${isError ? "rgba(220, 38, 38, 0.2)" : "rgba(34, 197, 94, 0.2)"}`,
+        }}>
+            {status.text}
+        </div>
+    );
+}
+
+export default function ProfileSettingsClient({ profile, email, isCook, cookDetails }: { profile: Profile | null, email: string, isCook: boolean, cookDetails: CookDetails | null }) {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState("personal");
-    const [specialties, setSpecialties] = useState<string[]>(cookDetails?.specialties || []);
-    const [availableDays, setAvailableDays] = useState<string[]>(cookDetails?.available_days || []);
-    
-    // Parse specialties if they came back as a string from DB
-    React.useEffect(() => {
-        if (typeof cookDetails?.specialties === 'string') {
-            const parsed = cookDetails.specialties.replace(/[{}]/g, '').split(',').map((s: string) => s.trim()).filter(Boolean);
-            setSpecialties(parsed);
-        }
-    }, [cookDetails]);
+    const [specialties, setSpecialties] = useState<string[]>(() => normalizeStringArray(cookDetails?.specialties));
+    const [availableDays, setAvailableDays] = useState<string[]>(() => normalizeStringArray(cookDetails?.available_days));
+    const [profileStatus, setProfileStatus] = useState<SaveStatus>(null);
+    const [scheduleStatus, setScheduleStatus] = useState<SaveStatus>(null);
+    const [passwordStatus, setPasswordStatus] = useState<SaveStatus>(null);
 
     const availableSpecialties = ["Traditional", "Vegan", "Pastries", "Healthy", "Comfort Food", "Seafood", "Couscous", "Baking"];
 
@@ -43,21 +62,21 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
             <div style={{ display: "flex", gap: "32px", alignItems: "flex-start" }}>
                 {/* Sidebar Nav */}
                 <div style={{ width: "240px", flexShrink: 0, display: "flex", flexDirection: "column", gap: "8px", position: "sticky", top: "100px" }} className="hidden md:flex">
-                    <button 
+                    <button
                         onClick={() => setActiveTab("personal")}
                         style={{ display: "flex", alignItems: "center", gap: "12px", width: "100%", padding: "12px 16px", borderRadius: "12px", backgroundColor: activeTab === "personal" ? "var(--bg-surface)" : "transparent", border: `1px solid ${activeTab === "personal" ? "var(--border-medium)" : "transparent"}`, color: activeTab === "personal" ? "var(--brand-primary)" : "var(--text-muted)", fontWeight: activeTab === "personal" ? 700 : 600, cursor: "pointer", textAlign: "left" }}
                     >
                         <User size={18} /> {isCook ? "Public Profile" : "Personal Info"}
                     </button>
                     {isCook && (
-                        <button 
+                        <button
                             onClick={() => setActiveTab("availability")}
                             style={{ display: "flex", alignItems: "center", gap: "12px", width: "100%", padding: "12px 16px", borderRadius: "12px", backgroundColor: activeTab === "availability" ? "var(--bg-surface)" : "transparent", border: `1px solid ${activeTab === "availability" ? "var(--border-medium)" : "transparent"}`, color: activeTab === "availability" ? "var(--brand-primary)" : "var(--text-muted)", fontWeight: activeTab === "availability" ? 700 : 600, cursor: "pointer", textAlign: "left" }}
                         >
                             <Calendar size={18} /> Schedule
                         </button>
                     )}
-                    <button 
+                    <button
                         onClick={() => setActiveTab("security")}
                         style={{ display: "flex", alignItems: "center", gap: "12px", width: "100%", padding: "12px 16px", borderRadius: "12px", backgroundColor: activeTab === "security" ? "var(--bg-surface)" : "transparent", border: `1px solid ${activeTab === "security" ? "var(--border-medium)" : "transparent"}`, color: activeTab === "security" ? "var(--brand-primary)" : "var(--text-muted)", fontWeight: activeTab === "security" ? 700 : 600, cursor: "pointer", textAlign: "left" }}
                     >
@@ -67,25 +86,35 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
 
                 {/* Main Form Area */}
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "32px" }}>
-                    
+
                     {activeTab === "personal" && (
                         <div className="card" style={{ padding: "32px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", animation: "fadeIn 0.2s ease" }}>
                             <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, margin: "0 0 24px 0", color: "var(--text-heading)" }}>
                                 {isCook ? "Cook Details" : "Personal Information"}
                             </h2>
 
+                            <StatusBanner status={profileStatus} />
+
                             <form action={async (formData) => {
+                                setProfileStatus(null);
+                                let res;
                                 if (isCook) {
                                     formData.append("specialties", JSON.stringify(specialties));
-                                    await updateCookProfile(formData);
+                                    res = await updateCookProfile(formData);
                                 } else {
-                                    await updateFamilyProfile(formData);
+                                    res = await updateFamilyProfile(formData);
+                                }
+                                if (res?.error) {
+                                    setProfileStatus({ type: "error", text: res.error });
+                                } else {
+                                    setProfileStatus({ type: "success", text: "Profile saved." });
+                                    router.refresh();
                                 }
                             }} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                                
+
                                 <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "8px" }}>
                                     <div style={{ width: "80px", height: "80px", borderRadius: "50%", backgroundColor: "var(--bg-base)", border: "2px dashed var(--border-medium)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", overflow: "hidden" }}>
-                                        {profile?.avatar_url ? <img src={profile.avatar_url} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={32} />}
+                                        {profile?.avatar_url ? <img src={profile.avatar_url} alt="Your profile photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={32} />}
                                     </div>
                                     <button type="button" className="btn-nav" style={{ padding: "8px 16px", fontSize: "14px" }}>Upload Photo</button>
                                 </div>
@@ -93,7 +122,7 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
                                     <div>
                                         <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>Full Name</label>
-                                        <input name="fullName" type="text" defaultValue={profile?.full_name} placeholder="e.g. Fatma Ben Ali" style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }} />
+                                        <input name="fullName" type="text" required defaultValue={profile?.full_name ?? ""} placeholder="e.g. Fatma Ben Ali" style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }} />
                                     </div>
                                     <div>
                                         <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>Email Address</label>
@@ -103,7 +132,7 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
 
                                 <div>
                                     <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>{isCook ? "Cooking Location / City" : "Your Home Region"}</label>
-                                    <RegionPicker defaultValue={profile?.address} />
+                                    <RegionPicker defaultValue={profile?.address ?? undefined} />
                                 </div>
 
                                 {/* Cook Specific Fields */}
@@ -112,14 +141,14 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                         <div style={{ padding: "24px 0", borderTop: "1px solid var(--border-light)", marginTop: "8px" }}>
                                             <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>About You (Bio)</label>
                                             <p style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "12px", marginTop: 0 }}>Tell families about your cooking experience, background, and what makes your dishes special.</p>
-                                            <textarea name="bio" defaultValue={cookDetails?.bio} rows={4} placeholder="I have 10 years of experience cooking traditional Tunisian family dinners..." style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)", resize: "vertical" }} />
+                                            <textarea name="bio" defaultValue={cookDetails?.bio ?? ""} rows={4} placeholder="I have 10 years of experience cooking traditional Tunisian family dinners..." style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)", resize: "vertical" }} />
                                         </div>
 
                                         <div>
                                             <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>Price Per Hour (TND)</label>
                                             <div style={{ position: "relative", maxWidth: "200px" }}>
                                                 <DollarSign size={18} color="var(--text-muted)" style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)" }} />
-                                                <input name="pricePerHour" type="number" defaultValue={cookDetails?.price_per_session} placeholder="45" style={{ width: "100%", padding: "14px 14px 14px 40px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }} />
+                                                <input name="pricePerHour" type="number" min="0" step="0.5" required defaultValue={cookDetails?.price_per_session ?? ""} placeholder="45" style={{ width: "100%", padding: "14px 14px 14px 40px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }} />
                                             </div>
                                         </div>
 
@@ -129,15 +158,15 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                                 {availableSpecialties.map(s => {
                                                     const isActive = specialties.includes(s);
                                                     return (
-                                                        <button 
-                                                            key={s} 
+                                                        <button
+                                                            key={s}
                                                             type="button"
                                                             onClick={() => toggleSpecialty(s)}
-                                                            style={{ 
-                                                                padding: "10px 18px", borderRadius: "99px", 
-                                                                border: `1.5px solid ${isActive ? "var(--brand-primary)" : "var(--border-medium)"}`, 
-                                                                backgroundColor: isActive ? "var(--brand-primary)" : "var(--bg-base)", 
-                                                                color: isActive ? "white" : "var(--text-body)", 
+                                                            style={{
+                                                                padding: "10px 18px", borderRadius: "99px",
+                                                                border: `1.5px solid ${isActive ? "var(--brand-primary)" : "var(--border-medium)"}`,
+                                                                backgroundColor: isActive ? "var(--brand-primary)" : "var(--bg-base)",
+                                                                color: isActive ? "white" : "var(--text-body)",
                                                                 fontSize: "14px", fontWeight: isActive ? 700 : 600,
                                                                 cursor: "pointer", display: "flex", alignItems: "center", gap: "6px",
                                                                 transition: "all 0.2s ease"
@@ -153,7 +182,7 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                 )}
 
                                 <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end", paddingTop: "24px", borderTop: "1px solid var(--border-light)" }}>
-                                    <button type="submit" className="btn-primary" style={{ padding: "14px 32px", fontSize: "15px" }}>Save Profile</button>
+                                    <button type="submit" className="btn-primary" style={{ padding: "14px 32px", fontSize: "15px" }}>{isCook ? "Save Profile" : "Save Changes"}</button>
                                 </div>
                             </form>
                         </div>
@@ -168,21 +197,30 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                 Select the days of the week you are generally available to accept bookings. Families will only be able to request these days.
                             </p>
 
+                            <StatusBanner status={scheduleStatus} />
+
                             <form action={async (formData) => {
+                                setScheduleStatus(null);
                                 formData.append("availableDays", JSON.stringify(availableDays));
-                                await updateCookAvailability(formData);
+                                const res = await updateCookAvailability(formData);
+                                if (res?.error) {
+                                    setScheduleStatus({ type: "error", text: res.error });
+                                } else {
+                                    setScheduleStatus({ type: "success", text: "Schedule saved." });
+                                    router.refresh();
+                                }
                             }} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                                
+
                                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                                     {DAYS_OF_WEEK.map(day => {
                                         const isAvailable = availableDays.includes(day);
                                         return (
-                                            <div 
+                                            <div
                                                 key={day}
                                                 onClick={() => toggleDay(day)}
-                                                style={{ 
+                                                style={{
                                                     display: "flex", alignItems: "center", justifyContent: "space-between",
-                                                    padding: "16px 20px", borderRadius: "12px", 
+                                                    padding: "16px 20px", borderRadius: "12px",
                                                     border: `1.5px solid ${isAvailable ? "var(--brand-primary)" : "var(--border-medium)"}`,
                                                     backgroundColor: isAvailable ? "rgba(235, 171, 33, 0.05)" : "var(--bg-base)",
                                                     cursor: "pointer", transition: "all 0.2s ease"
@@ -210,8 +248,16 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                         <div className="card" style={{ padding: "32px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", animation: "fadeIn 0.2s ease" }}>
                             <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, margin: "0 0 24px 0", color: "var(--text-heading)" }}>Security & Password</h2>
 
+                            <StatusBanner status={passwordStatus} />
+
                             <form action={async (formData) => {
-                                await updatePassword(formData);
+                                setPasswordStatus(null);
+                                const res = await updatePassword(formData);
+                                if (res?.error) {
+                                    setPasswordStatus({ type: "error", text: res.error });
+                                } else {
+                                    setPasswordStatus({ type: "success", text: "Password updated." });
+                                }
                             }} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
                                 <div style={{ maxWidth: "400px" }}>
                                     <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>New Password</label>

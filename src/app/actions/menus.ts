@@ -11,13 +11,29 @@ export async function createMenu(formData: FormData, selectedDishIds: string[]) 
         return { error: "Not authenticated" };
     }
 
-    const name = formData.get("name") as string;
-    const description = formData.get("description") as string;
-    const priceStr = formData.get("price") as string;
-    const price = parseFloat(priceStr);
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+    if (profile?.role !== 'cook') {
+        return { error: "Only cooks can create menus." };
+    }
 
-    if (!name || isNaN(price) || selectedDishIds.length === 0) {
+    const name = ((formData.get("name") as string) || "").trim().slice(0, 120);
+    const description = ((formData.get("description") as string) || "").trim().slice(0, 1000);
+    const price = parseFloat(formData.get("price") as string);
+    const dishIds = [...new Set(selectedDishIds)];
+
+    if (!name || !Number.isFinite(price) || price < 0 || dishIds.length === 0) {
         return { error: "Name, price, and at least one dish are required." };
+    }
+
+    // Every dish in the package must belong to this cook
+    const { data: ownedDishes } = await supabase
+        .from('dishes')
+        .select('id')
+        .in('id', dishIds)
+        .eq('cook_id', user.id);
+
+    if (!ownedDishes || ownedDishes.length !== dishIds.length) {
+        return { error: "You can only add your own dishes to a menu." };
     }
 
     // 1. Insert the Menu
@@ -38,7 +54,7 @@ export async function createMenu(formData: FormData, selectedDishIds: string[]) 
     }
 
     // 2. Insert into the junction table for each selected dish
-    const menuDishesData = selectedDishIds.map(dishId => ({
+    const menuDishesData = dishIds.map(dishId => ({
         menu_id: newMenu.id,
         dish_id: dishId
     }));
