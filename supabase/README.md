@@ -2,6 +2,17 @@
 
 All SQL for the Foodie app lives here.
 
+## Fresh project? Use one file
+
+For a brand-new Supabase project, paste **`setup_fresh_project.sql`** into the
+SQL Editor and run it once. It contains the complete schema, the signup
+trigger, all row-level-security policies, and the storage bucket — everything
+in `legacy/` + `migrations/` consolidated, with no demo accounts. Do not run
+the other scripts afterwards.
+
+The sections below only apply to a database that was set up with the original
+ad-hoc scripts.
+
 ## Layout
 
 | Path | What it is |
