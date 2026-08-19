@@ -1,10 +1,29 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import PwaRegister from "@/components/PwaRegister";
 
 export const metadata: Metadata = {
   title: "Foodie — Home-Cooked Meals, Made With Love",
   description:
     "Connect with talented home cooks in your area. Fresh, home-cooked meals prepared by real people — right in your kitchen or delivered to your door.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Foodie",
+  },
+  icons: {
+    apple: "/icons/apple-touch-icon.png",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4efe6" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
 };
 
 const themeScript = `
@@ -26,7 +45,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -37,6 +55,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <PwaRegister />
       </body>
     </html>
   );
