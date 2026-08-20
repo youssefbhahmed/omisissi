@@ -77,14 +77,14 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                                         </div>
                                         <div>
                                             <h3 style={{ margin: "0 0 2px 0", fontWeight: 700, fontSize: "16px", color: "var(--text-heading)" }}>{familyName}</h3>
-                                            <div style={{ fontSize: "13px", color: "var(--text-muted)" }}>Requested {new Date(req.created_at).toLocaleDateString()}</div>
+                                            <div style={{ fontSize: "13px", color: "var(--text-muted)" }}>Requested {new Date(req.created_at).toLocaleDateString("en-GB")}</div>
                                         </div>
                                     </div>
 
                                     <div style={{ backgroundColor: "var(--bg-base)", padding: "16px", borderRadius: "12px", border: "1px solid var(--border-light)", marginBottom: "20px" }}>
                                         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px", fontWeight: 600, color: "var(--text-heading)" }}>
                                             <Calendar size={16} color="var(--brand-primary)" />
-                                            {new Date(req.scheduled_date).toLocaleDateString()} &middot; {req.scheduled_time}
+                                            {new Date(req.scheduled_date).toLocaleDateString("en-GB")} &middot; {req.scheduled_time?.slice(0, 5)}
                                             {Number(req.duration_hours) > 0 && ` (${req.duration_hours}h)`}
                                         </div>
                                         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px", fontSize: "14px", color: "var(--text-body)" }}>
@@ -171,7 +171,7 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                                         <div>
                                             <h3 style={{ margin: "0 0 4px 0", fontWeight: 700, fontSize: "16px", color: "var(--text-heading)" }}>{familyName}</h3>
                                             <div style={{ fontSize: "13px", color: "var(--text-body)", display: "flex", alignItems: "center", gap: "8px" }}>
-                                                {new Date(booking.scheduled_date).toLocaleDateString()} at {booking.scheduled_time}
+                                                {new Date(booking.scheduled_date).toLocaleDateString("en-GB")} at {booking.scheduled_time?.slice(0, 5)}
                                                 <span style={{ color: "var(--border-medium)" }}>•</span>
                                                 {booking.menu ? booking.menu.name : (booking.dishes && booking.dishes.length > 0 ? `${booking.dishes.length} dishes` : "Cook Time Only")}
                                             </div>

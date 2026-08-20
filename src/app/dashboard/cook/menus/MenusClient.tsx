@@ -36,17 +36,17 @@ export default function MenusClient({ menus, availableDishes }: { menus: MenuWit
 
     return (
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px", flexWrap: "wrap", gap: "16px" }}>
                 <div>
                     <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, margin: "0 0 8px 0", color: "var(--text-heading)" }}>
                         My Set Menus
                     </h1>
                     <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>Group your individual dishes into fixed-price packages.</p>
                 </div>
-                <button 
-                    onClick={() => { setIsAdding(true); setSelectedDishIds([]); }} 
-                    className="btn-primary" 
-                    style={{ padding: "12px 24px", display: "flex", alignItems: "center", gap: "8px" }}
+                <button
+                    onClick={() => { setIsAdding(true); setSelectedDishIds([]); }}
+                    className="btn-primary"
+                    style={{ padding: "12px 24px", display: "flex", alignItems: "center", gap: "8px", whiteSpace: "nowrap" }}
                 >
                     <Plus size={18} /> Create Package
                 </button>

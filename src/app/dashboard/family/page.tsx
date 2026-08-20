@@ -102,21 +102,21 @@ export default async function FamilyBookingsPage() {
 
                         return (
                             <div key={booking.id} className="card" style={{ backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", overflow: "hidden" }}>
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px", borderBottom: "1px solid var(--border-light)" }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px", borderBottom: "1px solid var(--border-light)", flexWrap: "wrap", gap: "12px" }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                                        <div style={{ width: "48px", height: "48px", borderRadius: "50%", overflow: "hidden" }}>
+                                        <div style={{ width: "48px", height: "48px", borderRadius: "50%", overflow: "hidden", flexShrink: 0 }}>
                                             <img src={cookAvatar} alt={cookName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                         </div>
                                         <div>
                                             <h3 style={{ margin: "0 0 4px 0", fontWeight: 700, fontSize: "18px", color: "var(--text-heading)" }}>{cookName}</h3>
                                             <span style={{ fontSize: "13px", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "4px" }}>
                                                 <Calendar size={14} />
-                                                {new Date(booking.scheduled_date).toLocaleDateString()} at {booking.scheduled_time}
+                                                {new Date(booking.scheduled_date).toLocaleDateString("en-GB")} at {booking.scheduled_time?.slice(0, 5)}
                                                 {Number(booking.duration_hours) > 0 && ` (${booking.duration_hours}h)`}
                                             </span>
                                         </div>
                                     </div>
-                                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
                                         {booking.status === "pending" && <CancelBookingButton bookingId={booking.id} />}
                                         <div style={{
                                             backgroundColor: sColor.bg, color: sColor.color,

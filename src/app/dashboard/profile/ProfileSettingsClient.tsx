@@ -142,7 +142,7 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                     <button type="button" className="btn-nav" style={{ padding: "8px 16px", fontSize: "14px" }}>Upload Photo</button>
                                 </div>
 
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                                <div style={{ gap: "20px" }} className="grid grid-cols-1 sm:grid-cols-2">
                                     <div>
                                         <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>Full Name</label>
                                         <input name="fullName" type="text" required defaultValue={profile?.full_name ?? ""} placeholder="e.g. Fatma Ben Ali" style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }} />

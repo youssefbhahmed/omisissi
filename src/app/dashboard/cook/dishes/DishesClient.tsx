@@ -41,7 +41,7 @@ export default function DishesClient({ dishes }: { dishes: Dish[] }) {
 
     return (
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px", flexWrap: "wrap", gap: "16px" }}>
                 <div>
                     <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, margin: "0 0 8px 0", color: "var(--text-heading)" }}>
                         My Dishes (A La Carte)
@@ -51,7 +51,7 @@ export default function DishesClient({ dishes }: { dishes: Dish[] }) {
                 <button
                     onClick={() => setIsAdding(true)}
                     className="btn-primary"
-                    style={{ padding: "12px 24px", display: "flex", alignItems: "center", gap: "8px" }}
+                    style={{ padding: "12px 24px", display: "flex", alignItems: "center", gap: "8px", whiteSpace: "nowrap" }}
                 >
                     <Plus size={18} /> Add New Dish
                 </button>
@@ -203,14 +203,14 @@ export default function DishesClient({ dishes }: { dishes: Dish[] }) {
                         </div>
                     ) : (
                         dishes.map(dish => (
-                            <div key={dish.id} className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", display: "flex", gap: "24px", alignItems: "flex-start" }}>
-                                <div style={{ width: "120px", height: "120px", borderRadius: "12px", overflow: "hidden", flexShrink: 0, backgroundColor: "var(--bg-base)" }}>
+                            <div key={dish.id} className="card" style={{ padding: "clamp(16px, 4vw, 24px)", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", display: "flex", gap: "clamp(12px, 3vw, 24px)", alignItems: "flex-start" }}>
+                                <div style={{ width: "clamp(88px, 24vw, 120px)", height: "clamp(88px, 24vw, 120px)", borderRadius: "12px", overflow: "hidden", flexShrink: 0, backgroundColor: "var(--bg-base)" }}>
                                     <img src={dish.image_url || "/hero-tunisian-food.png"} alt={dish.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                 </div>
-                                <div style={{ flex: 1 }}>
+                                <div style={{ flex: 1, minWidth: 0 }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                                        <div>
-                                            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
+                                        <div style={{ minWidth: 0 }}>
+                                            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px", flexWrap: "wrap" }}>
                                                 <h3 className="heading-font" style={{ margin: 0, fontSize: "20px", fontWeight: 800, color: "var(--text-heading)" }}>{dish.name}</h3>
                                                 <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", padding: "4px 8px", borderRadius: "6px", backgroundColor: "var(--bg-subtle)", color: "var(--text-muted)" }}>{dish.category}</span>
                                                 <span style={{ fontSize: "11px", fontWeight: 700, padding: "4px 10px", borderRadius: "6px", display: "flex", alignItems: "center", gap: "5px", backgroundColor: dish.complexity === 1 ? "rgba(34,197,94,0.1)" : dish.complexity === 2 ? "rgba(235,171,33,0.1)" : dish.complexity === 3 ? "rgba(249,115,22,0.1)" : "rgba(239,68,68,0.1)", color: dish.complexity === 1 ? "#22c55e" : dish.complexity === 2 ? "var(--brand-primary)" : dish.complexity === 3 ? "#f97316" : "#ef4444" }}>
