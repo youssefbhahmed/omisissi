@@ -360,3 +360,67 @@ body {
     background-attachment: scroll;
   }
 }
+/* ─── Dish marquee ribbon ─── */
+.marquee {
+  background: var(--brand-primary);
+  overflow: hidden;
+  padding: 13px 0;
+  transform: rotate(-1.2deg) scale(1.02);
+  position: relative;
+  z-index: 20;
+  margin: -10px 0;
+  box-shadow: var(--shadow-md);
+}
+.marquee-track {
+  display: flex;
+  gap: 44px;
+  width: max-content;
+  animation: marquee-scroll 36s linear infinite;
+}
+.marquee-item {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #121212;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 44px;
+}
+.marquee-pepper {
+  font-size: 13px;
+}
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-33.3333%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ─── Pulsing availability dot ─── */
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #4ade80;
+  display: inline-block;
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(74, 222, 128, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot {
+    animation: none;
+  }
+}

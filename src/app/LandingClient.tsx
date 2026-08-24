@@ -221,6 +221,19 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
         </div>
       </section>
 
+      {/* ─────────── DISH MARQUEE ─────────── */}
+      <div className="marquee" aria-hidden="true">
+        <div className="marquee-track">
+          {Array.from({ length: 3 }).flatMap((_, r) =>
+            ["Couscous au Poisson", "Brik à l'Œuf", "Slata Mechouia", "Ojja Merguez", "Lablabi", "Kafteji", "Mloukhia", "Makroudh"].map((dish, i) => (
+              <span key={`${r}-${i}`} className="marquee-item heading-font">
+                {dish} <span className="marquee-pepper">🌶</span>
+              </span>
+            ))
+          )}
+        </div>
+      </div>
+
       {/* ─────────── HOW IT WORKS ─────────── */}
       <Section bgVar="--bg-surface" id="how-it-works">
         <SectionHeader badge="How It Works" title="From browsing to eating in 4 steps" subtitle="The entire experience — from finding a cook to paying — happens seamlessly inside the app." />
@@ -229,7 +242,8 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             const Icon = step.icon;
             return (
               <div key={step.n} className="card reveal" style={{ padding: "32px 24px", textAlign: "center", position: "relative" }}>
-                <div style={{ position: "absolute", top: "-14px", right: "20px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "var(--brand-primary)", color: "#121212", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "14px" }}>
+                {/* .card clips overflow, so the number chip must sit inside the edge */}
+                <div style={{ position: "absolute", top: "14px", right: "14px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "var(--brand-primary)", color: "#121212", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "14px" }}>
                   {step.n}
                 </div>
                 <div style={{ width: "56px", height: "56px", borderRadius: "16px", backgroundColor: "rgba(255,184,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 16px auto" }}>
@@ -414,18 +428,32 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
 
       {/* ─────────── CTA ─────────── */}
       <Section>
-        <div className="reveal" style={{ backgroundImage: "url('/tunisian-pastries.png')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "32px", position: "relative", overflow: "hidden" }}>
-          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.65)" }} />
-          <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "80px 32px" }}>
-            <h2 className="heading-font" style={{ fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, margin: "0 0 16px 0", lineHeight: 1.1, color: "white" }}>
-              Ready for better dinners?
+        <div className="reveal" style={{ backgroundImage: "url('/hero-feast.png')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "32px", position: "relative", overflow: "hidden", border: "2px solid rgba(255,184,0,0.35)" }}>
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 55%, rgba(120,40,0,0.45) 100%)" }} />
+          <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "88px 32px" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(255,184,0,0.16)", border: "1px solid rgba(255,184,0,0.4)", backdropFilter: "blur(8px)", color: "#ffc436", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "24px" }}>
+              <span className="pulse-dot" /> Cooks available this week in Tunis, La Marsa &amp; Ariana
+            </div>
+            <h2 className="heading-font" style={{ fontSize: "clamp(32px, 5vw, 54px)", fontWeight: 800, margin: "0 0 12px 0", lineHeight: 1.08, color: "white", letterSpacing: "-1px" }}>
+              Ce soir, on mange<br />comme chez <span style={{ color: "#ffc436" }}>Mama</span>. 🌶
             </h2>
-            <p style={{ fontSize: "17px", color: "rgba(255,255,255,0.8)", margin: "0 auto 32px auto", lineHeight: 1.6, maxWidth: "500px" }}>
-              Join thousands of families already enjoying fresh, home-cooked meals — made by real Tunisian moms.
+            <p style={{ fontSize: "17px", color: "rgba(255,255,255,0.85)", margin: "0 auto 32px auto", lineHeight: 1.6, maxWidth: "520px" }}>
+              Real Tunisian moms, cooking in your kitchen. Couscous Fridays, brik that crackles,
+              and zero washing up — your first booking takes two minutes.
             </p>
-            <Link href="/signup" className="btn-primary" style={{ padding: "16px 36px", fontSize: "16px", textDecoration: "none" }}>
-              Get Started <ArrowRight size={18} />
-            </Link>
+            <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap", marginBottom: "36px" }}>
+              <Link href="/signup" className="btn-primary" style={{ padding: "16px 36px", fontSize: "16px", textDecoration: "none" }}>
+                Find a Cook Near You <ArrowRight size={18} />
+              </Link>
+              <Link href="/signup" style={{ padding: "16px 32px", fontSize: "16px", fontWeight: 700, background: "rgba(255,255,255,0.1)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "99px", color: "white", textDecoration: "none" }}>
+                I Want to Cook
+              </Link>
+            </div>
+            <div style={{ display: "flex", gap: "28px", justifyContent: "center", flexWrap: "wrap", fontSize: "14px", fontWeight: 600, color: "rgba(255,255,255,0.75)" }}>
+              <span>★ 4.9 average rating</span>
+              <span>from 40 TND / hour</span>
+              <span>verified &amp; hygiene-trained</span>
+            </div>
           </div>
         </div>
       </Section>
