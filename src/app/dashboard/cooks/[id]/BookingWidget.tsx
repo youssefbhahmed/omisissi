@@ -196,7 +196,7 @@ export default function BookingWidget({
                         <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Select Date</label>
                         <input
                             type="date"
-                            min={new Date().toISOString().split('T')[0]}
+                            min={new Date(Date.now() + 24 * 3600 * 1000).toISOString().split('T')[0]}
                             value={date}
                             onChange={e => setDate(e.target.value)}
                             style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }}
@@ -205,7 +205,7 @@ export default function BookingWidget({
                             <p style={{ color: "var(--danger)", fontSize: "12px", marginTop: "8px" }}>Cook is not available on {weekdayName(date)}s.</p>
                         )}
                         <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "8px" }}>
-                            Available: {availableDays.join(', ') || "No days set"}
+                            Available: {availableDays.join(', ') || "No days set"} · book at least 24h ahead
                         </p>
                     </div>
 

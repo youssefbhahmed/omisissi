@@ -28,7 +28,7 @@ function StatusBanner({ status }: { status: SaveStatus }) {
     );
 }
 
-export default function ProfileSettingsClient({ profile, email, isCook, cookDetails }: { profile: Profile | null, email: string, isCook: boolean, cookDetails: CookDetails | null }) {
+export default function ProfileSettingsClient({ profile, email, isCook, cookDetails, phone }: { profile: Profile | null, email: string, isCook: boolean, cookDetails: CookDetails | null, phone: string | null }) {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState("personal");
     const [specialties, setSpecialties] = useState<string[]>(() => normalizeStringArray(cookDetails?.specialties));
@@ -153,9 +153,18 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>{isCook ? "Cooking Location / City" : "Your Home Region"}</label>
-                                    <RegionPicker defaultValue={profile?.address ?? undefined} />
+                                <div style={{ gap: "20px" }} className="grid grid-cols-1 sm:grid-cols-2">
+                                    <div>
+                                        <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>{isCook ? "Cooking Location / City" : "Your Home Region"}</label>
+                                        <RegionPicker defaultValue={profile?.address ?? undefined} />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>Phone Number</label>
+                                        <input name="phone" type="tel" defaultValue={phone ?? ""} placeholder="+216 12 345 678" style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)", fontSize: "14px" }} />
+                                        <p style={{ margin: "6px 0 0 0", fontSize: "12px", color: "var(--text-muted)" }}>
+                                            Only shared with the other party once a booking is accepted.
+                                        </p>
+                                    </div>
                                 </div>
 
                                 {/* Cook Specific Fields */}

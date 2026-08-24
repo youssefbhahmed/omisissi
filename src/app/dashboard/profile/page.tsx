@@ -18,12 +18,16 @@ export default async function FamilyProfile() {
         redirect("/dashboard/cook/profile");
     }
 
+    const { data: privateDetails } = await supabase
+        .from('private_details').select('phone').eq('id', user.id).maybeSingle();
+
     return (
         <ProfileSettingsClient
             profile={profile}
             email={user.email || ""}
             isCook={false}
             cookDetails={null}
+            phone={privateDetails?.phone ?? null}
         />
     );
 }

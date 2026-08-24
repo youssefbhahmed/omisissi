@@ -15,6 +15,43 @@ import { normalizeStringArray, type BookingStatus } from "@/lib/types";
 
 type ActionResult = { error: string } | { success: true; bookingId?: string };
 
+const MIN_NOTICE_HOURS = 24;   // bookings must be made at least this far ahead
+const CANCEL_WINDOW_HOURS = 48; // accepted bookings can be cancelled up to this far before
+const CONFLICT_WINDOW_HOURS = 3; // a cook is "busy" within this window around an accepted booking
+
+function scheduledMs(date: string, time: string): number {
+    return Date.parse(`${date}T${time.slice(0, 5)}:00Z`);
+}
+
+function timeToMinutes(time: string): number {
+    const [h, m] = time.split(":").map(Number);
+    return h * 60 + (m || 0);
+}
+
+/** True when the cook already has an accepted/in-progress booking on that
+ *  date within CONFLICT_WINDOW_HOURS of the requested time. */
+async function cookHasConflict(
+    supabase: Awaited<ReturnType<typeof createClient>>,
+    cookId: string,
+    date: string,
+    time: string,
+    ignoreBookingId?: string
+): Promise<boolean> {
+    const { data: sameDay } = await supabase
+        .from('bookings')
+        .select('id, scheduled_time')
+        .eq('cook_id', cookId)
+        .eq('scheduled_date', date)
+        .in('status', ['accepted', 'in_progress']);
+
+    const requested = timeToMinutes(time);
+    return (sameDay ?? []).some(
+        (b) =>
+            b.id !== ignoreBookingId &&
+            Math.abs(timeToMinutes(b.scheduled_time) - requested) < CONFLICT_WINDOW_HOURS * 60
+    );
+}
+
 export async function submitBooking(formData: FormData): Promise<ActionResult> {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -39,8 +76,10 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
     if (!cookId) return { error: "Missing cook." };
     if (cookId === user.id) return { error: "You cannot book yourself." };
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return { error: "Please select a valid date." };
-    if (date < new Date().toISOString().slice(0, 10)) return { error: "The date must be in the future." };
     if (!/^\d{2}:\d{2}/.test(time)) return { error: "Please select a valid time." };
+    if (scheduledMs(date, time) - Date.now() < MIN_NOTICE_HOURS * 3600_000) {
+        return { error: `Bookings must be made at least ${MIN_NOTICE_HOURS} hours in advance, so the cook can plan and shop.` };
+    }
     if (!Number.isInteger(guests) || guests < 1 || guests > MAX_GUESTS) {
         return { error: `Guests must be between 1 and ${MAX_GUESTS}.` };
     }
@@ -71,6 +110,9 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
     }
     if (!availableDays.includes(weekdayName(date))) {
         return { error: `The cook is not available on ${weekdayName(date)}s.` };
+    }
+    if (await cookHasConflict(supabase, cookId, date, time)) {
+        return { error: "This cook already has a confirmed booking around that time. Try another time or day." };
     }
 
     // --- Compute the price server-side (never trust the client's number) ---
@@ -192,7 +234,7 @@ export async function updateBookingStatus(formData: FormData): Promise<ActionRes
 
     const { data: booking, error: fetchError } = await supabase
         .from('bookings')
-        .select('cook_id, family_id, status')
+        .select('cook_id, family_id, status, scheduled_date, scheduled_time')
         .eq('id', bookingId)
         .single();
 
@@ -213,12 +255,23 @@ export async function updateBookingStatus(formData: FormData): Promise<ActionRes
         if (newStatus === "completed" && booking.status !== "accepted") {
             return { error: "Only accepted bookings can be completed." };
         }
+        if (
+            newStatus === "accepted" &&
+            await cookHasConflict(supabase, user.id, booking.scheduled_date, booking.scheduled_time, bookingId)
+        ) {
+            return { error: "You already have a confirmed booking around that time. Decline this one or free up the slot first." };
+        }
     } else if (isFamily) {
         if (newStatus !== "cancelled") {
             return { error: "You can only cancel your own bookings." };
         }
-        if (booking.status !== "pending") {
-            return { error: "Only pending requests can be cancelled." };
+        if (booking.status === "accepted") {
+            const hoursLeft = (scheduledMs(booking.scheduled_date, booking.scheduled_time) - Date.now()) / 3600_000;
+            if (hoursLeft < CANCEL_WINDOW_HOURS) {
+                return { error: `Accepted bookings can only be cancelled up to ${CANCEL_WINDOW_HOURS} hours before the meal. Please contact the cook directly.` };
+            }
+        } else if (booking.status !== "pending") {
+            return { error: "Only pending requests or upcoming accepted bookings can be cancelled." };
         }
     } else {
         return { error: "You do not have permission to update this booking." };

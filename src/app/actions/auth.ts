@@ -5,6 +5,25 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { WEEKDAYS } from "@/lib/booking";
 
+const PHONE_PATTERN = /^[+0-9][0-9 .\-]{6,19}$/;
+
+// Phone lives in private_details (owner-only RLS); a missing table (SQL not
+// applied yet) must not break the profile save.
+async function savePhone(
+    supabase: Awaited<ReturnType<typeof createClient>>,
+    userId: string,
+    phone: string
+): Promise<string | null> {
+    const { error } = await supabase
+        .from('private_details')
+        .upsert({ id: userId, phone: phone || null });
+    if (error && error.code !== '42P01') {
+        console.error("Error saving phone:", error);
+        return error.message;
+    }
+    return null;
+}
+
 function parseStringArray(raw: string | null, maxItems: number, maxLength: number): string[] | null {
     if (!raw) return [];
     let parsed: unknown;
@@ -133,11 +152,15 @@ export async function updateFamilyProfile(formData: FormData) {
 
     const fullName = ((formData.get("fullName") as string) || "").trim();
     const address = ((formData.get("address") as string) || "").trim();
+    const phone = ((formData.get("phone") as string) || "").trim();
     const lat = parseFloat(formData.get("lat") as string);
     const lng = parseFloat(formData.get("lng") as string);
 
     if (!fullName) {
         return { error: "Please enter your full name." };
+    }
+    if (phone && !PHONE_PATTERN.test(phone)) {
+        return { error: "Please enter a valid phone number (e.g. +216 12 345 678)." };
     }
 
     const updates: { full_name: string; address: string; lat?: number; lng?: number } = {
@@ -161,6 +184,11 @@ export async function updateFamilyProfile(formData: FormData) {
         return { error: error.message };
     }
 
+    const phoneError = await savePhone(supabase, user.id, phone);
+    if (phoneError) {
+        return { error: phoneError };
+    }
+
     revalidatePath("/dashboard/profile");
     return { success: true };
 }
@@ -180,6 +208,7 @@ export async function updateCookProfile(formData: FormData) {
 
     const fullName = ((formData.get("fullName") as string) || "").trim();
     const address = ((formData.get("address") as string) || "").trim();
+    const phone = ((formData.get("phone") as string) || "").trim();
     const lat = parseFloat(formData.get("lat") as string);
     const lng = parseFloat(formData.get("lng") as string);
     const bio = ((formData.get("bio") as string) || "").trim();
@@ -188,6 +217,9 @@ export async function updateCookProfile(formData: FormData) {
 
     if (!fullName) {
         return { error: "Please enter your full name." };
+    }
+    if (phone && !PHONE_PATTERN.test(phone)) {
+        return { error: "Please enter a valid phone number (e.g. +216 12 345 678)." };
     }
     if (specialties === null) {
         return { error: "Invalid specialties selection." };
@@ -247,6 +279,11 @@ export async function updateCookProfile(formData: FormData) {
     if (detailsError) {
         console.error("Error updating cook details:", detailsError);
         return { error: detailsError.message };
+    }
+
+    const phoneError = await savePhone(supabase, user.id, phone);
+    if (phoneError) {
+        return { error: phoneError };
     }
 
     revalidatePath("/dashboard/profile");

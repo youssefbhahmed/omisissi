@@ -91,6 +91,18 @@ export interface BookingListItem {
     // Filled in by the page after a second profiles query (the bookings FKs
     // point at auth.users, so PostgREST cannot embed profiles directly).
     partner?: { full_name: string | null; avatar_url: string | null } | null;
+    // Counterparty phone, revealed via get_booking_contact() once accepted.
+    partner_phone?: string | null;
+}
+
+export interface Review {
+    id: string;
+    booking_id: string;
+    cook_id: string;
+    family_id: string;
+    rating: number;
+    comment: string | null;
+    created_at: string;
 }
 
 export interface DiscoverCook {

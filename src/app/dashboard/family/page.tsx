@@ -1,9 +1,16 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { Clock, CheckCircle, XCircle, MapPin, ChefHat, Calendar } from "lucide-react";
+import { Clock, CheckCircle, XCircle, MapPin, ChefHat, Calendar, Phone, Star } from "lucide-react";
 import CancelBookingButton from "./CancelBookingButton";
+import ReviewForm from "./ReviewForm";
 import type { BookingListItem } from "@/lib/types";
+
+const CANCEL_WINDOW_HOURS = 48;
+
+function hoursUntil(date: string, time: string): number {
+    return (Date.parse(`${date}T${time.slice(0, 5)}:00Z`) - Date.now()) / 3600_000;
+}
 
 export default async function FamilyBookingsPage() {
     const supabase = await createClient();
@@ -51,6 +58,23 @@ export default async function FamilyBookingsPage() {
     for (const booking of bookings) {
         booking.partner = cookProfiles?.find((p) => p.id === booking.cook_id) ?? null;
     }
+
+    // Reveal the cook's phone for accepted/ongoing bookings
+    await Promise.all(
+        bookings
+            .filter((b) => b.status === "accepted" || b.status === "in_progress")
+            .map(async (b) => {
+                const { data } = await supabase.rpc('get_booking_contact', { p_booking_id: b.id });
+                b.partner_phone = data?.[0]?.phone ?? null;
+            })
+    );
+
+    // Which completed bookings has this family already reviewed?
+    const { data: myReviews } = await supabase
+        .from('reviews')
+        .select('booking_id, rating')
+        .eq('family_id', user.id);
+    const reviewByBooking = new Map((myReviews ?? []).map((r) => [r.booking_id, r.rating]));
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -117,7 +141,10 @@ export default async function FamilyBookingsPage() {
                                         </div>
                                     </div>
                                     <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
-                                        {booking.status === "pending" && <CancelBookingButton bookingId={booking.id} />}
+                                        {(booking.status === "pending" ||
+                                            (booking.status === "accepted" && hoursUntil(booking.scheduled_date, booking.scheduled_time) > CANCEL_WINDOW_HOURS)) && (
+                                            <CancelBookingButton bookingId={booking.id} />
+                                        )}
                                         <div style={{
                                             backgroundColor: sColor.bg, color: sColor.color,
                                             padding: "6px 12px", borderRadius: "99px",
@@ -152,6 +179,30 @@ export default async function FamilyBookingsPage() {
                                             <div style={{ marginTop: "12px", fontSize: "13px", color: "var(--text-body)", display: "flex", alignItems: "center", gap: "8px" }}>
                                                 <span style={{ backgroundColor: "var(--brand-primary)", color: "white", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 700 }}>EXTRA</span>
                                                 Grocery Shopping Included
+                                            </div>
+                                        )}
+
+                                        {(booking.status === "accepted" || booking.status === "in_progress") && (
+                                            <div style={{ marginTop: "12px", padding: "12px 16px", borderRadius: "10px", backgroundColor: "rgba(34, 197, 94, 0.08)", border: "1px solid rgba(34, 197, 94, 0.25)", fontSize: "14px", display: "flex", alignItems: "center", gap: "8px", color: "var(--text-body)" }}>
+                                                <Phone size={16} color="var(--brand-success)" />
+                                                {booking.partner_phone ? (
+                                                    <span>Call {cookName.split(' ')[0]}: <a href={`tel:${booking.partner_phone}`} style={{ fontWeight: 700, color: "var(--brand-success)", textDecoration: "none" }}>{booking.partner_phone}</a></span>
+                                                ) : (
+                                                    <span style={{ color: "var(--text-muted)" }}>{cookName.split(' ')[0]} hasn&apos;t added a phone number yet.</span>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {booking.status === "completed" && (
+                                            <div style={{ marginTop: "12px" }}>
+                                                {reviewByBooking.has(booking.id) ? (
+                                                    <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 600, color: "var(--text-muted)" }}>
+                                                        <Star size={16} fill="var(--brand-primary)" color="var(--brand-primary)" />
+                                                        You rated this meal {reviewByBooking.get(booking.id)}/5
+                                                    </div>
+                                                ) : (
+                                                    <ReviewForm bookingId={booking.id} cookName={cookName} />
+                                                )}
                                             </div>
                                         )}
                                     </div>

@@ -52,6 +52,16 @@ export default async function CookBookingsPage() {
         booking.partner = familyProfiles?.find((p) => p.id === booking.family_id) ?? null;
     }
 
+    // Reveal the family's phone for accepted/ongoing bookings
+    await Promise.all(
+        bookings
+            .filter((b) => b.status === "accepted" || b.status === "in_progress")
+            .map(async (b) => {
+                const { data } = await supabase.rpc('get_booking_contact', { p_booking_id: b.id });
+                b.partner_phone = data?.[0]?.phone ?? null;
+            })
+    );
+
     // Separate into pending vs active/past
     const pendingRequests = bookings.filter((b) => b.status === "pending");
     const otherBookings = bookings.filter((b) => b.status !== "pending");

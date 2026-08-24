@@ -13,13 +13,16 @@ export default async function CookProfile() {
 
     const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
     const { data: cookDetails } = await supabase.from('cook_details').select('*').eq('id', user.id).single();
+    const { data: privateDetails } = await supabase
+        .from('private_details').select('phone').eq('id', user.id).maybeSingle();
 
     return (
-        <ProfileSettingsClient 
-            profile={profile} 
-            email={user.email || ""} 
-            isCook={true} 
-            cookDetails={cookDetails} 
+        <ProfileSettingsClient
+            profile={profile}
+            email={user.email || ""}
+            isCook={true}
+            cookDetails={cookDetails}
+            phone={privateDetails?.phone ?? null}
         />
     );
 }

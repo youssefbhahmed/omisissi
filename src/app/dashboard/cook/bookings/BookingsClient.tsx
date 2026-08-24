@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Clock, CheckCircle, XCircle, MapPin, Calendar, AlertCircle } from "lucide-react";
+import { Clock, CheckCircle, XCircle, MapPin, Calendar, AlertCircle, Phone } from "lucide-react";
 import { updateBookingStatus } from "../../../actions/booking";
 import type { BookingListItem } from "@/lib/types";
 
@@ -170,10 +170,18 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                                         </div>
                                         <div>
                                             <h3 style={{ margin: "0 0 4px 0", fontWeight: 700, fontSize: "16px", color: "var(--text-heading)" }}>{familyName}</h3>
-                                            <div style={{ fontSize: "13px", color: "var(--text-body)", display: "flex", alignItems: "center", gap: "8px" }}>
+                                            <div style={{ fontSize: "13px", color: "var(--text-body)", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
                                                 {new Date(booking.scheduled_date).toLocaleDateString("en-GB")} at {booking.scheduled_time?.slice(0, 5)}
                                                 <span style={{ color: "var(--border-medium)" }}>•</span>
                                                 {booking.menu ? booking.menu.name : (booking.dishes && booking.dishes.length > 0 ? `${booking.dishes.length} dishes` : "Cook Time Only")}
+                                                {(booking.status === "accepted" || booking.status === "in_progress") && booking.partner_phone && (
+                                                    <>
+                                                        <span style={{ color: "var(--border-medium)" }}>•</span>
+                                                        <a href={`tel:${booking.partner_phone}`} style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontWeight: 700, color: "var(--brand-success)", textDecoration: "none" }}>
+                                                            <Phone size={13} /> {booking.partner_phone}
+                                                        </a>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
