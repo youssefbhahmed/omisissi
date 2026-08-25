@@ -116,6 +116,32 @@ export async function signup(formData: FormData) {
     }
 }
 
+// Role choice for accounts freshly created via Google/Facebook.
+// The set_signup_role function only allows this within 15 minutes of signup.
+export async function chooseSignupRole(formData: FormData) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        redirect("/login");
+    }
+
+    const role = formData.get("role") as string;
+    if (role !== "family" && role !== "cook") {
+        redirect("/dashboard");
+    }
+
+    const { error } = await supabase.rpc('set_signup_role', { p_role: role });
+    if (error) {
+        console.error("set_signup_role failed:", error);
+        // Too late or SQL not applied — the account simply stays a family
+        redirect("/dashboard");
+    }
+
+    revalidatePath("/", "layout");
+    redirect(role === "cook" ? "/dashboard/cook" : "/dashboard");
+}
+
 export async function logout() {
     const supabase = await createClient();
     await supabase.auth.signOut();

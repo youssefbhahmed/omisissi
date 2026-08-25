@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ChefHat, ArrowRight, User, Utensils } from "lucide-react";
 import { signup } from "@/app/actions/auth";
+import OAuthButtons from "@/components/OAuthButtons";
 
 export default function SignupPage() {
     const [roleType, setRoleType] = useState<"family" | "cook">("family");
@@ -110,6 +111,10 @@ export default function SignupPage() {
                             {loading ? "Creating account..." : "Sign Up"} <ArrowRight size={18} />
                         </button>
                     </form>
+
+                    <div style={{ marginTop: "20px" }}>
+                        <OAuthButtons role={roleType} action="Sign up" />
+                    </div>
 
                     <p style={{ textAlign: "center", marginTop: "24px", fontSize: "14px", color: "var(--text-muted)" }}>
                         Already have an account? <Link href="/login" style={{ color: "var(--brand-primary)", fontWeight: 700, textDecoration: "none" }}>Log in</Link>
