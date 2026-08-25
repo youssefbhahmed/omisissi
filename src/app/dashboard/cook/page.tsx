@@ -1,8 +1,14 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { ChefHat, ShoppingBag, ShieldAlert, ArrowRight } from "lucide-react";
+import { ShoppingBag, ShieldAlert, ArrowRight } from "lucide-react";
 import Link from "next/link";
+
+// Outside the component: the react-hooks purity rule forbids Date.now()
+// directly in render.
+function isoDaysAgo(days: number): string {
+    return new Date(Date.now() - days * 24 * 3600 * 1000).toISOString().slice(0, 10);
+}
 
 export default async function CookDashboard() {
     const supabase = await createClient();
@@ -29,7 +35,7 @@ export default async function CookDashboard() {
         .select('status, total_price, scheduled_date')
         .eq('cook_id', user.id);
 
-    const weekAgo = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+    const weekAgo = isoDaysAgo(7);
     const completed = (myBookings ?? []).filter((b) => b.status === 'completed');
     const weeklyEarnings = completed
         .filter((b) => b.scheduled_date >= weekAgo)

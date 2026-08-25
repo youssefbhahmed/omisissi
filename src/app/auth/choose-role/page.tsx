@@ -4,6 +4,12 @@ import { redirect } from "next/navigation";
 import { ChefHat, User, Utensils } from "lucide-react";
 import { chooseSignupRole } from "@/app/actions/auth";
 
+// Outside the component: the react-hooks purity rule forbids Date.now()
+// directly in render.
+function minutesSince(timestamp: string): number {
+    return (Date.now() - Date.parse(timestamp)) / 60_000;
+}
+
 // Shown once to accounts freshly created through Google/Facebook from the
 // login page, where no role was picked. The window is enforced server-side
 // (set_signup_role allows changes only within 15 minutes of signup).
@@ -22,7 +28,7 @@ export default async function ChooseRolePage() {
         .single();
 
     // Established accounts have nothing to choose — send them home
-    if (!profile || profile.role === 'cook' || Date.now() - Date.parse(profile.created_at) > 15 * 60_000) {
+    if (!profile || profile.role === 'cook' || minutesSince(profile.created_at) > 15) {
         redirect(profile?.role === 'cook' ? "/dashboard/cook" : "/dashboard");
     }
 

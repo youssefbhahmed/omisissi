@@ -1,7 +1,7 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { Calendar, Clock, MapPin, ChefHat, ArrowRight, Search } from "lucide-react";
+import { Calendar, ArrowRight, Search } from "lucide-react";
 import Link from "next/link";
 
 export default async function FamilyDashboard() {

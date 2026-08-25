@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { Clock, MapPin, ShoppingBag, Utensils, Plus, Minus, Users } from "lucide-react";
 import { submitBooking } from "../../../actions/booking";
 import {
@@ -28,6 +29,7 @@ export default function BookingWidget({
     menus: Menu[],
     dishes: Dish[]
 }) {
+    const router = useRouter();
     const [step, setStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -153,7 +155,7 @@ export default function BookingWidget({
                 alert(res.error);
             } else {
                 alert("Booking request sent successfully!");
-                window.location.href = "/dashboard/family";
+                router.push("/dashboard/family");
             }
         } catch {
             alert("Something went wrong sending your request. Please try again.");
