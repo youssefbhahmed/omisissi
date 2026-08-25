@@ -23,6 +23,21 @@ export default async function CookDashboard() {
     // Check if they need to complete their profile setup
     const isProfileIncomplete = !cookDetails || !cookDetails.bio || !cookDetails.price_per_session;
 
+    // Real earnings and booking stats
+    const { data: myBookings } = await supabase
+        .from('bookings')
+        .select('status, total_price, scheduled_date')
+        .eq('cook_id', user.id);
+
+    const weekAgo = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+    const completed = (myBookings ?? []).filter((b) => b.status === 'completed');
+    const weeklyEarnings = completed
+        .filter((b) => b.scheduled_date >= weekAgo)
+        .reduce((sum, b) => sum + Number(b.total_price || 0), 0);
+    const totalEarnings = completed.reduce((sum, b) => sum + Number(b.total_price || 0), 0);
+    const activeCount = (myBookings ?? []).filter((b) => b.status === 'accepted' || b.status === 'in_progress').length;
+    const pendingCount = (myBookings ?? []).filter((b) => b.status === 'pending').length;
+
     return (
         <div>
             <div style={{ marginBottom: "40px", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
@@ -55,25 +70,49 @@ export default async function CookDashboard() {
                 {/* Quick Stats */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                     <div className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)" }}>
-                        <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Weekly Earnings</p>
-                        <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: "var(--text-heading)" }}>0 <span style={{ fontSize: "16px", color: "var(--text-muted)" }}>TND</span></h3>
+                        <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Earnings This Week</p>
+                        <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: "var(--text-heading)" }}>{weeklyEarnings} <span style={{ fontSize: "16px", color: "var(--text-muted)" }}>TND</span></h3>
+                        {totalEarnings > weeklyEarnings && (
+                            <p style={{ margin: "6px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }}>{totalEarnings} TND earned in total</p>
+                        )}
                     </div>
                     <div className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)" }}>
-                        <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Active Bookings</p>
-                        <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: "var(--text-heading)" }}>0</h3>
+                        <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Confirmed Bookings</p>
+                        <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: "var(--text-heading)" }}>{activeCount}</h3>
+                    </div>
+                    <div className="card" style={{ padding: "24px", backgroundColor: pendingCount > 0 ? "rgba(255,184,0,0.08)" : "var(--bg-surface)", border: pendingCount > 0 ? "1px solid rgba(255,184,0,0.4)" : "1px solid var(--border-light)" }}>
+                        <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Pending Requests</p>
+                        <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: pendingCount > 0 ? "var(--brand-primary)" : "var(--text-heading)" }}>{pendingCount}</h3>
                     </div>
                 </div>
 
                 {/* Orders Area */}
-                <div className="card" style={{ padding: "40px", textAlign: "center", backgroundColor: "var(--bg-surface)", border: "1px dashed var(--border-medium)", display: "flex", flexGrow: 1, flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "300px" }}>
-                    <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(255,184,0,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 20px auto" }}>
-                        <ShoppingBag size={32} />
+                {pendingCount > 0 ? (
+                    <div className="card" style={{ padding: "40px", textAlign: "center", backgroundColor: "var(--bg-surface)", border: "2px solid rgba(255,184,0,0.35)", display: "flex", flexGrow: 1, flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "300px" }}>
+                        <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(255,184,0,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 20px auto" }}>
+                            <ShoppingBag size={32} />
+                        </div>
+                        <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>
+                            {pendingCount} request{pendingCount > 1 ? "s" : ""} waiting for your answer
+                        </h3>
+                        <p style={{ color: "var(--text-muted)", maxWidth: "400px", margin: "0 auto 24px auto", lineHeight: 1.6 }}>
+                            Families are waiting — accept or decline before the requested date gets too close.
+                        </p>
+                        <Link href="/dashboard/cook/bookings" className="btn-primary" style={{ padding: "14px 28px", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                            Review Requests <ArrowRight size={18} />
+                        </Link>
                     </div>
-                    <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>No orders yet</h3>
-                    <p style={{ color: "var(--text-muted)", maxWidth: "400px", margin: "0 auto", lineHeight: 1.6 }}>
-                        {isProfileIncomplete ? 'Complete your profile to start receiving booking requests from nearby families.' : 'You have no active or pending cooking requests right now. We will notify you when a family requests your services.'}
-                    </p>
-                </div>
+                ) : (
+                    <div className="card" style={{ padding: "40px", textAlign: "center", backgroundColor: "var(--bg-surface)", border: "1px dashed var(--border-medium)", display: "flex", flexGrow: 1, flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "300px" }}>
+                        <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(255,184,0,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 20px auto" }}>
+                            <ShoppingBag size={32} />
+                        </div>
+                        <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>No pending requests</h3>
+                        <p style={{ color: "var(--text-muted)", maxWidth: "400px", margin: "0 auto", lineHeight: 1.6 }}>
+                            {isProfileIncomplete ? 'Complete your profile to start receiving booking requests from nearby families.' : 'You have no pending cooking requests right now. New requests will appear here and in your Bookings tab.'}
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     );
