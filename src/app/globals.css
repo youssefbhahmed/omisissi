@@ -400,11 +400,8 @@ body {
     transform: translateX(-33.3333%);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
-  }
-}
+/* Deliberately NOT paused under prefers-reduced-motion: the ribbon is the
+   brand moment of the landing page and stays animated for everyone. */
 
 /* ─── Pulsing availability dot ─── */
 .pulse-dot {
