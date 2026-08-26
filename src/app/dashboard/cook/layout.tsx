@@ -16,25 +16,25 @@ export default function CookDashboardLayout({ children }: { children: React.Reac
                         <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                             <ChefHat color="#121212" size={20} />
                         </div>
-                        <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)", whiteSpace: "nowrap" }}>foodie <span className="hidden sm:inline" style={{ color: "var(--brand-primary)", fontSize: "14px" }}>Cook</span></span>
+                        <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)", whiteSpace: "nowrap" }}>foodie <span className="hidden sm:inline" style={{ color: "var(--brand-primary)", fontSize: "14px" }}>Cuisine</span></span>
                     </Link>
 
                     <nav style={{ display: "flex", gap: "clamp(12px, 2.5vw, 20px)", height: "100%" }}>
                         <NavLink href="/dashboard/cook/dishes">
-                            <Utensils size={18} /> <span className="hidden md:inline">My Dishes</span>
+                            <Utensils size={18} /> <span className="hidden md:inline">Mes plats</span>
                         </NavLink>
                         <NavLink href="/dashboard/cook/menus">
-                            <Library size={18} /> <span className="hidden md:inline">Set Menus</span>
+                            <Library size={18} /> <span className="hidden md:inline">Mes menus</span>
                         </NavLink>
                         <NavLink href="/dashboard/cook/bookings">
-                            <Clock size={18} /> <span className="hidden md:inline">Bookings</span>
+                            <Clock size={18} /> <span className="hidden md:inline">Réservations</span>
                         </NavLink>
                         <NavLink href="/dashboard/cook/profile">
-                            <Settings size={18} /> <span className="hidden md:inline">Cook Profile</span>
+                            <Settings size={18} /> <span className="hidden md:inline">Profil cuisinier</span>
                         </NavLink>
                         {/* Cooks are clients too: they can browse and book other cooks */}
                         <NavLink href="/cooks">
-                            <Search size={18} /> <span className="hidden md:inline">Find a Cook</span>
+                            <Search size={18} /> <span className="hidden md:inline">Trouver un cuisinier</span>
                         </NavLink>
                     </nav>
 
@@ -42,7 +42,7 @@ export default function CookDashboardLayout({ children }: { children: React.Reac
                         <ThemeToggle />
                         <form action={logout}>
                             <button type="submit" className="btn-nav" style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--text-muted)" }}>
-                                <LogOut size={18} /> <span className="hidden md:inline">Log Out</span>
+                                <LogOut size={18} /> <span className="hidden md:inline">Se déconnecter</span>
                             </button>
                         </form>
                     </div>

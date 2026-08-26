@@ -8,7 +8,7 @@ export async function submitReview(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: "Not authenticated" };
+        return { error: "Vous devez être connecté." };
     }
 
     const bookingId = formData.get("bookingId") as string;
@@ -16,10 +16,10 @@ export async function submitReview(formData: FormData) {
     const comment = ((formData.get("comment") as string) || "").trim().slice(0, 1000);
 
     if (!bookingId) {
-        return { error: "Missing booking." };
+        return { error: "Réservation manquante." };
     }
     if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
-        return { error: "Please pick a rating from 1 to 5 stars." };
+        return { error: "Veuillez choisir une note de 1 à 5 étoiles." };
     }
 
     // The review must target one of the caller's own COMPLETED bookings
@@ -31,10 +31,10 @@ export async function submitReview(formData: FormData) {
         .single();
 
     if (!booking) {
-        return { error: "Booking not found." };
+        return { error: "Réservation introuvable." };
     }
     if (booking.status !== 'completed') {
-        return { error: "You can review a booking once the meal is completed." };
+        return { error: "Vous pourrez laisser un avis une fois le repas terminé." };
     }
 
     const { error } = await supabase.from('reviews').insert({
@@ -47,10 +47,10 @@ export async function submitReview(formData: FormData) {
 
     if (error) {
         if (error.code === '23505') {
-            return { error: "You have already reviewed this booking." };
+            return { error: "Vous avez déjà laissé un avis pour cette réservation." };
         }
         console.error("Error submitting review:", error);
-        return { error: "Failed to submit your review. " + error.message };
+        return { error: "Échec de l’envoi de votre avis. " + error.message };
     }
 
     revalidatePath("/dashboard/family");

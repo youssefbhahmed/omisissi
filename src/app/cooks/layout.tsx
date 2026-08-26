@@ -33,19 +33,19 @@ export default async function CooksLayout({ children }: { children: React.ReactN
                         {user ? (
                             <>
                                 <Link href="/dashboard/family" className="btn-nav" style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--text-muted)", textDecoration: "none", fontWeight: 600 }}>
-                                    <Calendar size={18} /> <span className="hidden md:inline">My Bookings</span>
+                                    <Calendar size={18} /> <span className="hidden md:inline">Mes réservations</span>
                                 </Link>
                                 <Link href={role === "cook" ? "/dashboard/cook" : "/dashboard"} className="btn-primary" style={{ padding: "10px 18px", textDecoration: "none", display: "flex", alignItems: "center", gap: "8px" }}>
-                                    <LayoutDashboard size={18} /> <span className="hidden md:inline">My Space</span>
+                                    <LayoutDashboard size={18} /> <span className="hidden md:inline">Mon espace</span>
                                 </Link>
                             </>
                         ) : (
                             <>
                                 <Link href="/login" className="btn-nav" style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--text-muted)", textDecoration: "none", fontWeight: 600 }}>
-                                    <LogIn size={18} /> Log In
+                                    <LogIn size={18} /> Se connecter
                                 </Link>
                                 <Link href="/signup" className="btn-primary" style={{ padding: "10px 18px", textDecoration: "none" }}>
-                                    Sign Up
+                                    S’inscrire
                                 </Link>
                             </>
                         )}

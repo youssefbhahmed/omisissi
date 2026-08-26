@@ -5,6 +5,7 @@ import { MapPin, Check, ArrowLeft, ChefHat, Star, Clock, Settings } from "lucide
 import Link from "next/link";
 import BookingWidget from "./BookingWidget";
 import { normalizeStringArray, type Dish, type Review } from "@/lib/types";
+import { categoryFr } from "@/lib/labels";
 
 function Stars({ n }: { n: number }) {
     return (
@@ -93,11 +94,11 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
         : { data: [] };
 
     const cook = {
-        name: profile.full_name || "Cook",
+        name: profile.full_name || "Cuisinier",
         img: profile.avatar_url || "/hero-tunisian-food-1.png",
-        bio: details.bio || "No bio yet.",
+        bio: details.bio || "Pas encore de bio.",
         specialties,
-        city: details.city || "Tunisia",
+        city: details.city || "Tunisie",
         rating: details.rating_average || 5.0,
         reviews: details.total_reviews || 0,
         pricePerHour: details.price_per_session || 0,
@@ -107,7 +108,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
             <div style={{ marginBottom: "24px" }}>
                 <Link href="/cooks" className="btn-nav" style={{ display: "inline-flex", alignItems: "center", gap: "8px", color: "var(--text-muted)", textDecoration: "none", fontWeight: 600 }}>
-                    <ArrowLeft size={18} /> Back to Search
+                    <ArrowLeft size={18} /> Retour à la recherche
                 </Link>
             </div>
 
@@ -115,7 +116,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                 <div className="card" style={{ padding: "16px 24px", marginBottom: "24px", backgroundColor: "rgba(255,184,0,0.1)", border: "1px solid rgba(255,184,0,0.3)", display: "flex", alignItems: "center", gap: "12px" }}>
                     <Clock size={20} color="#d97706" />
                     <p style={{ margin: 0, fontSize: "14px", color: "#b45309", fontWeight: 600 }}>
-                        This profile is awaiting approval by the Foodie team — only you {viewerIsAdmin ? "(and admins) " : ""}can see it for now.
+                        Ce profil est en attente d’approbation par l’équipe Foodie — vous seul {viewerIsAdmin ? "(et les admins) " : ""}pouvez le voir pour l’instant.
                     </p>
                 </div>
             )}
@@ -130,7 +131,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
                                 {isApproved && (
                                     <span style={{ backgroundColor: "var(--brand-success)", color: "white", padding: "6px 14px", borderRadius: "99px", fontSize: "12px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
-                                        <Check size={14} strokeWidth={3} /> Verified Home Cook
+                                        <Check size={14} strokeWidth={3} /> Cuisinier vérifié
                                     </span>
                                 )}
                                 <span style={{ backgroundColor: "rgba(255,255,255,0.2)", backdropFilter: "blur(8px)", color: "white", padding: "6px 14px", borderRadius: "99px", fontSize: "12px", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
@@ -142,12 +143,12 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                     </div>
 
                     <div style={{ marginBottom: "40px", paddingBottom: "32px", borderBottom: "1px solid var(--border-light)" }}>
-                        <h2 className="heading-font" style={{ fontSize: "24px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "16px" }}>About {cook.name.split(' ')[0]}</h2>
+                        <h2 className="heading-font" style={{ fontSize: "24px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "16px" }}>À propos de {cook.name.split(' ')[0]}</h2>
                         <p style={{ fontSize: "16px", lineHeight: 1.7, color: "var(--text-body)" }}>{cook.bio}</p>
                     </div>
 
                     <div style={{ marginBottom: "40px", paddingBottom: "32px", borderBottom: "1px solid var(--border-light)" }}>
-                        <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "16px" }}>Specialties</h2>
+                        <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "16px" }}>Spécialités</h2>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
                             {cook.specialties.map((s: string) => (
                                 <span key={s} style={{ padding: "8px 16px", borderRadius: "99px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-medium)", color: "var(--brand-primary)", fontWeight: 600, fontSize: "14px", display: "flex", alignItems: "center", gap: "8px" }}>
@@ -159,11 +160,11 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
 
                     <div style={{ marginBottom: "40px", paddingBottom: "32px", borderBottom: "1px solid var(--border-light)" }}>
                         <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "16px" }}>
-                            All Dishes {rawDishes && rawDishes.length > 0 && <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--text-muted)" }}>({rawDishes.length})</span>}
+                            Tous les plats {rawDishes && rawDishes.length > 0 && <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--text-muted)" }}>({rawDishes.length})</span>}
                         </h2>
                         {(!rawDishes || rawDishes.length === 0) ? (
                             <div className="card" style={{ padding: "40px 24px", textAlign: "center", backgroundColor: "var(--bg-surface)", border: "1px dashed var(--border-medium)" }}>
-                                <p style={{ color: "var(--text-muted)", margin: 0 }}>No dishes listed yet.</p>
+                                <p style={{ color: "var(--text-muted)", margin: 0 }}>Aucun plat répertorié pour l’instant.</p>
                             </div>
                         ) : (
                             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -188,10 +189,10 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                                                     letterSpacing: "0.5px",
                                                     backgroundColor: dish.category === "main" ? "rgba(235, 171, 33, 0.12)" : dish.category === "starter" ? "rgba(34, 197, 94, 0.12)" : "rgba(168, 85, 247, 0.12)",
                                                     color: dish.category === "main" ? "var(--brand-primary)" : dish.category === "starter" ? "#22c55e" : "#a855f7",
-                                                }}>{dish.category}</span>
+                                                }}>{categoryFr(dish.category)}</span>
                                             </div>
                                             <p style={{ margin: "0 0 10px 0", fontSize: "13px", lineHeight: 1.6, color: "var(--text-body)", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                                                {dish.description || "No description available."}
+                                                {dish.description || "Aucune description disponible."}
                                             </p>
                                             {dish.dietary_tags && dish.dietary_tags.length > 0 && (
                                                 <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
@@ -211,17 +212,17 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
 
                     <div>
                         <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "16px", display: "flex", alignItems: "center", gap: "10px" }}>
-                            Reviews ({cook.reviews})
+                            Avis ({cook.reviews})
                             {reviews.length > 0 && <Stars n={Number(cook.rating)} />}
                         </h2>
                         {reviews.length === 0 ? (
                             <div className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "1px dashed var(--border-medium)", textAlign: "center" }}>
-                                <p style={{ color: "var(--text-muted)", margin: 0 }}>Reviews will appear here once {cook.name.split(' ')[0]} completes their first booking through the platform.</p>
+                                <p style={{ color: "var(--text-muted)", margin: 0 }}>Les avis apparaîtront ici dès que {cook.name.split(' ')[0]} aura effectué sa première réservation via la plateforme.</p>
                             </div>
                         ) : (
                             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                                 {reviews.map((review) => {
-                                    const reviewerName = reviewers?.find((p) => p.id === review.family_id)?.full_name || "A family";
+                                    const reviewerName = reviewers?.find((p) => p.id === review.family_id)?.full_name || "Une famille";
                                     return (
                                         <div key={review.id} className="card" style={{ padding: "20px 24px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)" }}>
                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", flexWrap: "wrap", gap: "8px" }}>
@@ -231,7 +232,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                                                     </div>
                                                     <div>
                                                         <div style={{ fontWeight: 700, fontSize: "14px", color: "var(--text-heading)" }}>{reviewerName}</div>
-                                                        <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>{new Date(review.created_at).toLocaleDateString("en-GB")}</div>
+                                                        <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>{new Date(review.created_at).toLocaleDateString("fr-FR")}</div>
                                                     </div>
                                                 </div>
                                                 <Stars n={review.rating} />
@@ -251,12 +252,12 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                 <div>
                     {isOwner ? (
                         <div className="card" style={{ padding: "32px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", position: "sticky", top: "100px", textAlign: "center" }}>
-                            <h3 className="heading-font" style={{ margin: "0 0 8px 0", fontSize: "18px", fontWeight: 800, color: "var(--text-heading)" }}>This is your public profile</h3>
+                            <h3 className="heading-font" style={{ margin: "0 0 8px 0", fontSize: "18px", fontWeight: 800, color: "var(--text-heading)" }}>Ceci est votre profil public</h3>
                             <p style={{ margin: "0 0 20px 0", fontSize: "14px", color: "var(--text-muted)", lineHeight: 1.6 }}>
-                                This is exactly what families see when they find you. Keep your bio, dishes and menus up to date!
+                                C’est exactement ce que voient les familles lorsqu’elles vous trouvent. Gardez votre bio, vos plats et vos menus à jour !
                             </p>
                             <Link href="/dashboard/cook/profile" className="btn-primary" style={{ padding: "12px 24px", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                                <Settings size={16} /> Edit My Profile
+                                <Settings size={16} /> Modifier mon profil
                             </Link>
                         </div>
                     ) : (

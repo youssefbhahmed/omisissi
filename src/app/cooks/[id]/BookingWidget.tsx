@@ -16,6 +16,7 @@ import {
     weekdayName,
 } from "@/lib/booking";
 import type { Dish, Menu } from "@/lib/types";
+import { dayFr, categoryFr } from "@/lib/labels";
 
 export default function BookingWidget({
     cookId,
@@ -128,12 +129,12 @@ export default function BookingWidget({
     }, [orderType, selectedMenuId, menuPrice, cookTimeFee, travelFee, groceryFee]);
 
     const handleSubmit = async () => {
-        if (!date || !time) return alert("Please select a date and time.");
-        if (!isDateAvailable(date)) return alert("The cook is not available on this day of the week.");
-        if (locationType === "client_home" && !address) return alert("Please provide your address.");
-        if (orderType === "menu" && !selectedMenuId) return alert("Please select a Set Menu.");
-        if (orderType === "dishes" && !canPickDishes) return alert("This cook hasn't set an hourly rate yet — please choose a Set Menu instead.");
-        if (orderType === "dishes" && Object.keys(selectedDishes).length === 0) return alert("Please select at least one dish.");
+        if (!date || !time) return alert("Veuillez sélectionner une date et une heure.");
+        if (!isDateAvailable(date)) return alert("Le cuisinier n’est pas disponible ce jour de la semaine.");
+        if (locationType === "client_home" && !address) return alert("Veuillez indiquer votre adresse.");
+        if (orderType === "menu" && !selectedMenuId) return alert("Veuillez sélectionner un menu.");
+        if (orderType === "dishes" && !canPickDishes) return alert("Ce cuisinier n’a pas encore défini de tarif horaire — veuillez plutôt choisir un menu.");
+        if (orderType === "dishes" && Object.keys(selectedDishes).length === 0) return alert("Veuillez sélectionner au moins un plat.");
 
         setIsSubmitting(true);
         try {
@@ -157,11 +158,11 @@ export default function BookingWidget({
             if ("error" in res) {
                 alert(res.error);
             } else {
-                alert("Booking request sent successfully!");
+                alert("Demande de réservation envoyée avec succès !");
                 router.push("/dashboard/family");
             }
         } catch {
-            alert("Something went wrong sending your request. Please try again.");
+            alert("Une erreur est survenue lors de l’envoi de votre demande. Veuillez réessayer.");
         } finally {
             setIsSubmitting(false);
         }
@@ -182,7 +183,7 @@ export default function BookingWidget({
         <div className="card" style={{ padding: "32px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", position: "sticky", top: "100px" }}>
             <div style={{ display: "flex", alignItems: "flex-end", gap: "8px", marginBottom: "24px", paddingBottom: "24px", borderBottom: "1px solid var(--border-light)" }}>
                 <span className="heading-font" style={{ fontSize: "36px", fontWeight: 800, color: "var(--text-heading)", lineHeight: 1 }}>{pricePerHour} <span style={{ fontSize: "16px", color: "var(--text-muted)" }}>TND</span></span>
-                <span style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "4px" }}>/ hour</span>
+                <span style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "4px" }}>/ heure</span>
             </div>
 
             {/* Progress Tabs */}
@@ -195,10 +196,10 @@ export default function BookingWidget({
             {/* STEP 1: Date & Guests */}
             {step === 1 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "20px", animation: "fadeIn 0.2s" }}>
-                    <h3 className="heading-font" style={{ margin: 0, fontSize: "20px", fontWeight: 800 }}>1. Date & Guests</h3>
+                    <h3 className="heading-font" style={{ margin: 0, fontSize: "20px", fontWeight: 800 }}>1. Date et convives</h3>
 
                     <div>
-                        <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Select Date</label>
+                        <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Sélectionner une date</label>
                         <input
                             type="date"
                             min={new Date(Date.now() + 24 * 3600 * 1000).toISOString().split('T')[0]}
@@ -207,16 +208,16 @@ export default function BookingWidget({
                             style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }}
                         />
                         {date && !isDateAvailable(date) && (
-                            <p style={{ color: "var(--danger)", fontSize: "12px", marginTop: "8px" }}>Cook is not available on {weekdayName(date)}s.</p>
+                            <p style={{ color: "var(--danger)", fontSize: "12px", marginTop: "8px" }}>Le cuisinier n’est pas disponible le {dayFr(weekdayName(date)).toLowerCase()}.</p>
                         )}
                         <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "8px" }}>
-                            Available: {availableDays.join(', ') || "No days set"} · book at least 24h ahead
+                            Disponible : {availableDays.map(dayFr).join(', ') || "Aucun jour défini"} · réservez au moins 24h à l’avance
                         </p>
                     </div>
 
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                         <div>
-                            <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Arrival Time</label>
+                            <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Heure d’arrivée</label>
                             <input
                                 type="time"
                                 value={time}
@@ -226,7 +227,7 @@ export default function BookingWidget({
                         </div>
                         <div>
                             <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>
-                                <Users size={16} /> Guests
+                                <Users size={16} /> Convives
                             </label>
                             <div style={{ display: "flex", alignItems: "center", gap: "0", border: "1px solid var(--border-medium)", borderRadius: "10px", overflow: "hidden", backgroundColor: "var(--bg-base)" }}>
                                 <button
@@ -242,7 +243,7 @@ export default function BookingWidget({
                                 >+</button>
                             </div>
                             <p style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "6px", textAlign: "center" }}>
-                                {guests <= 4 ? "Small gathering" : guests <= 8 ? "Family dinner" : guests <= 15 ? "Large party" : "Event / Banquet"}
+                                {guests <= 4 ? "Petit comité" : guests <= 8 ? "Dîner en famille" : guests <= 15 ? "Grande tablée" : "Événement / Banquet"}
                             </p>
                         </div>
                     </div>
@@ -253,7 +254,7 @@ export default function BookingWidget({
                         className="btn-primary"
                         style={{ width: "100%", padding: "14px", marginTop: "12px", opacity: (!date || !isDateAvailable(date)) ? 0.5 : 1 }}
                     >
-                        Next: Choose Food
+                        Suivant : Choisir les plats
                     </button>
                 </div>
             )}
@@ -261,17 +262,17 @@ export default function BookingWidget({
             {/* STEP 2: Choose Food */}
             {step === 2 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "20px", animation: "fadeIn 0.2s" }}>
-                    <h3 className="heading-font" style={{ margin: 0, fontSize: "20px", fontWeight: 800 }}>2. Choose Food</h3>
+                    <h3 className="heading-font" style={{ margin: 0, fontSize: "20px", fontWeight: 800 }}>2. Choisir les plats</h3>
 
                     <div style={{ display: "flex", backgroundColor: "var(--bg-base)", padding: "4px", borderRadius: "12px", border: "1px solid var(--border-light)" }}>
-                        <button onClick={() => { setOrderType("menu"); setSelectedDishes({}); }} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", backgroundColor: orderType === "menu" ? "var(--bg-surface)" : "transparent", color: orderType === "menu" ? "var(--text-heading)" : "var(--text-muted)", fontWeight: 700, boxShadow: orderType === "menu" ? "0 2px 8px rgba(0,0,0,0.05)" : "none", cursor: "pointer", transition: "all 0.2s" }}>Set Menus</button>
-                        <button onClick={() => { setOrderType("dishes"); setSelectedMenuId(""); }} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", backgroundColor: orderType === "dishes" ? "var(--bg-surface)" : "transparent", color: orderType === "dishes" ? "var(--text-heading)" : "var(--text-muted)", fontWeight: 700, boxShadow: orderType === "dishes" ? "0 2px 8px rgba(0,0,0,0.05)" : "none", cursor: "pointer", transition: "all 0.2s" }}>Pick Dishes</button>
+                        <button onClick={() => { setOrderType("menu"); setSelectedDishes({}); }} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", backgroundColor: orderType === "menu" ? "var(--bg-surface)" : "transparent", color: orderType === "menu" ? "var(--text-heading)" : "var(--text-muted)", fontWeight: 700, boxShadow: orderType === "menu" ? "0 2px 8px rgba(0,0,0,0.05)" : "none", cursor: "pointer", transition: "all 0.2s" }}>Menus</button>
+                        <button onClick={() => { setOrderType("dishes"); setSelectedMenuId(""); }} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", backgroundColor: orderType === "dishes" ? "var(--bg-surface)" : "transparent", color: orderType === "dishes" ? "var(--text-heading)" : "var(--text-muted)", fontWeight: 700, boxShadow: orderType === "dishes" ? "0 2px 8px rgba(0,0,0,0.05)" : "none", cursor: "pointer", transition: "all 0.2s" }}>À la carte</button>
                     </div>
 
                     {orderType === "menu" && (
                         <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxHeight: "280px", overflowY: "auto", paddingRight: "8px" }}>
                             {menus.length === 0 ? (
-                                <p style={{ fontSize: "14px", color: "var(--text-muted)", textAlign: "center", padding: "20px 0" }}>No set menus available from this cook.</p>
+                                <p style={{ fontSize: "14px", color: "var(--text-muted)", textAlign: "center", padding: "20px 0" }}>Aucun menu proposé par ce cuisinier.</p>
                             ) : menus.map((m) => (
                                 <div key={m.id} onClick={() => setSelectedMenuId(m.id)} style={{ padding: "16px", borderRadius: "12px", border: `2px solid ${selectedMenuId === m.id ? "var(--brand-primary)" : "var(--border-medium)"}`, backgroundColor: "var(--bg-base)", cursor: "pointer", transition: "all 0.2s" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
@@ -286,7 +287,7 @@ export default function BookingWidget({
 
                     {orderType === "dishes" && !canPickDishes && (
                         <p style={{ fontSize: "14px", color: "var(--text-muted)", textAlign: "center", padding: "20px 8px" }}>
-                            This cook hasn&apos;t set an hourly rate yet, so individual dishes can&apos;t be booked. Choose a Set Menu instead.
+                            Ce cuisinier n’a pas encore défini de tarif horaire, il n’est donc pas possible de réserver des plats à la carte. Choisissez plutôt un menu.
                         </p>
                     )}
 
@@ -294,7 +295,7 @@ export default function BookingWidget({
                         <>
                             <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxHeight: "240px", overflowY: "auto", paddingRight: "8px" }}>
                                 {dishes.length === 0 ? (
-                                    <p style={{ fontSize: "14px", color: "var(--text-muted)", textAlign: "center", padding: "20px 0" }}>No dishes available from this cook.</p>
+                                    <p style={{ fontSize: "14px", color: "var(--text-muted)", textAlign: "center", padding: "20px 0" }}>Aucun plat proposé par ce cuisinier.</p>
                                 ) : dishes.map((d) => {
                                     const qty = selectedDishes[d.id] || 0;
                                     const isSelected = qty > 0;
@@ -305,7 +306,7 @@ export default function BookingWidget({
                                             <div style={{ flex: 1, minWidth: 0 }}>
                                                 <div style={{ fontWeight: 700, fontSize: "13px", color: "var(--text-heading)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.name}</div>
                                                 <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "2px" }}>
-                                                    <span style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", fontWeight: 600 }}>{d.category}</span>
+                                                    <span style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", fontWeight: 600 }}>{categoryFr(d.category)}</span>
                                                     <span style={{ width: "3px", height: "3px", borderRadius: "50%", backgroundColor: "var(--border-medium)" }} />
                                                     <span style={{ fontSize: "10px", fontWeight: 600, color: getComplexityColor(d.complexity || 2), display: "flex", alignItems: "center", gap: "4px" }}>
                                                         <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "currentColor", flexShrink: 0 }} />
@@ -325,15 +326,15 @@ export default function BookingWidget({
                             </div>
                             {totalDishCount > 0 && (
                                 <div style={{ padding: "12px 16px", borderRadius: "10px", backgroundColor: "rgba(235, 171, 33, 0.08)", border: "1px solid rgba(235, 171, 33, 0.2)", fontSize: "13px", color: "var(--text-body)" }}>
-                                    <strong>{totalDishCount} dish{totalDishCount !== 1 ? "es" : ""}</strong> for <strong>{guests} guest{guests !== 1 ? "s" : ""}</strong> → est. <strong>{estimatedHours}h</strong> cook time
+                                    <strong>{totalDishCount} plat{totalDishCount !== 1 ? "s" : ""}</strong> pour <strong>{guests} convive{guests !== 1 ? "s" : ""}</strong> → env. <strong>{estimatedHours}h</strong> de cuisine
                                 </div>
                             )}
                         </>
                     )}
 
                     <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
-                        <button onClick={() => setStep(1)} className="btn-nav" style={{ flex: 1, padding: "14px", border: "1px solid var(--border-medium)" }}>Back</button>
-                        <button onClick={() => setStep(3)} className="btn-primary" style={{ flex: 2, padding: "14px" }}>Next: Details</button>
+                        <button onClick={() => setStep(1)} className="btn-nav" style={{ flex: 1, padding: "14px", border: "1px solid var(--border-medium)" }}>Retour</button>
+                        <button onClick={() => setStep(3)} className="btn-primary" style={{ flex: 2, padding: "14px" }}>Suivant : Détails</button>
                     </div>
                 </div>
             )}
@@ -341,23 +342,23 @@ export default function BookingWidget({
             {/* STEP 3: Final Details & Price Breakdown */}
             {step === 3 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "20px", animation: "fadeIn 0.2s" }}>
-                    <h3 className="heading-font" style={{ margin: 0, fontSize: "20px", fontWeight: 800 }}>3. Final Details</h3>
+                    <h3 className="heading-font" style={{ margin: 0, fontSize: "20px", fontWeight: 800 }}>3. Derniers détails</h3>
 
                     <div>
-                        <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Location</label>
+                        <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Lieu</label>
                         <select
                             value={locationType}
                             onChange={e => setLocationType(e.target.value as "client_home" | "cook_home")}
                             style={{ width: "100%", padding: "14px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)", marginBottom: "12px" }}
                         >
-                            <option value="client_home">My Home (Cook comes to me)</option>
-                            <option value="cook_home">Pick Up (Cook&apos;s Home)</option>
+                            <option value="client_home">Chez moi (le cuisinier se déplace)</option>
+                            <option value="cook_home">À emporter (chez le cuisinier)</option>
                         </select>
 
                         {locationType === "client_home" && (
                             <input
                                 type="text"
-                                placeholder="Enter your full address"
+                                placeholder="Saisissez votre adresse complète"
                                 value={address}
                                 onChange={e => setAddress(e.target.value)}
                                 style={{ width: "100%", padding: "14px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }}
@@ -368,18 +369,18 @@ export default function BookingWidget({
                     <label style={{ display: "flex", alignItems: "center", gap: "12px", padding: "16px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", cursor: "pointer" }}>
                         <input type="checkbox" checked={groceryDelivery} onChange={e => setGroceryDelivery(e.target.checked)} style={{ width: "20px", height: "20px", accentColor: "var(--brand-primary)" }} />
                         <div style={{ flex: 1 }}>
-                            <div style={{ fontWeight: 700, fontSize: "14px" }}>Add Grocery Shopping</div>
+                            <div style={{ fontWeight: 700, fontSize: "14px" }}>Ajouter les courses</div>
                             <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
-                                Cook buys all ingredients ({getGroceryFee(guests)} TND for {guests} guests)
+                                Le cuisinier achète tous les ingrédients ({getGroceryFee(guests)} TND pour {guests} convives)
                             </div>
                         </div>
                     </label>
 
                     <div>
-                        <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Custom Requests / Dietary Notes</label>
+                        <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px" }}>Demandes particulières / Notes diététiques</label>
                         <textarea
                             rows={3}
-                            placeholder="e.g. Please make the couscous extra spicy, no nuts..."
+                            placeholder="ex. Couscous bien épicé, sans fruits à coque..."
                             value={notes}
                             onChange={e => setNotes(e.target.value)}
                             style={{ width: "100%", padding: "14px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)", resize: "vertical" }}
@@ -388,12 +389,12 @@ export default function BookingWidget({
 
                     {/* --- PRICE BREAKDOWN --- */}
                     <div style={{ padding: "20px", borderRadius: "12px", backgroundColor: "var(--bg-subtle)", marginTop: "8px" }}>
-                        <div style={{ fontSize: "13px", fontWeight: 700, color: "var(--text-heading)", marginBottom: "14px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Price Breakdown</div>
+                        <div style={{ fontSize: "13px", fontWeight: 700, color: "var(--text-heading)", marginBottom: "14px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Détail du prix</div>
 
                         {orderType === "menu" && selectedMenuId ? (
                             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", fontSize: "14px" }}>
                                 <span style={{ color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }}>
-                                    <Utensils size={14} /> {menus.find(m => m.id === selectedMenuId)?.name || "Set Menu"}
+                                    <Utensils size={14} /> {menus.find(m => m.id === selectedMenuId)?.name || "Menu"}
                                 </span>
                                 <span style={{ fontWeight: 600 }}>{menuPrice} TND</span>
                             </div>
@@ -401,12 +402,12 @@ export default function BookingWidget({
                             <>
                                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px", fontSize: "14px" }}>
                                     <span style={{ color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }}>
-                                        <Clock size={14} /> Cook Service ({estimatedHours}h × {pricePerHour} TND)
+                                        <Clock size={14} /> Service du cuisinier ({estimatedHours}h × {pricePerHour} TND)
                                     </span>
                                     <span style={{ fontWeight: 600 }}>{cookTimeFee} TND</span>
                                 </div>
                                 <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "10px", paddingLeft: "20px" }}>
-                                    {totalDishCount} dish{totalDishCount !== 1 ? "es" : ""} ({dishPrepTime.toFixed(1)}h prep) + {guests} guest{guests !== 1 ? "s" : ""} ({guestTime.toFixed(1)}h)
+                                    {totalDishCount} plat{totalDishCount !== 1 ? "s" : ""} ({dishPrepTime.toFixed(1)}h de préparation) + {guests} convive{guests !== 1 ? "s" : ""} ({guestTime.toFixed(1)}h)
                                 </div>
                             </>
                         )}
@@ -414,7 +415,7 @@ export default function BookingWidget({
                         {travelFee > 0 && (
                             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", fontSize: "14px" }}>
                                 <span style={{ color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }}>
-                                    <MapPin size={14} /> Travel Fee
+                                    <MapPin size={14} /> Frais de déplacement
                                 </span>
                                 <span style={{ fontWeight: 600 }}>{travelFee} TND</span>
                             </div>
@@ -423,7 +424,7 @@ export default function BookingWidget({
                         {groceryFee > 0 && (
                             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", fontSize: "14px" }}>
                                 <span style={{ color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }}>
-                                    <ShoppingBag size={14} /> Grocery Shopping ({guests} guests)
+                                    <ShoppingBag size={14} /> Courses ({guests} convives)
                                 </span>
                                 <span style={{ fontWeight: 600 }}>{groceryFee} TND</span>
                             </div>
@@ -436,20 +437,20 @@ export default function BookingWidget({
                     </div>
 
                     <div style={{ display: "flex", gap: "12px", marginTop: "4px" }}>
-                        <button onClick={() => setStep(2)} className="btn-nav" style={{ flex: 1, padding: "14px", border: "1px solid var(--border-medium)" }}>Back</button>
+                        <button onClick={() => setStep(2)} className="btn-nav" style={{ flex: 1, padding: "14px", border: "1px solid var(--border-medium)" }}>Retour</button>
                         {isLoggedIn ? (
                             <button onClick={handleSubmit} disabled={isSubmitting} className="btn-primary" style={{ flex: 2, padding: "14px", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>
-                                {isSubmitting ? "Sending..." : `Book · ${totalEstimate} TND`}
+                                {isSubmitting ? "Envoi..." : `Réserver · ${totalEstimate} TND`}
                             </button>
                         ) : (
                             <Link href={`/login?next=/cooks/${cookId}`} className="btn-primary" style={{ flex: 2, padding: "14px", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", textDecoration: "none" }}>
-                                <LogIn size={16} /> Log in to book
+                                <LogIn size={16} /> Se connecter pour réserver
                             </Link>
                         )}
                     </div>
                     {!isLoggedIn && (
                         <p style={{ margin: 0, fontSize: "12px", color: "var(--text-muted)", textAlign: "center" }}>
-                            Browsing is free — an account is only needed to send a booking request.
+                            La navigation est gratuite — un compte n’est nécessaire que pour envoyer une demande de réservation.
                         </p>
                     )}
                 </div>

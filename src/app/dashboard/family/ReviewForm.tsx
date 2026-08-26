@@ -16,7 +16,7 @@ export default function ReviewForm({ bookingId, cookName }: { bookingId: string;
 
     const handleSubmit = async () => {
         if (rating < 1) {
-            setError("Please pick a rating first.");
+            setError("Veuillez d’abord choisir une note.");
             return;
         }
         setIsSubmitting(true);
@@ -34,7 +34,7 @@ export default function ReviewForm({ bookingId, cookName }: { bookingId: string;
                 router.refresh();
             }
         } catch {
-            setError("Something went wrong. Please try again.");
+            setError("Une erreur est survenue. Veuillez réessayer.");
         } finally {
             setIsSubmitting(false);
         }
@@ -47,7 +47,7 @@ export default function ReviewForm({ bookingId, cookName }: { bookingId: string;
                 className="btn-primary"
                 style={{ padding: "10px 20px", fontSize: "14px", display: "inline-flex", alignItems: "center", gap: "8px" }}
             >
-                <Star size={16} /> Rate this meal
+                <Star size={16} /> Noter ce repas
             </button>
         );
     }
@@ -55,7 +55,7 @@ export default function ReviewForm({ bookingId, cookName }: { bookingId: string;
     return (
         <div style={{ padding: "16px", borderRadius: "12px", border: "1.5px solid var(--brand-primary)", backgroundColor: "rgba(235, 171, 33, 0.05)", display: "flex", flexDirection: "column", gap: "12px" }}>
             <div style={{ fontWeight: 700, fontSize: "14px", color: "var(--text-heading)" }}>
-                How was the meal with {cookName}?
+                Comment était le repas avec {cookName} ?
             </div>
 
             <div style={{ display: "flex", gap: "6px" }} onMouseLeave={() => setHovered(0)}>
@@ -65,7 +65,7 @@ export default function ReviewForm({ bookingId, cookName }: { bookingId: string;
                         type="button"
                         onClick={() => setRating(n)}
                         onMouseEnter={() => setHovered(n)}
-                        aria-label={`${n} star${n > 1 ? "s" : ""}`}
+                        aria-label={`${n} étoile${n > 1 ? "s" : ""}`}
                         style={{ background: "none", border: "none", cursor: "pointer", padding: "2px" }}
                     >
                         <Star
@@ -81,7 +81,7 @@ export default function ReviewForm({ bookingId, cookName }: { bookingId: string;
                 rows={3}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="Tell other families about the food, the punctuality, the experience... (optional)"
+                placeholder="Parlez aux autres familles de la cuisine, de la ponctualité, de l’expérience… (facultatif)"
                 style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-surface)", color: "var(--text-body)", fontSize: "14px", resize: "vertical" }}
             />
 
@@ -95,7 +95,7 @@ export default function ReviewForm({ bookingId, cookName }: { bookingId: string;
                     className="btn-nav"
                     style={{ padding: "10px 18px", border: "1px solid var(--border-medium)", borderRadius: "10px" }}
                 >
-                    Cancel
+                    Annuler
                 </button>
                 <button
                     onClick={handleSubmit}
@@ -103,7 +103,7 @@ export default function ReviewForm({ bookingId, cookName }: { bookingId: string;
                     className="btn-primary"
                     style={{ padding: "10px 24px", fontSize: "14px" }}
                 >
-                    {isSubmitting ? "Sending..." : "Submit review"}
+                    {isSubmitting ? "Envoi…" : "Envoyer l’avis"}
                 </button>
             </div>
         </div>

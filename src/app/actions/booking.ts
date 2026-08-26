@@ -11,6 +11,7 @@ import {
     parseSelectedDishes,
     weekdayName,
 } from "@/lib/booking";
+import { dayFr } from "@/lib/labels";
 import { normalizeStringArray, type BookingStatus } from "@/lib/types";
 
 type ActionResult = { error: string } | { success: true; bookingId?: string };
@@ -57,7 +58,7 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: "You must be logged in to book a cook." };
+        return { error: "Vous devez être connecté pour réserver un cuisinier." };
     }
 
     const cookId = formData.get("cookId") as string;
@@ -73,24 +74,24 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
     const notes = ((formData.get("notes") as string) || "").trim().slice(0, 2000);
 
     // --- Validate the request shape ---
-    if (!cookId) return { error: "Missing cook." };
-    if (cookId === user.id) return { error: "You cannot book yourself." };
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return { error: "Please select a valid date." };
-    if (!/^\d{2}:\d{2}/.test(time)) return { error: "Please select a valid time." };
+    if (!cookId) return { error: "Cuisinier manquant." };
+    if (cookId === user.id) return { error: "Vous ne pouvez pas vous réserver vous-même." };
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return { error: "Veuillez choisir une date valide." };
+    if (!/^\d{2}:\d{2}/.test(time)) return { error: "Veuillez choisir une heure valide." };
     if (scheduledMs(date, time) - Date.now() < MIN_NOTICE_HOURS * 3600_000) {
-        return { error: `Bookings must be made at least ${MIN_NOTICE_HOURS} hours in advance, so the cook can plan and shop.` };
+        return { error: `Les réservations doivent être faites au moins ${MIN_NOTICE_HOURS} heures à l’avance, pour que le cuisinier puisse s’organiser et faire les courses.` };
     }
     if (!Number.isInteger(guests) || guests < 1 || guests > MAX_GUESTS) {
-        return { error: `Guests must be between 1 and ${MAX_GUESTS}.` };
+        return { error: `Le nombre de convives doit être entre 1 et ${MAX_GUESTS}.` };
     }
     if (locationType !== "client_home" && locationType !== "cook_home") {
-        return { error: "Please choose a valid location." };
+        return { error: "Veuillez choisir un lieu valide." };
     }
     if (locationType === "client_home" && !address) {
-        return { error: "Please provide your address." };
+        return { error: "Veuillez indiquer votre adresse." };
     }
     if (orderType !== "menu" && orderType !== "dishes") {
-        return { error: "Please choose a set menu or pick dishes." };
+        return { error: "Veuillez choisir un menu ou sélectionner des plats." };
     }
 
     // --- Load the cook and check availability ---
@@ -103,21 +104,21 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
         .single();
 
     if (!cookDetails) {
-        return { error: "This cook is not available for bookings." };
+        return { error: "Ce cuisinier n’est pas disponible à la réservation." };
     }
     if (cookDetails.is_approved === false) {
-        return { error: "This cook has not been approved by the Foodie team yet." };
+        return { error: "Ce cuisinier n’a pas encore été approuvé par l’équipe Foodie." };
     }
 
     const availableDays = normalizeStringArray(cookDetails.available_days);
     if (availableDays.length === 0) {
-        return { error: "This cook has not set their availability yet." };
+        return { error: "Ce cuisinier n’a pas encore défini ses disponibilités." };
     }
     if (!availableDays.includes(weekdayName(date))) {
-        return { error: `The cook is not available on ${weekdayName(date)}s.` };
+        return { error: `Le cuisinier n’est pas disponible le ${dayFr(weekdayName(date)).toLowerCase()}.` };
     }
     if (await cookHasConflict(supabase, cookId, date, time)) {
-        return { error: "This cook already has a confirmed booking around that time. Try another time or day." };
+        return { error: "Ce cuisinier a déjà une réservation confirmée à ce créneau. Essayez une autre heure ou un autre jour." };
     }
 
     // --- Compute the price server-side (never trust the client's number) ---
@@ -130,24 +131,24 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
     let bookedMenuId: string | null = null;
 
     if (orderType === "menu") {
-        if (!menuId) return { error: "Please select a set menu." };
+        if (!menuId) return { error: "Veuillez choisir un menu." };
         const { data: menu } = await supabase
             .from('menus')
             .select('id, price')
             .eq('id', menuId)
             .eq('cook_id', cookId)
             .single();
-        if (!menu) return { error: "That menu does not belong to this cook." };
+        if (!menu) return { error: "Ce menu n’appartient pas à ce cuisinier." };
         bookedMenuId = menu.id;
         totalPrice = Number(menu.price) + travelFee + groceryFee;
     } else {
         const trimmedDishes = (dishesStr || "").trim();
         if (!trimmedDishes || trimmedDishes === "{}") {
-            return { error: "Please select at least one dish." };
+            return { error: "Veuillez sélectionner au moins un plat." };
         }
         const selected = parseSelectedDishes(trimmedDishes);
         if (!selected) {
-            return { error: `Invalid dish selection — you can order between 1 and ${MAX_DISH_QUANTITY} of each dish.` };
+            return { error: `Sélection invalide — vous pouvez commander entre 1 et ${MAX_DISH_QUANTITY} exemplaires de chaque plat.` };
         }
 
         const dishIds = Object.keys(selected);
@@ -158,12 +159,12 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
             .eq('cook_id', cookId);
 
         if (!cookDishes || cookDishes.length !== dishIds.length) {
-            return { error: "One or more selected dishes do not belong to this cook." };
+            return { error: "Un ou plusieurs plats sélectionnés n’appartiennent pas à ce cuisinier." };
         }
 
         const pricePerHour = Number(cookDetails.price_per_session);
         if (!Number.isFinite(pricePerHour) || pricePerHour <= 0) {
-            return { error: "This cook has not set an hourly rate yet." };
+            return { error: "Ce cuisinier n’a pas encore défini de tarif horaire." };
         }
 
         durationHours = estimateHours(selected, cookDishes, guests);
@@ -199,7 +200,7 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
 
     if (bookingError || !booking) {
         console.error("Booking error:", bookingError);
-        return { error: "Failed to submit booking request. " + (bookingError?.message ?? "") };
+        return { error: "Échec de l’envoi de la demande de réservation. " + (bookingError?.message ?? "") };
     }
 
     if (dishInserts.length > 0) {
@@ -211,7 +212,7 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
             console.error("Booking dishes error:", dishError);
             // Roll back so we never store a paid booking with no order lines.
             await supabase.from('bookings').delete().eq('id', booking.id);
-            return { error: "Failed to save your dish selection. Please try again." };
+            return { error: "Échec de l’enregistrement de vos plats. Veuillez réessayer." };
         }
     }
 
@@ -227,14 +228,14 @@ export async function updateBookingStatus(formData: FormData): Promise<ActionRes
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: "You must be logged in." };
+        return { error: "Vous devez être connecté." };
     }
 
     const bookingId = formData.get("bookingId") as string;
     const newStatus = formData.get("status") as BookingStatus;
 
     if (!bookingId || !newStatus) {
-        return { error: "Missing required fields." };
+        return { error: "Champs requis manquants." };
     }
 
     const { data: booking, error: fetchError } = await supabase
@@ -244,7 +245,7 @@ export async function updateBookingStatus(formData: FormData): Promise<ActionRes
         .single();
 
     if (fetchError || !booking) {
-        return { error: "Booking not found." };
+        return { error: "Réservation introuvable." };
     }
 
     const isCook = booking.cook_id === user.id;
@@ -252,34 +253,34 @@ export async function updateBookingStatus(formData: FormData): Promise<ActionRes
 
     if (isCook) {
         if (!COOK_STATUSES.includes(newStatus)) {
-            return { error: "Invalid status." };
+            return { error: "Statut invalide." };
         }
         if ((newStatus === "accepted" || newStatus === "declined") && booking.status !== "pending") {
-            return { error: "This request has already been handled." };
+            return { error: "Cette demande a déjà été traitée." };
         }
         if (newStatus === "completed" && booking.status !== "accepted") {
-            return { error: "Only accepted bookings can be completed." };
+            return { error: "Seules les réservations acceptées peuvent être marquées terminées." };
         }
         if (
             newStatus === "accepted" &&
             await cookHasConflict(supabase, user.id, booking.scheduled_date, booking.scheduled_time, bookingId)
         ) {
-            return { error: "You already have a confirmed booking around that time. Decline this one or free up the slot first." };
+            return { error: "Vous avez déjà une réservation confirmée à ce créneau. Refusez celle-ci ou libérez d’abord le créneau." };
         }
     } else if (isFamily) {
         if (newStatus !== "cancelled") {
-            return { error: "You can only cancel your own bookings." };
+            return { error: "Vous ne pouvez annuler que vos propres réservations." };
         }
         if (booking.status === "accepted") {
             const hoursLeft = (scheduledMs(booking.scheduled_date, booking.scheduled_time) - Date.now()) / 3600_000;
             if (hoursLeft < CANCEL_WINDOW_HOURS) {
-                return { error: `Accepted bookings can only be cancelled up to ${CANCEL_WINDOW_HOURS} hours before the meal. Please contact the cook directly.` };
+                return { error: `Une réservation acceptée ne peut être annulée que jusqu’à ${CANCEL_WINDOW_HOURS} heures avant le repas. Contactez directement le cuisinier.` };
             }
         } else if (booking.status !== "pending") {
-            return { error: "Only pending requests or upcoming accepted bookings can be cancelled." };
+            return { error: "Seules les demandes en attente ou les réservations acceptées à venir peuvent être annulées." };
         }
     } else {
-        return { error: "You do not have permission to update this booking." };
+        return { error: "Vous n’avez pas la permission de modifier cette réservation." };
     }
 
     // Compare-and-swap on the status we validated against, so a concurrent
@@ -294,10 +295,10 @@ export async function updateBookingStatus(formData: FormData): Promise<ActionRes
 
     if (updateError) {
         console.error("Error updating booking status:", updateError);
-        return { error: "Failed to update booking. " + updateError.message };
+        return { error: "Échec de la mise à jour de la réservation. " + updateError.message };
     }
     if (!updatedRows || updatedRows.length === 0) {
-        return { error: "This booking was just updated by someone else. Please refresh and try again." };
+        return { error: "Cette réservation vient d’être modifiée par quelqu’un d’autre. Actualisez et réessayez." };
     }
 
     revalidatePath("/dashboard/cook/bookings");

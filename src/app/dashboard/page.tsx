@@ -23,18 +23,18 @@ export default async function FamilyDashboard() {
         <div>
             {profile?.is_admin === true && (
                 <Link href="/dashboard/admin" className="card" style={{ padding: "16px 24px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "12px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-medium)", textDecoration: "none", color: "var(--text-heading)", fontWeight: 700 }}>
-                    <ShieldCheck size={20} color="var(--brand-primary)" /> Admin — Cook Approvals <ArrowRight size={16} style={{ marginLeft: "auto" }} />
+                    <ShieldCheck size={20} color="var(--brand-primary)" /> Admin — Approbation des cuisiniers <ArrowRight size={16} style={{ marginLeft: "auto" }} />
                 </Link>
             )}
             <div style={{ marginBottom: "40px", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                 <div>
                     <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, margin: "0 0 8px 0", color: "var(--text-heading)" }}>
-                        Welcome back, {profile?.full_name?.split(' ')[0] || 'Family'}! 👋
+                        Bon retour, {profile?.full_name?.split(' ')[0] || 'Famille'} ! 👋
                     </h1>
-                    <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>Here&apos;s what&apos;s cooking this week.</p>
+                    <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>Voici ce qui mijote cette semaine.</p>
                 </div>
                 <Link href="/cooks" className="btn-primary" style={{ padding: "12px 24px", textDecoration: "none" }}>
-                    <Search size={18} /> Find a Cook
+                    <Search size={18} /> Trouver un cuisinier
                 </Link>
             </div>
 
@@ -42,12 +42,12 @@ export default async function FamilyDashboard() {
                 <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(255,184,0,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 20px auto" }}>
                     <Calendar size={32} />
                 </div>
-                <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>No upcoming bookings</h3>
+                <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>Aucune réservation à venir</h3>
                 <p style={{ color: "var(--text-muted)", marginBottom: "24px", maxWidth: "400px", margin: "0 auto 24px auto", lineHeight: 1.6 }}>
-                    You don&apos;t have any meals scheduled yet. Browse our verified home cooks and book your first dinner!
+                    Vous n’avez pas encore de repas planifiés. Parcourez nos cuisiniers à domicile vérifiés et réservez votre premier dîner !
                 </p>
                 <Link href="/cooks" className="btn-primary" style={{ padding: "14px 28px", textDecoration: "none", display: "inline-flex" }}>
-                    Browse Cooks Near You <ArrowRight size={18} />
+                    Parcourir les cuisiniers près de chez vous <ArrowRight size={18} />
                 </Link>
             </div>
         </div>

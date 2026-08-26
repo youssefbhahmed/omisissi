@@ -3,9 +3,9 @@ import "./globals.css";
 import PwaRegister from "@/components/PwaRegister";
 
 export const metadata: Metadata = {
-  title: "Foodie — Home-Cooked Meals, Made With Love",
+  title: "Foodie — Des plats faits maison, préparés avec amour",
   description:
-    "Connect with talented home cooks in your area. Fresh, home-cooked meals prepared by real people — right in your kitchen or delivered to your door.",
+    "Trouvez des cuisiniers à domicile talentueux près de chez vous. Des plats frais faits maison, préparés par de vraies personnes — directement dans votre cuisine ou livrés chez vous.",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -43,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="fr" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

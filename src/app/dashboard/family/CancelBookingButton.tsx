@@ -9,7 +9,7 @@ export default function CancelBookingButton({ bookingId }: { bookingId: string }
     const [isCancelling, setIsCancelling] = useState(false);
 
     const handleCancel = async () => {
-        if (!confirm("Cancel this booking request?")) return;
+        if (!confirm("Annuler cette demande de réservation ?")) return;
 
         setIsCancelling(true);
         try {
@@ -23,7 +23,7 @@ export default function CancelBookingButton({ bookingId }: { bookingId: string }
                 router.refresh();
             }
         } catch {
-            alert("Something went wrong. Please try again.");
+            alert("Une erreur est survenue. Veuillez réessayer.");
         } finally {
             setIsCancelling(false);
         }
@@ -36,7 +36,7 @@ export default function CancelBookingButton({ bookingId }: { bookingId: string }
             className="btn-nav"
             style={{ padding: "8px 16px", border: "1px solid var(--border-medium)", color: "var(--danger)", fontSize: "13px", fontWeight: 600, borderRadius: "10px", cursor: "pointer" }}
         >
-            {isCancelling ? "Cancelling..." : "Cancel Request"}
+            {isCancelling ? "Annulation…" : "Annuler la demande"}
         </button>
     );
 }

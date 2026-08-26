@@ -52,15 +52,15 @@ export default async function CookDashboard() {
         <div>
             {profile?.is_admin === true && (
                 <Link href="/dashboard/admin" className="card" style={{ padding: "16px 24px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "12px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-medium)", textDecoration: "none", color: "var(--text-heading)", fontWeight: 700 }}>
-                    <ShieldAlert size={20} color="var(--brand-primary)" /> Admin — Cook Approvals <ArrowRight size={16} style={{ marginLeft: "auto" }} />
+                    <ShieldAlert size={20} color="var(--brand-primary)" /> Admin — Approbation des cuisiniers <ArrowRight size={16} style={{ marginLeft: "auto" }} />
                 </Link>
             )}
             <div style={{ marginBottom: "40px", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                 <div>
                     <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, margin: "0 0 8px 0", color: "var(--text-heading)" }}>
-                        Welcome back, {profile?.full_name?.split(' ')[0] || 'Chef'}! 🍳
+                        Bon retour, {profile?.full_name?.split(' ')[0] || 'Chef'} ! 🍳
                     </h1>
-                    <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>Manage your cooking business.</p>
+                    <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>Gérez votre activité de cuisine.</p>
                 </div>
             </div>
 
@@ -70,9 +70,9 @@ export default async function CookDashboard() {
                         <ShieldAlert size={24} />
                     </div>
                     <div>
-                        <h3 className="heading-font" style={{ margin: "0 0 4px 0", fontSize: "18px", fontWeight: 700, color: "#1d4ed8" }}>Your profile is awaiting approval</h3>
+                        <h3 className="heading-font" style={{ margin: "0 0 4px 0", fontSize: "18px", fontWeight: 700, color: "#1d4ed8" }}>Votre profil est en attente d’approbation</h3>
                         <p style={{ margin: 0, fontSize: "14px", color: "#1e40af" }}>
-                            The Foodie team reviews every new cook before they appear in the directory. Until then, families can&apos;t find or book you — use the time to polish your <Link href={`/cooks/${user.id}`} style={{ color: "#1d4ed8", fontWeight: 700 }}>public profile</Link>, dishes and menus.
+                            L’équipe Foodie examine chaque nouveau cuisinier avant qu’il n’apparaisse dans l’annuaire. D’ici là, les familles ne peuvent ni vous trouver ni vous réserver — profitez-en pour peaufiner votre <Link href={`/cooks/${user.id}`} style={{ color: "#1d4ed8", fontWeight: 700 }}>profil public</Link>, vos plats et vos menus.
                         </p>
                     </div>
                 </div>
@@ -85,12 +85,12 @@ export default async function CookDashboard() {
                             <ShieldAlert size={24} />
                         </div>
                         <div>
-                            <h3 className="heading-font" style={{ margin: "0 0 4px 0", fontSize: "18px", fontWeight: 700, color: "#92400e" }}>Complete Your Cook Profile</h3>
-                            <p style={{ margin: 0, fontSize: "14px", color: "#b45309" }}>Families cannot book you until you set your bio, specialties, and hourly rate.</p>
+                            <h3 className="heading-font" style={{ margin: "0 0 4px 0", fontSize: "18px", fontWeight: 700, color: "#92400e" }}>Complétez votre profil cuisinier</h3>
+                            <p style={{ margin: 0, fontSize: "14px", color: "#b45309" }}>Les familles ne peuvent pas vous réserver tant que vous n’avez pas renseigné votre bio, vos spécialités et votre tarif horaire.</p>
                         </div>
                     </div>
                     <Link href="/dashboard/cook/profile" className="btn-primary" style={{ padding: "10px 20px", textDecoration: "none", backgroundColor: "#f59e0b", color: "white" }}>
-                        Setup Profile
+                        Configurer le profil
                     </Link>
                 </div>
             )}
@@ -99,18 +99,18 @@ export default async function CookDashboard() {
                 {/* Quick Stats */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                     <div className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)" }}>
-                        <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Earnings This Week</p>
+                        <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Revenus cette semaine</p>
                         <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: "var(--text-heading)" }}>{weeklyEarnings} <span style={{ fontSize: "16px", color: "var(--text-muted)" }}>TND</span></h3>
                         {totalEarnings > weeklyEarnings && (
-                            <p style={{ margin: "6px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }}>{totalEarnings} TND earned in total</p>
+                            <p style={{ margin: "6px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }}>{totalEarnings} TND gagnés au total</p>
                         )}
                     </div>
                     <div className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)" }}>
-                        <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Confirmed Bookings</p>
+                        <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Réservations confirmées</p>
                         <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: "var(--text-heading)" }}>{activeCount}</h3>
                     </div>
                     <div className="card" style={{ padding: "24px", backgroundColor: pendingCount > 0 ? "rgba(255,184,0,0.08)" : "var(--bg-surface)", border: pendingCount > 0 ? "1px solid rgba(255,184,0,0.4)" : "1px solid var(--border-light)" }}>
-                        <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Pending Requests</p>
+                        <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Demandes en attente</p>
                         <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: pendingCount > 0 ? "var(--brand-primary)" : "var(--text-heading)" }}>{pendingCount}</h3>
                     </div>
                 </div>
@@ -122,13 +122,13 @@ export default async function CookDashboard() {
                             <ShoppingBag size={32} />
                         </div>
                         <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>
-                            {pendingCount} request{pendingCount > 1 ? "s" : ""} waiting for your answer
+                            {pendingCount} demande{pendingCount > 1 ? "s" : ""} en attente de votre réponse
                         </h3>
                         <p style={{ color: "var(--text-muted)", maxWidth: "400px", margin: "0 auto 24px auto", lineHeight: 1.6 }}>
-                            Families are waiting — accept or decline before the requested date gets too close.
+                            Des familles attendent — acceptez ou refusez avant que la date demandée ne soit trop proche.
                         </p>
                         <Link href="/dashboard/cook/bookings" className="btn-primary" style={{ padding: "14px 28px", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                            Review Requests <ArrowRight size={18} />
+                            Examiner les demandes <ArrowRight size={18} />
                         </Link>
                     </div>
                 ) : (
@@ -136,9 +136,9 @@ export default async function CookDashboard() {
                         <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(255,184,0,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 20px auto" }}>
                             <ShoppingBag size={32} />
                         </div>
-                        <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>No pending requests</h3>
+                        <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>Aucune demande en attente</h3>
                         <p style={{ color: "var(--text-muted)", maxWidth: "400px", margin: "0 auto", lineHeight: 1.6 }}>
-                            {isProfileIncomplete ? 'Complete your profile to start receiving booking requests from nearby families.' : 'You have no pending cooking requests right now. New requests will appear here and in your Bookings tab.'}
+                            {isProfileIncomplete ? 'Complétez votre profil pour commencer à recevoir des demandes de réservation des familles à proximité.' : 'Vous n’avez aucune demande de cuisine en attente pour le moment. Les nouvelles demandes apparaîtront ici et dans votre onglet Réservations.'}
                         </p>
                     </div>
                 )}

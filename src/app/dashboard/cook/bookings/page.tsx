@@ -71,10 +71,10 @@ export default async function CookBookingsPage() {
             <div style={{ marginBottom: "32px", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                 <div>
                     <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, margin: "0 0 8px 0", color: "var(--text-heading)" }}>
-                        Booking Requests
+                        Demandes de réservation
                     </h1>
                     <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>
-                        Manage your upcoming meals and review new requests from families.
+                        Gérez vos repas à venir et examinez les nouvelles demandes des familles.
                     </p>
                 </div>
             </div>
@@ -84,9 +84,9 @@ export default async function CookBookingsPage() {
                     <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "var(--bg-subtle)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px auto", color: "var(--text-muted)" }}>
                         <Calendar size={32} />
                     </div>
-                    <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, margin: "0 0 12px 0", color: "var(--text-heading)" }}>No requests yet</h3>
+                    <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, margin: "0 0 12px 0", color: "var(--text-heading)" }}>Aucune demande pour le moment</h3>
                     <p style={{ margin: "0 0 24px 0", color: "var(--text-muted)", maxWidth: "400px", marginLeft: "auto", marginRight: "auto" }}>
-                        Make sure your profile looks great and your schedule is up to date to start receiving booking requests from families!
+                        Assurez-vous que votre profil est soigné et que vos disponibilités sont à jour pour commencer à recevoir des demandes de réservation des familles !
                     </p>
                 </div>
             ) : (

@@ -82,9 +82,9 @@ export default async function DiscoverCooks() {
         <div>
             <div style={{ marginBottom: "24px" }}>
                 <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, margin: "0 0 8px 0", color: "var(--text-heading)" }}>
-                    Find a Cook
+                    Trouver un cuisinier
                 </h1>
-                <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>Browse verified home cooks in your area.</p>
+                <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>Parcourez les cuisiniers à domicile vérifiés près de chez vous.</p>
             </div>
 
             <DiscoverClient cooks={cooks} hasLocation={hasLocation} />

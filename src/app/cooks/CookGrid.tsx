@@ -40,7 +40,7 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: DiscoverCook[]
                 }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
                         <span style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--text-heading)", fontSize: "14px", fontWeight: 700 }}>
-                            <MapPin size={16} /> Search Radius
+                            <MapPin size={16} /> Rayon de recherche
                         </span>
                         <span style={{
                             background: "var(--brand-primary)",
@@ -138,10 +138,10 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: DiscoverCook[]
                 {filtered.length > 0 ? filtered.map((cook) => (
                     <Link href={`/cooks/${cook.id}`} key={cook.id} className="card" style={{ cursor: "pointer", textDecoration: "none", color: "inherit", display: "block" }}>
                         <div style={{ position: "relative", height: "240px", overflow: "hidden" }}>
-                            <img src={cook.avatar_url || "/hero-tunisian-food-1.png"} alt={cook.full_name || "Cook"} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }} />
+                            <img src={cook.avatar_url || "/hero-tunisian-food-1.png"} alt={cook.full_name || "Cuisinier"} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }} />
                             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%)", pointerEvents: "none" }} />
                             <div style={{ position: "absolute", top: "12px", right: "12px", backgroundColor: "var(--brand-success)", color: "white", padding: "4px 10px", borderRadius: "99px", fontSize: "11px", fontWeight: 700, display: "flex", alignItems: "center", gap: "4px" }}>
-                                <Check size={14} strokeWidth={3} /> Verified
+                                <Check size={14} strokeWidth={3} /> Vérifié
                             </div>
                             <div style={{ position: "absolute", bottom: "16px", left: "16px" }}>
                                 <h3 className="heading-font" style={{ margin: "0 0 4px 0", fontSize: "22px", fontWeight: 800, color: "white" }}>{cook.full_name}</h3>
@@ -160,7 +160,7 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: DiscoverCook[]
                                 </div>
                                 <div>
                                     <span style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)" }}>{cook.price_per_hour} TND</span>
-                                    <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>/hour</span>
+                                    <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>/heure</span>
                                 </div>
                             </div>
                             <p style={{ margin: 0, fontSize: "14px", color: "var(--text-body)", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{cook.bio}</p>
@@ -172,9 +172,9 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: DiscoverCook[]
                         <p style={{ fontSize: "18px", fontWeight: 600 }}>
                             {hasLocation
                                 ? maxDistance < MAX_RADIUS_KM
-                                    ? `No cooks found within ${maxDistance} km. Try increasing the search radius.`
-                                    : `No cooks found within ${MAX_RADIUS_KM} km of your region.`
-                                : "Set your region in your profile to find cooks near you."}
+                                    ? `Aucun cuisinier trouvé dans un rayon de ${maxDistance} km. Essayez d’élargir le rayon de recherche.`
+                                    : `Aucun cuisinier trouvé dans un rayon de ${MAX_RADIUS_KM} km autour de votre région.`
+                                : "Définissez votre région dans votre profil pour trouver des cuisiniers près de chez vous."}
                         </p>
                     </div>
                 )}

@@ -19,7 +19,7 @@ export const EMPTY_FILTERS: CookFilters = {
 
 const SPECIALTIES_LIST = ["Traditional", "Vegan", "Pastries", "Healthy", "Comfort Food", "Seafood"];
 const RATING_OPTIONS: { label: string; value: number }[] = [
-    { label: "Any", value: 0 },
+    { label: "Toutes", value: 0 },
     { label: "4.0+", value: 4 },
     { label: "4.5+", value: 4.5 },
 ];
@@ -83,7 +83,7 @@ export function FilterControls({
                     <Search size={20} color="var(--text-muted)" style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)" }} />
                     <input
                         type="text"
-                        placeholder="Search by city, specialty, or cook name..."
+                        placeholder="Rechercher par ville, spécialité ou nom de cuisinier..."
                         value={search}
                         onChange={(e) => onSearchChange(e.target.value)}
                         style={{
@@ -123,7 +123,7 @@ export function FilterControls({
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--bg-base)"}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "var(--bg-surface)"}
                 >
-                    <Filter size={18} style={{ color: "var(--text-muted)" }} /> Filters
+                    <Filter size={18} style={{ color: "var(--text-muted)" }} /> Filtres
                     {filtersActive && (
                         <div style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "var(--brand-primary)", marginLeft: "4px" }} />
                     )}
@@ -145,8 +145,8 @@ export function FilterControls({
                     }}>
                         {/* Header */}
                         <div style={{ padding: "24px", borderBottom: "1px solid var(--border-light)", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "var(--bg-surface)" }}>
-                            <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, margin: 0, color: "var(--text-heading)" }}>Filter Cooks</h3>
-                            <button onClick={() => setIsModalOpen(false)} style={{ background: "transparent", border: "none", cursor: "pointer", padding: "8px", color: "var(--text-muted)", borderRadius: "50%" }} aria-label="Close filters">
+                            <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, margin: 0, color: "var(--text-heading)" }}>Filtrer les cuisiniers</h3>
+                            <button onClick={() => setIsModalOpen(false)} style={{ background: "transparent", border: "none", cursor: "pointer", padding: "8px", color: "var(--text-muted)", borderRadius: "50%" }} aria-label="Fermer les filtres">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                             </button>
                         </div>
@@ -156,7 +156,7 @@ export function FilterControls({
 
                             {/* Price Section */}
                             <div>
-                                <h4 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "16px", color: "var(--text-heading)" }}>Price Range (TND / hour)</h4>
+                                <h4 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "16px", color: "var(--text-heading)" }}>Fourchette de prix (TND / heure)</h4>
                                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                                     <div style={{ position: "relative" }}>
                                         <span style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", fontSize: "14px", fontWeight: 600 }}>Min</span>
@@ -177,7 +177,7 @@ export function FilterControls({
 
                             {/* Specialties Section */}
                             <div>
-                                <h4 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "16px", color: "var(--text-heading)" }}>Specialties</h4>
+                                <h4 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "16px", color: "var(--text-heading)" }}>Spécialités</h4>
                                 <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                                     {SPECIALTIES_LIST.map(s => {
                                         const isActive = draftSpecialties.includes(s);
@@ -209,7 +209,7 @@ export function FilterControls({
 
                             {/* Rating Section */}
                             <div>
-                                <h4 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "16px", color: "var(--text-heading)" }}>Minimum Rating</h4>
+                                <h4 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "16px", color: "var(--text-heading)" }}>Note minimale</h4>
                                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
                                     {RATING_OPTIONS.map(rt => {
                                         const isActive = draftRating === rt.value;
@@ -250,14 +250,14 @@ export function FilterControls({
                                 onMouseEnter={(e) => e.currentTarget.style.color = "var(--text-heading)"}
                                 onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-body)"}
                             >
-                                Clear All
+                                Tout effacer
                             </button>
                             <button
                                 onClick={applyFilters}
                                 className="btn-primary"
                                 style={{ flex: 1, padding: "16px", fontSize: "16px", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
                             >
-                                Apply Filters
+                                Appliquer les filtres
                             </button>
                         </div>
                     </div>

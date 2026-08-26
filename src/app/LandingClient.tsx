@@ -28,10 +28,10 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
    ═══════════════════════════════════════════ */
 
 const STEPS = [
-  { icon: Search, n: 1, title: "Browse Cooks", desc: "Explore verified moms in your neighborhood. Check photos, specialties, ratings and reviews — just like Airbnb." },
-  { icon: Utensils, n: 2, title: "Pick a Menu", desc: "Choose from her signature weekly menus, or build a custom one. The app auto-generates a grocery list." },
-  { icon: Home, n: 3, title: "She Cooks at Your Home", desc: "Your cook arrives at your kitchen with fresh ingredients and prepares everything on the spot." },
-  { icon: Heart, n: 4, title: "Enjoy & Rate", desc: "Savor authentic home-cooked meals with your family, then leave a review to help her grow." },
+  { icon: Search, n: 1, title: "Parcourez les cuisiniers", desc: "Découvrez des mamans vérifiées dans votre quartier. Consultez photos, spécialités, notes et avis — comme sur Airbnb." },
+  { icon: Utensils, n: 2, title: "Choisissez un menu", desc: "Choisissez parmi ses menus hebdomadaires signature, ou composez le vôtre. L’appli génère automatiquement la liste de courses." },
+  { icon: Home, n: 3, title: "Elle cuisine chez vous", desc: "Votre cuisinière arrive dans votre cuisine avec des ingrédients frais et prépare tout sur place." },
+  { icon: Heart, n: 4, title: "Savourez et notez", desc: "Savourez des plats faits maison authentiques en famille, puis laissez un avis pour l’aider à se développer." },
 ];
 
 export interface LandingCook {
@@ -47,23 +47,23 @@ export interface LandingCook {
 }
 
 const FAMILY_PERKS = [
-  { icon: ShieldCheck, title: "Verified & Trained", desc: "Every cook is background-checked and completes food hygiene training." },
-  { icon: Home, title: "She Comes to You", desc: "Your cook arrives at your kitchen. Or opt for cook-at-home delivery." },
-  { icon: ShoppingCart, title: "Groceries Handled", desc: "Auto-generated grocery lists. Shop yourself or pay for delivery." },
-  { icon: Smartphone, title: "Everything In-App", desc: "Scheduling, chat, and payments — no phone numbers or cash exchanged." },
+  { icon: ShieldCheck, title: "Vérifiées et formées", desc: "Chaque cuisinière fait l’objet d’une vérification d’antécédents et suit une formation à l’hygiène alimentaire." },
+  { icon: Home, title: "Elle vient chez vous", desc: "Votre cuisinière arrive dans votre cuisine. Ou optez pour la livraison de plats préparés chez elle." },
+  { icon: ShoppingCart, title: "Courses prises en charge", desc: "Listes de courses générées automatiquement. Faites vos courses vous-même ou payez la livraison." },
+  { icon: Smartphone, title: "Tout dans l’appli", desc: "Planification, messagerie et paiements — sans échange de numéros de téléphone ni d’espèces." },
 ];
 
 const MOM_BENEFITS = [
-  { icon: Clock, title: "Flexible Schedule", desc: "Accept or decline bookings. Cook when it works for you." },
-  { icon: Award, title: "We Help You Start", desc: "Our team sets up your profile, handles tech, and trains you." },
-  { icon: CreditCard, title: "Earn Weekly", desc: "Secure in-app payments deposited directly to your account." },
-  { icon: BookOpen, title: "Build Your Reputation", desc: "Grow your client base through ratings and word-of-mouth." },
+  { icon: Clock, title: "Horaires flexibles", desc: "Acceptez ou refusez les réservations. Cuisinez quand cela vous arrange." },
+  { icon: Award, title: "Nous vous aidons à démarrer", desc: "Notre équipe crée votre profil, s’occupe de la technique et vous forme." },
+  { icon: CreditCard, title: "Gagnez chaque semaine", desc: "Paiements sécurisés dans l’appli, versés directement sur votre compte." },
+  { icon: BookOpen, title: "Bâtissez votre réputation", desc: "Développez votre clientèle grâce aux notes et au bouche-à-oreille." },
 ];
 
 const TESTIMONIALS = [
-  { name: "Sonia Bouazizi", role: "Mother of 3, Tunis", text: "I used to stress about dinner every single day. Now Fatma comes twice a week and my kids actually look forward to eating at home again." },
-  { name: "Karim Jendoubi", role: "Working Dad, Sousse", text: "It's like having a personal chef. The couscous Fridays are sacred in our house now. Best thing we ever signed up for." },
-  { name: "Fatma Ben Ali", role: "Foodie Cook, La Marsa", text: "I was a stay-at-home mom with no income. Now I earn 900 TND a month doing what I love — and the Foodie team helped me with everything." },
+  { name: "Sonia Bouazizi", role: "Maman de 3 enfants, Tunis", text: "Avant, le dîner était un stress quotidien. Maintenant, Fatma vient deux fois par semaine et mes enfants ont de nouveau hâte de manger à la maison." },
+  { name: "Karim Jendoubi", role: "Papa actif, Sousse", text: "C’est comme avoir un chef personnel. Les vendredis couscous sont devenus sacrés chez nous. La meilleure décision que nous ayons prise." },
+  { name: "Fatma Ben Ali", role: "Cuisinière Foodie, La Marsa", text: "J’étais une maman au foyer sans revenu. Aujourd’hui, je gagne 900 TND par mois en faisant ce que j’aime — et l’équipe Foodie m’a aidée pour tout." },
 ];
 
 /* ═══════════════════════════════════════════
@@ -158,17 +158,17 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           </div>
 
           <nav style={{ gap: "28px", fontSize: "14px" }} className="hidden md:flex">
-            <a href="#how-it-works" className="nav-link">How it Works</a>
-            <a href="#cooks" className="nav-link">Our Cooks</a>
-            <a href="#families" className="nav-link">For Families</a>
-            <a href="#for-moms" className="nav-link">For Moms</a>
-            <a href="#reviews" className="nav-link">Reviews</a>
+            <a href="#how-it-works" className="nav-link">Comment ça marche</a>
+            <a href="#cooks" className="nav-link">Nos cuisiniers</a>
+            <a href="#families" className="nav-link">Pour les familles</a>
+            <a href="#for-moms" className="nav-link">Pour les mamans</a>
+            <a href="#reviews" className="nav-link">Avis</a>
           </nav>
 
           <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
             <ThemeToggle />
-            <Link href="/login" className="btn-nav hidden sm:block" style={{ textDecoration: "none" }}>Log In</Link>
-            <Link href="/signup" className="btn-primary" style={{ padding: "10px 20px", textDecoration: "none" }}>Get Started <ArrowRight size={16} /></Link>
+            <Link href="/login" className="btn-nav hidden sm:block" style={{ textDecoration: "none" }}>Se connecter</Link>
+            <Link href="/signup" className="btn-primary" style={{ padding: "10px 20px", textDecoration: "none" }}>Commencer <ArrowRight size={16} /></Link>
           </div>
         </div>
       </header>
@@ -182,23 +182,23 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div className="reveal" style={{ maxWidth: "620px", paddingTop: "140px", paddingBottom: "100px" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(255,184,0,0.15)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,184,0,0.35)", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, color: "#ffc436", marginBottom: "28px" }}>
               <span style={{ width: "7px", height: "7px", backgroundColor: "#ffc436", borderRadius: "50%" }} />
-              Homemade meals, real people
+              Des repas faits maison, par de vraies personnes
             </div>
 
             <h1 className="heading-font" style={{ fontSize: "clamp(40px, 6vw, 68px)", fontWeight: 800, margin: "0 0 24px 0", lineHeight: 1.05, color: "white", letterSpacing: "-1.5px" }}>
-              A home cook<br />for every family
+              Un cuisinier à domicile<br />pour chaque famille
             </h1>
 
             <p style={{ fontSize: "19px", color: "rgba(255,255,255,0.85)", lineHeight: 1.65, margin: "0 0 40px 0", maxWidth: "500px" }}>
-              Browse talented moms in your area, pick a menu, and she&apos;ll come cook fresh, authentic meals right in your kitchen. It&apos;s that simple.
+              Découvrez des mamans talentueuses près de chez vous, choisissez un menu, et elle viendra cuisiner des plats frais et authentiques directement dans votre cuisine. C’est aussi simple que ça.
             </p>
 
             <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "48px" }}>
               <Link href="/signup" className="btn-primary" style={{ padding: "16px 32px", fontSize: "16px", textDecoration: "none" }}>
-                Find a Cook <ArrowRight size={18} />
+                Trouver un cuisinier <ArrowRight size={18} />
               </Link>
               <Link href="/signup" style={{ padding: "16px 32px", fontSize: "16px", fontWeight: 700, background: "rgba(255,255,255,0.12)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: "99px", color: "white", cursor: "pointer", transition: "all 0.25s ease", textDecoration: "none" }}>
-                I Want to Cook
+                Je veux cuisiner
               </Link>
             </div>
 
@@ -213,7 +213,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               <div>
                 <Stars n={5} />
                 <p style={{ margin: "2px 0 0 0", fontSize: "13px", color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>
-                  Trusted by <strong style={{ color: "white" }}>2,000+</strong> families
+                  Plus de <strong style={{ color: "white" }}>2 000</strong> familles nous font confiance
                 </p>
               </div>
             </div>
@@ -241,7 +241,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
 
       {/* ─────────── HOW IT WORKS ─────────── */}
       <Section bgVar="--bg-surface" id="how-it-works">
-        <SectionHeader badge="How It Works" title="From browsing to eating in 4 steps" subtitle="The entire experience — from finding a cook to paying — happens seamlessly inside the app." />
+        <SectionHeader badge="Comment ça marche" title="De la recherche au repas en 4 étapes" subtitle="Toute l’expérience — de la recherche d’un cuisinier au paiement — se déroule simplement dans l’appli." />
         <div className="auto-grid-4 reveal-stagger">
           {STEPS.map((step) => {
             const Icon = step.icon;
@@ -266,12 +266,12 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       <Section id="cooks">
         <div className="reveal" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px", flexWrap: "wrap", gap: "16px" }}>
           <div>
-            <span style={{ display: "inline-block", backgroundColor: "var(--brand-primary)", color: "#121212", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "12px" }}>Top Rated</span>
-            <h2 className="heading-font" style={{ fontSize: "36px", fontWeight: 800, margin: 0, color: "var(--text-heading)" }}>Meet Our Cooks</h2>
-            <p style={{ margin: "8px 0 0 0", fontSize: "16px", color: "var(--text-muted)", maxWidth: "400px" }}>Each cook is recruited, verified, and trained by our team before her first booking.</p>
+            <span style={{ display: "inline-block", backgroundColor: "var(--brand-primary)", color: "#121212", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "12px" }}>Les mieux notés</span>
+            <h2 className="heading-font" style={{ fontSize: "36px", fontWeight: 800, margin: 0, color: "var(--text-heading)" }}>Découvrez nos cuisiniers</h2>
+            <p style={{ margin: "8px 0 0 0", fontSize: "16px", color: "var(--text-muted)", maxWidth: "400px" }}>Chaque cuisinière est recrutée, vérifiée et formée par notre équipe avant sa première réservation.</p>
           </div>
           <Link href="/cooks" className="btn-nav" style={{ color: "var(--brand-primary)", fontWeight: 700, display: "flex", alignItems: "center", gap: "4px", textDecoration: "none" }}>
-            View All Cooks <ChevronRight size={16} strokeWidth={2.5} />
+            Voir tous les cuisiniers <ChevronRight size={16} strokeWidth={2.5} />
           </Link>
         </div>
 
@@ -284,7 +284,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                 <img src={cook.img} alt={cook.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%)", pointerEvents: "none" }} />
                 <div style={{ position: "absolute", top: "12px", right: "12px", backgroundColor: "var(--brand-success)", color: "white", padding: "4px 10px", borderRadius: "99px", fontSize: "11px", fontWeight: 700, display: "flex", alignItems: "center", gap: "4px" }}>
-                  <Check size={14} strokeWidth={3} /> Verified
+                  <Check size={14} strokeWidth={3} /> Vérifié
                 </div>
                 <div style={{ position: "absolute", bottom: "16px", left: "16px" }}>
                   <h3 className="heading-font" style={{ margin: "0 0 4px 0", fontSize: "22px", fontWeight: 800, color: "white" }}>{cook.name}</h3>
@@ -302,7 +302,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                   </div>
                   <div>
                     <span style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)" }}>{cook.pricePerHour} TND</span>
-                    <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>/hour</span>
+                    <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>/heure</span>
                   </div>
                 </div>
                 <p style={{ margin: 0, fontSize: "14px", color: "var(--text-body)" }}>{cook.bio}</p>
@@ -317,13 +317,13 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
         <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", alignItems: "center" }}>
           <div className="reveal" style={{ flex: "1 1 450px" }}>
             <div className="image-card" style={{ aspectRatio: "4/3" }}>
-              <img src="/family-tunisian.png" alt="Tunisian family enjoying dinner together" />
+              <img src="/family-tunisian.png" alt="Famille tunisienne partageant un dîner" />
               <div className="image-card-overlay" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 40%)" }} />
             </div>
           </div>
 
           <div style={{ flex: "1 1 450px" }}>
-            <SectionHeader align="left" badge="For Families" title="Reclaim your evenings." subtitle="Stop stressing about what to cook. A verified mom comes to your kitchen and prepares fresh, authentic meals for your family." />
+            <SectionHeader align="left" badge="Pour les familles" title="Retrouvez vos soirées." subtitle="Ne stressez plus pour le dîner. Une maman vérifiée vient dans votre cuisine et prépare des plats frais et authentiques pour votre famille." />
 
             <div className="reveal-stagger" style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "36px" }}>
               {FAMILY_PERKS.map((perk, i) => {
@@ -344,7 +344,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
 
             <div className="reveal">
               <Link href="/signup" className="btn-primary" style={{ padding: "14px 28px", textDecoration: "none" }}>
-                Browse Cooks Near You <ArrowRight size={18} />
+                Parcourir les cuisiniers près de chez vous <ArrowRight size={18} />
               </Link>
             </div>
           </div>
@@ -359,12 +359,12 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", alignItems: "center" }}>
             <div style={{ flex: "1 1 500px" }}>
               <div className="reveal">
-                <span style={{ display: "inline-block", backgroundColor: "rgba(255,184,0,0.2)", color: "#ffc436", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "20px", border: "1px solid rgba(255,184,0,0.3)" }}>For Moms</span>
+                <span style={{ display: "inline-block", backgroundColor: "rgba(255,184,0,0.2)", color: "#ffc436", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "20px", border: "1px solid rgba(255,184,0,0.3)" }}>Pour les mamans</span>
                 <h2 className="heading-font" style={{ fontSize: "clamp(32px, 4vw, 44px)", fontWeight: 800, margin: "0 0 16px 0", lineHeight: 1.1, color: "white" }}>
-                  Turn your cooking skills into flexible income
+                  Transformez vos talents de cuisinière en revenu flexible
                 </h2>
                 <p style={{ fontSize: "17px", color: "rgba(255,255,255,0.8)", margin: "0 0 40px 0", lineHeight: 1.65, maxWidth: "480px" }}>
-                  You don&apos;t need to be tech-savvy. Our team recruits you, sets up your profile, trains you on food hygiene, and helps you get your first booking. You just cook.
+                  Pas besoin d’être à l’aise avec la technologie. Notre équipe vous recrute, crée votre profil, vous forme à l’hygiène alimentaire et vous aide à obtenir votre première réservation. Vous n’avez qu’à cuisiner.
                 </p>
               </div>
 
@@ -384,7 +384,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               </div>
 
               <div className="reveal" style={{ display: "flex", gap: "24px", flexWrap: "wrap", marginBottom: "36px" }}>
-                {[{ v: "900+ TND", l: "Avg. monthly earnings" }, { v: "100%", l: "Flexible schedule" }].map(stat => (
+                {[{ v: "900+ TND", l: "Revenu mensuel moyen" }, { v: "100%", l: "Horaires flexibles" }].map(stat => (
                   <div key={stat.l} style={{ textAlign: "center" }}>
                     <p className="heading-font" style={{ margin: "0 0 2px 0", fontSize: "32px", fontWeight: 800, color: "#ffc436" }}>{stat.v}</p>
                     <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.6)", fontWeight: 600 }}>{stat.l}</p>
@@ -394,14 +394,14 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
 
               <div className="reveal">
                 <Link href="/signup" className="btn-primary" style={{ padding: "16px 32px", textDecoration: "none" }}>
-                  Apply to Cook <ArrowRight size={18} />
+                  Devenir cuisinière <ArrowRight size={18} />
                 </Link>
               </div>
             </div>
 
             <div className="reveal" style={{ flex: "1 1 350px" }}>
               <div className="image-card" style={{ aspectRatio: "3/4", border: "1px solid rgba(255,255,255,0.1)" }}>
-                <img src="/cook-portrait.png" alt="Tunisian home cook" style={{ objectPosition: "top" }} />
+                <img src="/cook-portrait.png" alt="Cuisinière tunisienne à domicile" style={{ objectPosition: "top" }} />
                 <div className="image-card-overlay" />
               </div>
             </div>
@@ -411,7 +411,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
 
       {/* ─────────── TESTIMONIALS ─────────── */}
       <Section bgVar="--bg-surface" id="reviews">
-        <SectionHeader badge="Testimonials" title="Loved by families and cooks" subtitle="Hear from the people who use Foodie every single week." />
+        <SectionHeader badge="Témoignages" title="Adoré des familles et des cuisiniers" subtitle="Écoutez celles et ceux qui utilisent Foodie chaque semaine." />
         <div className="auto-grid-3 reveal-stagger">
           {TESTIMONIALS.map((t, i) => (
             <div key={i} className="card reveal" style={{ padding: "28px", display: "flex", flexDirection: "column" }}>
@@ -437,27 +437,27 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 55%, rgba(120,40,0,0.45) 100%)" }} />
           <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "88px 32px" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(255,184,0,0.16)", border: "1px solid rgba(255,184,0,0.4)", backdropFilter: "blur(8px)", color: "#ffc436", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "24px" }}>
-              <span className="pulse-dot" /> Cooks available this week in Tunis, La Marsa &amp; Ariana
+              <span className="pulse-dot" /> Des cuisiniers disponibles cette semaine à Tunis, La Marsa et Ariana
             </div>
             <h2 className="heading-font" style={{ fontSize: "clamp(32px, 5vw, 54px)", fontWeight: 800, margin: "0 0 12px 0", lineHeight: 1.08, color: "white", letterSpacing: "-1px" }}>
               Ce soir, on mange<br />comme chez <span style={{ color: "#ffc436" }}>Mama</span>. 🌶
             </h2>
             <p style={{ fontSize: "17px", color: "rgba(255,255,255,0.85)", margin: "0 auto 32px auto", lineHeight: 1.6, maxWidth: "520px" }}>
-              Real Tunisian moms, cooking in your kitchen. Couscous Fridays, brik that crackles,
-              and zero washing up — your first booking takes two minutes.
+              De vraies mamans tunisiennes qui cuisinent dans votre cuisine. Des vendredis couscous, une brik qui croustille,
+              et zéro vaisselle — votre première réservation ne prend que deux minutes.
             </p>
             <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap", marginBottom: "36px" }}>
               <Link href="/signup" className="btn-primary" style={{ padding: "16px 36px", fontSize: "16px", textDecoration: "none" }}>
-                Find a Cook Near You <ArrowRight size={18} />
+                Trouver un cuisinier près de chez vous <ArrowRight size={18} />
               </Link>
               <Link href="/signup" style={{ padding: "16px 32px", fontSize: "16px", fontWeight: 700, background: "rgba(255,255,255,0.1)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "99px", color: "white", textDecoration: "none" }}>
-                I Want to Cook
+                Je veux cuisiner
               </Link>
             </div>
             <div style={{ display: "flex", gap: "28px", justifyContent: "center", flexWrap: "wrap", fontSize: "14px", fontWeight: 600, color: "rgba(255,255,255,0.75)" }}>
-              <span>★ 4.9 average rating</span>
-              <span>from 40 TND / hour</span>
-              <span>verified &amp; hygiene-trained</span>
+              <span>★ 4,9 de note moyenne</span>
+              <span>à partir de 40 TND / heure</span>
+              <span>vérifiées et formées à l’hygiène</span>
             </div>
           </div>
         </div>
@@ -475,14 +475,14 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                 <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "white" }}>foodie</span>
               </div>
               <p style={{ fontSize: "14px", lineHeight: 1.65, maxWidth: "300px", margin: 0 }}>
-                Connecting families with talented home cooks. Fresh, authentic meals — made with love in your own kitchen.
+                Nous connectons les familles avec des cuisiniers à domicile talentueux. Des plats frais et authentiques — préparés avec amour dans votre propre cuisine.
               </p>
             </div>
 
             {[
-              { title: "Families", links: ["Find a Cook", "How it Works", "Pricing", "FAQ"] },
-              { title: "Cooks", links: ["Apply to Cook", "Earnings", "Training", "Resources"] },
-              { title: "Company", links: ["About Us", "Blog", "Careers", "Terms"] },
+              { title: "Familles", links: ["Trouver un cuisinier", "Comment ça marche", "Tarifs", "FAQ"] },
+              { title: "Cuisiniers", links: ["Devenir cuisinière", "Revenus", "Formation", "Ressources"] },
+              { title: "Entreprise", links: ["À propos", "Blog", "Carrières", "Conditions"] },
             ].map(col => (
               <div key={col.title} style={{ flex: "1 1 120px" }}>
                 <h4 style={{ color: "white", fontSize: "14px", fontWeight: 700, margin: "0 0 16px 0" }}>{col.title}</h4>
@@ -496,8 +496,8 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           </div>
 
           <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "24px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", alignItems: "center", fontSize: "13px" }}>
-            <p style={{ margin: 0 }}>&copy; 2026 Foodie. All rights reserved.</p>
-            <p style={{ margin: 0, display: "flex", alignItems: "center", gap: "6px" }}>Made with <Heart size={14} fill="var(--brand-primary)" color="var(--brand-primary)" /> in Tunisia</p>
+            <p style={{ margin: 0 }}>&copy; 2026 Foodie. Tous droits réservés.</p>
+            <p style={{ margin: 0, display: "flex", alignItems: "center", gap: "6px" }}>Fait avec <Heart size={14} fill="var(--brand-primary)" color="var(--brand-primary)" /> en Tunisie</p>
           </div>
         </div>
       </footer>

@@ -28,13 +28,13 @@ export default function DashboardNavbar() {
 
                 <nav style={{ display: "flex", gap: "24px", height: "100%" }}>
                     <NavLink href="/cooks">
-                        <Search size={18} /> <span className="hidden md:inline">Discover Cooks</span>
+                        <Search size={18} /> <span className="hidden md:inline">Découvrir les cuisiniers</span>
                     </NavLink>
                     <NavLink href="/dashboard/family">
-                        <Calendar size={18} /> <span className="hidden md:inline">My Bookings</span>
+                        <Calendar size={18} /> <span className="hidden md:inline">Mes réservations</span>
                     </NavLink>
                     <NavLink href="/dashboard/profile">
-                        <User size={18} /> <span className="hidden md:inline">Profile</span>
+                        <User size={18} /> <span className="hidden md:inline">Profil</span>
                     </NavLink>
                 </nav>
 
@@ -42,7 +42,7 @@ export default function DashboardNavbar() {
                     <ThemeToggle />
                     <form action={logout}>
                         <button type="submit" className="btn-nav" style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--text-muted)" }}>
-                            <LogOut size={18} /> <span className="hidden md:inline">Log Out</span>
+                            <LogOut size={18} /> <span className="hidden md:inline">Se déconnecter</span>
                         </button>
                     </form>
                 </div>

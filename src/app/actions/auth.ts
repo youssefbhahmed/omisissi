@@ -7,6 +7,13 @@ import { WEEKDAYS } from "@/lib/booking";
 
 const PHONE_PATTERN = /^[+0-9][0-9 .\-]{6,19}$/;
 
+// GoTrue returns English error strings — map the common ones to French.
+function frAuthError(message: string): string {
+    if (message.includes("Invalid login credentials")) return "Email ou mot de passe incorrect.";
+    if (message.includes("Email not confirmed")) return "Email non confirmé — vérifiez votre boîte mail avant de vous connecter.";
+    return message;
+}
+
 // Phone lives in private_details (owner-only RLS); a missing table (SQL not
 // applied yet) must not break the profile save.
 async function savePhone(
@@ -50,7 +57,7 @@ export async function login(formData: FormData) {
     });
 
     if (error) {
-        return { error: error.message };
+        return { error: frAuthError(error.message) };
     }
 
     // Check role and redirect accordingly
@@ -82,10 +89,10 @@ export async function signup(formData: FormData) {
     const roleType = formData.get("roleType") as string; // 'family' or 'cook'
 
     if (!fullName) {
-        return { error: "Please enter your full name." };
+        return { error: "Veuillez saisir votre nom complet." };
     }
     if (roleType !== "family" && roleType !== "cook") {
-        return { error: "Please choose whether you are a family or a cook." };
+        return { error: "Veuillez choisir si vous êtes une famille ou un cuisinier." };
     }
 
     // We pass is_cook in the metadata so the signup trigger assigns the role
@@ -101,18 +108,18 @@ export async function signup(formData: FormData) {
     });
 
     if (error) {
-        return { error: error.message };
+        return { error: frAuthError(error.message) };
     }
 
     // With email confirmation enabled, Supabase reports an already-registered
     // email as a user with no identities instead of an error.
     if (data.user && data.user.identities && data.user.identities.length === 0) {
-        return { error: "An account with this email already exists. Try logging in instead." };
+        return { error: "Un compte existe déjà avec cet email. Essayez de vous connecter." };
     }
 
     // No session means email confirmation is required before the first login.
     if (!data.session) {
-        return { success: true, message: "Almost there! Check your inbox to confirm your email, then log in." };
+        return { success: true, message: "Presque fini ! Vérifiez votre boîte mail pour confirmer votre adresse, puis connectez-vous." };
     }
 
     revalidatePath("/", "layout");
@@ -162,7 +169,7 @@ export async function updatePassword(formData: FormData) {
     const newPassword = formData.get("newPassword") as string;
 
     if (!newPassword || newPassword.length < 6) {
-        return { error: "Password must be at least 6 characters long." };
+        return { error: "Le mot de passe doit contenir au moins 6 caractères." };
     }
 
     const { error } = await supabase.auth.updateUser({
@@ -181,7 +188,7 @@ export async function updateFamilyProfile(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: "Not authenticated" };
+        return { error: "Vous devez être connecté." };
     }
 
     const fullName = ((formData.get("fullName") as string) || "").trim();
@@ -191,10 +198,10 @@ export async function updateFamilyProfile(formData: FormData) {
     const lng = parseFloat(formData.get("lng") as string);
 
     if (!fullName) {
-        return { error: "Please enter your full name." };
+        return { error: "Veuillez saisir votre nom complet." };
     }
     if (phone && !PHONE_PATTERN.test(phone)) {
-        return { error: "Please enter a valid phone number (e.g. +216 12 345 678)." };
+        return { error: "Veuillez saisir un numéro de téléphone valide (ex. +216 12 345 678)." };
     }
 
     const updates: { full_name: string; address: string; lat?: number; lng?: number } = {
@@ -232,12 +239,12 @@ export async function updateCookProfile(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: "Not authenticated" };
+        return { error: "Vous devez être connecté." };
     }
 
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
     if (profile?.role !== 'cook') {
-        return { error: "Only cooks can edit a cook profile." };
+        return { error: "Seuls les cuisiniers peuvent modifier un profil cuisinier." };
     }
 
     const fullName = ((formData.get("fullName") as string) || "").trim();
@@ -250,16 +257,16 @@ export async function updateCookProfile(formData: FormData) {
     const specialties = parseStringArray(formData.get("specialties") as string, 20, 40);
 
     if (!fullName) {
-        return { error: "Please enter your full name." };
+        return { error: "Veuillez saisir votre nom complet." };
     }
     if (phone && !PHONE_PATTERN.test(phone)) {
-        return { error: "Please enter a valid phone number (e.g. +216 12 345 678)." };
+        return { error: "Veuillez saisir un numéro de téléphone valide (ex. +216 12 345 678)." };
     }
     if (specialties === null) {
-        return { error: "Invalid specialties selection." };
+        return { error: "Sélection de spécialités invalide." };
     }
     if (!Number.isFinite(price) || price < 0) {
-        return { error: "Please enter a valid hourly rate." };
+        return { error: "Veuillez saisir un tarif horaire valide." };
     }
 
     const hasCoords = Number.isFinite(lat) && Number.isFinite(lng);
@@ -330,17 +337,17 @@ export async function updateCookAvailability(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: "Not authenticated" };
+        return { error: "Vous devez être connecté." };
     }
 
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
     if (profile?.role !== 'cook') {
-        return { error: "Only cooks can set availability." };
+        return { error: "Seuls les cuisiniers peuvent définir leurs disponibilités." };
     }
 
     const availableDays = parseStringArray(formData.get("availableDays") as string, 7, 12);
     if (availableDays === null || !availableDays.every((d) => (WEEKDAYS as readonly string[]).includes(d))) {
-        return { error: "Invalid availability selection." };
+        return { error: "Sélection de disponibilités invalide." };
     }
 
     const { error } = await supabase

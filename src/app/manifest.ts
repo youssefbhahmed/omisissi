@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: "Foodie — Home-Cooked Meals",
+        name: "Foodie — Plats faits maison",
         short_name: "Foodie",
         description:
-            "Connect with talented home cooks in your area. Fresh, home-cooked meals prepared by real people.",
+            "Trouvez des cuisiniers à domicile talentueux près de chez vous. Des plats frais faits maison, préparés par de vraies personnes.",
         start_url: "/dashboard",
         scope: "/",
         display: "standalone",
