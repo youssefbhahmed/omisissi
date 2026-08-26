@@ -224,10 +224,10 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                     {isCook && activeTab === "availability" && (
                         <div className="card" style={{ padding: "32px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", animation: "fadeIn 0.2s ease" }}>
                             <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, margin: "0 0 8px 0", color: "var(--text-heading)" }}>
-                                Your Schedule
+                                Votre planning
                             </h2>
                             <p style={{ margin: "0 0 24px 0", color: "var(--text-muted)", fontSize: "15px" }}>
-                                Select the days of the week you are generally available to accept bookings. Families will only be able to request these days.
+                                Sélectionnez les jours de la semaine où vous êtes généralement disponible pour accepter des réservations. Les familles ne pourront demander que ces jours-là.
                             </p>
 
                             <StatusBanner status={scheduleStatus} />
@@ -239,7 +239,7 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                 if (res?.error) {
                                     setScheduleStatus({ type: "error", text: res.error });
                                 } else {
-                                    setScheduleStatus({ type: "success", text: "Schedule saved." });
+                                    setScheduleStatus({ type: "success", text: "Planning enregistré." });
                                     router.refresh();
                                 }
                             }} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -260,7 +260,7 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                                 }}
                                             >
                                                 <span style={{ fontSize: "16px", fontWeight: isAvailable ? 700 : 600, color: isAvailable ? "var(--brand-primary)" : "var(--text-body)" }}>
-                                                    {day}
+                                                    {dayFr(day)}
                                                 </span>
                                                 <div style={{ width: "24px", height: "24px", borderRadius: "50%", border: `2px solid ${isAvailable ? "var(--brand-primary)" : "var(--border-medium)"}`, backgroundColor: isAvailable ? "var(--brand-primary)" : "transparent", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                                     {isAvailable && <Check size={14} color="white" strokeWidth={3} />}
@@ -271,7 +271,7 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                 </div>
 
                                 <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end", paddingTop: "24px", borderTop: "1px solid var(--border-light)" }}>
-                                    <button type="submit" className="btn-primary" style={{ padding: "14px 32px", fontSize: "15px" }}>Save Schedule</button>
+                                    <button type="submit" className="btn-primary" style={{ padding: "14px 32px", fontSize: "15px" }}>Enregistrer le planning</button>
                                 </div>
                             </form>
                         </div>
@@ -279,7 +279,7 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
 
                     {activeTab === "security" && (
                         <div className="card" style={{ padding: "32px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", animation: "fadeIn 0.2s ease" }}>
-                            <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, margin: "0 0 24px 0", color: "var(--text-heading)" }}>Security & Password</h2>
+                            <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, margin: "0 0 24px 0", color: "var(--text-heading)" }}>Sécurité et mot de passe</h2>
 
                             <StatusBanner status={passwordStatus} />
 
@@ -289,17 +289,17 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                 if (res?.error) {
                                     setPasswordStatus({ type: "error", text: res.error });
                                 } else {
-                                    setPasswordStatus({ type: "success", text: "Password updated." });
+                                    setPasswordStatus({ type: "success", text: "Mot de passe mis à jour." });
                                 }
                             }} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
                                 <div style={{ maxWidth: "400px" }}>
-                                    <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>New Password</label>
-                                    <input name="newPassword" type="password" required minLength={6} placeholder="Enter a new password" style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }} />
-                                    <p style={{ margin: "8px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }}>Must be at least 6 characters long.</p>
+                                    <label style={{ display: "block", fontSize: "14px", fontWeight: 700, marginBottom: "8px", color: "var(--text-heading)" }}>Nouveau mot de passe</label>
+                                    <input name="newPassword" type="password" required minLength={6} placeholder="Saisissez un nouveau mot de passe" style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)" }} />
+                                    <p style={{ margin: "8px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }}>Doit contenir au moins 6 caractères.</p>
                                 </div>
 
                                 <div style={{ marginTop: "8px" }}>
-                                    <button type="submit" className="btn-primary" style={{ padding: "12px 24px" }}>Update Password</button>
+                                    <button type="submit" className="btn-primary" style={{ padding: "12px 24px" }}>Mettre à jour le mot de passe</button>
                                 </div>
                             </form>
                         </div>

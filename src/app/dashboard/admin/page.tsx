@@ -32,16 +32,16 @@ function CookRow({ cook }: { cook: AdminCookRow }) {
                         <MapPin size={12} /> {cook.city}
                     </span>
                     {!cook.hasRate && (
-                        <span style={{ fontSize: "11px", fontWeight: 700, color: "#d97706", backgroundColor: "rgba(255,184,0,0.12)", padding: "2px 8px", borderRadius: "99px" }}>profile incomplete</span>
+                        <span style={{ fontSize: "11px", fontWeight: 700, color: "#d97706", backgroundColor: "rgba(255,184,0,0.12)", padding: "2px 8px", borderRadius: "99px" }}>profil incomplet</span>
                     )}
                 </div>
                 <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "var(--text-muted)", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                    {cook.specialties.length > 0 ? cook.specialties.join(" · ") : cook.bio || "No bio yet."}
+                    {cook.specialties.length > 0 ? cook.specialties.join(" · ") : cook.bio || "Pas encore de bio."}
                 </p>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <Link href={`/cooks/${cook.id}`} className="btn-nav" style={{ padding: "10px 14px", border: "1px solid var(--border-light)", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px", textDecoration: "none", fontSize: "13px", fontWeight: 600 }}>
-                    <ExternalLink size={14} /> View profile
+                    <ExternalLink size={14} /> Voir le profil
                 </Link>
                 <ApprovalToggle cookId={cook.id} isApproved={cook.isApproved} />
             </div>
@@ -85,9 +85,9 @@ export default async function AdminPage() {
         if (!d) return [];
         return [{
             id: p.id,
-            name: p.full_name || "Cook",
+            name: p.full_name || "Cuisinier",
             avatar: p.avatar_url,
-            city: d.city || "Tunisia",
+            city: d.city || "Tunisie",
             specialties: normalizeStringArray(d.specialties),
             bio: d.bio || "",
             hasRate: !!d.price_per_session,
@@ -102,17 +102,17 @@ export default async function AdminPage() {
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ marginBottom: "32px" }}>
                 <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, margin: "0 0 8px 0", color: "var(--text-heading)", display: "flex", alignItems: "center", gap: "12px" }}>
-                    <ShieldCheck size={30} color="var(--brand-primary)" /> Cook Approvals
+                    <ShieldCheck size={30} color="var(--brand-primary)" /> Approbation des cuisiniers
                 </h1>
                 <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>
-                    New cooks stay hidden from the directory until you approve them here.
+                    Les nouveaux cuisiniers restent masqués de l’annuaire jusqu’à ce que vous les approuviez ici.
                 </p>
             </div>
 
             {!migrationApplied && (
                 <div className="card" style={{ padding: "20px 24px", marginBottom: "24px", backgroundColor: "rgba(255,184,0,0.1)", border: "1px solid rgba(255,184,0,0.3)" }}>
                     <p style={{ margin: 0, fontSize: "14px", color: "#b45309", fontWeight: 600 }}>
-                        The approval system is not active yet — run <code>supabase/setup_cook_approval.sql</code> in the Supabase SQL editor. Until then, every cook is publicly visible.
+                        Le système d’approbation n’est pas encore actif — exécutez <code>supabase/setup_cook_approval.sql</code> dans l’éditeur SQL de Supabase. D’ici là, chaque cuisinier est visible publiquement.
                     </p>
                 </div>
             )}
