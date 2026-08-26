@@ -225,7 +225,12 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       <div className="marquee" aria-hidden="true">
         <div className="marquee-track">
           {Array.from({ length: 3 }).flatMap((_, r) =>
-            ["Couscous au Poisson", "Brik à l'Œuf", "Slata Mechouia", "Ojja Merguez", "Lablabi", "Kafteji", "Mloukhia", "Makroudh"].map((dish, i) => (
+            [
+              "Couscous au Poisson", "Brik à l'Œuf", "Slata Mechouia", "Ojja Merguez",
+              "Lablabi", "Kafteji", "Mloukhia", "Makroudh",
+              "Couscous à l'Agneau", "Chorba Frik", "Fricassé", "Tajine Malsouka",
+              "Kamounia", "Nwasser", "Mosli", "Bambalouni",
+            ].map((dish, i) => (
               <span key={`${r}-${i}`} className="marquee-item heading-font">
                 {dish} <span className="marquee-pepper">🌶</span>
               </span>

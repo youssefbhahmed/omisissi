@@ -375,7 +375,8 @@ body {
   display: flex;
   gap: 44px;
   width: max-content;
-  animation: marquee-scroll 36s linear infinite;
+  /* Back-and-forth: scrolls left, slows down, then comes back */
+  animation: marquee-scroll 45s ease-in-out infinite alternate;
 }
 .marquee-item {
   font-size: 16px;
