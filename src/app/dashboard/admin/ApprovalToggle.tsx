@@ -28,11 +28,11 @@ export default function ApprovalToggle({ cookId, isApproved }: { cookId: string;
 
     return isApproved ? (
         <button onClick={toggle} disabled={busy} className="btn-nav" style={{ padding: "10px 18px", border: "1px solid var(--border-medium)", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "8px", opacity: busy ? 0.6 : 1 }}>
-            <X size={16} /> {busy ? "Working..." : "Revoke"}
+            <X size={16} /> {busy ? "En cours…" : "Révoquer"}
         </button>
     ) : (
         <button onClick={toggle} disabled={busy} className="btn-primary" style={{ padding: "10px 18px", display: "flex", alignItems: "center", gap: "8px", opacity: busy ? 0.6 : 1 }}>
-            <Check size={16} /> {busy ? "Working..." : "Approve"}
+            <Check size={16} /> {busy ? "En cours…" : "Approuver"}
         </button>
     );
 }

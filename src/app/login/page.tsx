@@ -12,7 +12,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
     const { error, next } = await searchParams;
     return (
         <LoginClient
-            initialError={error === "oauth" ? "Social sign-in didn't complete. Please try again." : null}
+            initialError={error === "oauth" ? "La connexion via un réseau social n’a pas abouti. Veuillez réessayer." : null}
             next={safeNext(next)}
         />
     );

@@ -118,11 +118,11 @@ export default async function AdminPage() {
             )}
 
             <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", margin: "0 0 16px 0", display: "flex", alignItems: "center", gap: "8px" }}>
-                <Clock size={18} color="#d97706" /> Pending approval ({pending.length})
+                <Clock size={18} color="#d97706" /> En attente d’approbation ({pending.length})
             </h2>
             {pending.length === 0 ? (
                 <div className="card" style={{ padding: "32px 24px", textAlign: "center", backgroundColor: "var(--bg-surface)", border: "1px dashed var(--border-medium)", marginBottom: "40px" }}>
-                    <p style={{ color: "var(--text-muted)", margin: 0 }}>No cooks waiting for approval. 🎉</p>
+                    <p style={{ color: "var(--text-muted)", margin: 0 }}>Aucun cuisinier en attente d’approbation. 🎉</p>
                 </div>
             ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "40px" }}>
@@ -131,11 +131,11 @@ export default async function AdminPage() {
             )}
 
             <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", margin: "0 0 16px 0", display: "flex", alignItems: "center", gap: "8px" }}>
-                <ShieldCheck size={18} color="var(--brand-success)" /> Approved ({approved.length})
+                <ShieldCheck size={18} color="var(--brand-success)" /> Approuvés ({approved.length})
             </h2>
             {approved.length === 0 ? (
                 <div className="card" style={{ padding: "32px 24px", textAlign: "center", backgroundColor: "var(--bg-surface)", border: "1px dashed var(--border-medium)" }}>
-                    <p style={{ color: "var(--text-muted)", margin: 0 }}>No approved cooks yet.</p>
+                    <p style={{ color: "var(--text-muted)", margin: 0 }}>Aucun cuisinier approuvé pour l’instant.</p>
                 </div>
             ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
