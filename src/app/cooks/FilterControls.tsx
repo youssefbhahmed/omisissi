@@ -17,7 +17,9 @@ export const EMPTY_FILTERS: CookFilters = {
     maxPrice: null,
 };
 
-const SPECIALTIES_LIST = ["Traditional", "Vegan", "Pastries", "Healthy", "Comfort Food", "Seafood"];
+// Free-text values stored on cook_details.specialties — kept in French so the
+// filter chips match what the profile form writes (see ProfileSettingsClient).
+const SPECIALTIES_LIST = ["Traditionnel", "Végane", "Pâtisseries", "Sain", "Plats réconfortants", "Fruits de mer"];
 const RATING_OPTIONS: { label: string; value: number }[] = [
     { label: "Toutes", value: 0 },
     { label: "4.0+", value: 4 },

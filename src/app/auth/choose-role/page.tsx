@@ -43,11 +43,11 @@ export default async function ChooseRolePage() {
                 </div>
 
                 <h1 className="heading-font" style={{ fontSize: "28px", fontWeight: 800, marginBottom: "8px", color: "var(--text-heading)" }}>
-                    Welcome{profile.full_name ? `, ${profile.full_name.split(' ')[0]}` : ""}!
+                    Bienvenue{profile.full_name ? `, ${profile.full_name.split(' ')[0]}` : ""} !
                 </h1>
                 <p style={{ color: "var(--text-muted)", marginBottom: "32px" }}>
-                    One last thing — how will you use Foodie? Either way, you can
-                    always browse and book other cooks as a client.
+                    Une dernière chose — comment utiliserez-vous Foodie ? Dans tous les cas,
+                    vous pourrez toujours parcourir et réserver d’autres cuisiniers en tant que client.
                 </p>
 
                 <form action={chooseSignupRole} style={{ display: "flex", gap: "16px" }}>
@@ -58,8 +58,8 @@ export default async function ChooseRolePage() {
                         style={{ flex: 1, padding: "28px 16px", borderRadius: "16px", border: "2px solid var(--border-light)", backgroundColor: "var(--bg-surface)", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", transition: "all 0.2s ease" }}
                     >
                         <User size={28} color="var(--brand-primary)" />
-                        <span style={{ fontWeight: 700, color: "var(--text-heading)" }}>I&apos;m a Family</span>
-                        <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>Book home cooks near me</span>
+                        <span style={{ fontWeight: 700, color: "var(--text-heading)" }}>Je suis une famille</span>
+                        <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>Réserver des cuisiniers à domicile près de chez moi</span>
                     </button>
                     <button
                         type="submit"
@@ -68,8 +68,8 @@ export default async function ChooseRolePage() {
                         style={{ flex: 1, padding: "28px 16px", borderRadius: "16px", border: "2px solid var(--border-light)", backgroundColor: "var(--bg-surface)", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", transition: "all 0.2s ease" }}
                     >
                         <Utensils size={28} color="var(--brand-primary)" />
-                        <span style={{ fontWeight: 700, color: "var(--text-heading)" }}>I want to cook</span>
-                        <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>Earn by cooking for families</span>
+                        <span style={{ fontWeight: 700, color: "var(--text-heading)" }}>Je veux cuisiner</span>
+                        <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>Gagner de l’argent en cuisinant pour des familles</span>
                     </button>
                 </form>
             </div>

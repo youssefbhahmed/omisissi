@@ -34,7 +34,7 @@ export default function SignupPage() {
             <div style={{ flex: 1, position: "relative" }} className="hidden md:block">
                 <img
                     src={roleType === "family" ? "/family-tunisian.png" : "/cook-tunisian.png"}
-                    alt="Signup background"
+                    alt="Arrière-plan d’inscription"
                     style={{ width: "100%", height: "100%", objectFit: "cover", transition: "all 0.5s ease" }}
                 />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(0,0,0,0) 0%, var(--bg-base) 100%)" }} />
@@ -50,8 +50,8 @@ export default function SignupPage() {
                         <span className="heading-font" style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-heading)" }}>foodie</span>
                     </div>
 
-                    <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, textAlign: "center", marginBottom: "8px", color: "var(--text-heading)" }}>Join the food revolution</h1>
-                    <p style={{ textAlign: "center", color: "var(--text-muted)", marginBottom: "32px" }}>Create your account to get started.</p>
+                    <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, textAlign: "center", marginBottom: "8px", color: "var(--text-heading)" }}>Rejoignez la révolution culinaire</h1>
+                    <p style={{ textAlign: "center", color: "var(--text-muted)", marginBottom: "32px" }}>Créez votre compte pour commencer.</p>
 
                     <div style={{ display: "flex", gap: "12px", marginBottom: "32px" }}>
                         <button
@@ -64,7 +64,7 @@ export default function SignupPage() {
                             }}
                         >
                             <User size={24} color={roleType === "family" ? "var(--brand-primary)" : "var(--text-muted)"} />
-                            <span style={{ fontWeight: 700, color: roleType === "family" ? "var(--brand-primary)" : "var(--text-muted)" }}>I&apos;m a Family</span>
+                            <span style={{ fontWeight: 700, color: roleType === "family" ? "var(--brand-primary)" : "var(--text-muted)" }}>Je suis une famille</span>
                         </button>
                         <button
                             onClick={() => setRoleType("cook")}
@@ -76,7 +76,7 @@ export default function SignupPage() {
                             }}
                         >
                             <Utensils size={24} color={roleType === "cook" ? "var(--brand-primary)" : "var(--text-muted)"} />
-                            <span style={{ fontWeight: 700, color: roleType === "cook" ? "var(--brand-primary)" : "var(--text-muted)" }}>I want to cook</span>
+                            <span style={{ fontWeight: 700, color: roleType === "cook" ? "var(--brand-primary)" : "var(--text-muted)" }}>Je veux cuisiner</span>
                         </button>
                     </div>
 
@@ -93,31 +93,31 @@ export default function SignupPage() {
                         )}
 
                         <div>
-                            <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "6px" }}>Full Name</label>
+                            <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "6px" }}>Nom complet</label>
                             <input name="fullName" type="text" required style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-surface)", color: "var(--text-body)" }} placeholder="Fatma Ben Ali" />
                         </div>
 
                         <div>
-                            <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "6px" }}>Email</label>
+                            <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "6px" }}>E-mail</label>
                             <input name="email" type="email" required style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-surface)", color: "var(--text-body)" }} placeholder="hello@example.com" />
                         </div>
 
                         <div>
-                            <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "6px" }}>Password</label>
+                            <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "6px" }}>Mot de passe</label>
                             <input name="password" type="password" required minLength={6} style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-surface)", color: "var(--text-body)" }} placeholder="••••••••" />
                         </div>
 
                         <button type="submit" disabled={loading} className="btn-primary" style={{ width: "100%", padding: "16px", marginTop: "12px", fontSize: "16px", opacity: loading ? 0.7 : 1 }}>
-                            {loading ? "Creating account..." : "Sign Up"} <ArrowRight size={18} />
+                            {loading ? "Création du compte…" : "S’inscrire"} <ArrowRight size={18} />
                         </button>
                     </form>
 
                     <div style={{ marginTop: "20px" }}>
-                        <OAuthButtons role={roleType} action="Sign up" />
+                        <OAuthButtons role={roleType} action="S’inscrire" />
                     </div>
 
                     <p style={{ textAlign: "center", marginTop: "24px", fontSize: "14px", color: "var(--text-muted)" }}>
-                        Already have an account? <Link href="/login" style={{ color: "var(--brand-primary)", fontWeight: 700, textDecoration: "none" }}>Log in</Link>
+                        Vous avez déjà un compte ? <Link href="/login" style={{ color: "var(--brand-primary)", fontWeight: 700, textDecoration: "none" }}>Se connecter</Link>
                     </p>
                 </div>
             </div>

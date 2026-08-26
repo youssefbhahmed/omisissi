@@ -18,12 +18,12 @@ export async function addDish(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: "Not authenticated" };
+        return { error: "Vous devez être connecté." };
     }
 
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
     if (profile?.role !== 'cook') {
-        return { error: "Only cooks can add dishes." };
+        return { error: "Seuls les cuisiniers peuvent ajouter des plats." };
     }
 
     const name = ((formData.get("name") as string) || "").trim().slice(0, 120);
@@ -33,13 +33,13 @@ export async function addDish(formData: FormData) {
     const complexity = parseInt(formData.get("complexity") as string, 10);
 
     if (!name) {
-        return { error: "Please give the dish a name." };
+        return { error: "Veuillez donner un nom au plat." };
     }
     if (!DISH_CATEGORIES.includes(category)) {
-        return { error: "Please choose a valid category." };
+        return { error: "Veuillez choisir une catégorie valide." };
     }
     if (!Number.isInteger(complexity) || complexity < 1 || complexity > 4) {
-        return { error: "Please choose a valid complexity level." };
+        return { error: "Veuillez choisir un niveau de difficulté valide." };
     }
 
     let dietary_tags: string[] = [];
@@ -47,11 +47,11 @@ export async function addDish(formData: FormData) {
         try {
             const parsed = JSON.parse(dietaryTagsStr);
             if (!Array.isArray(parsed) || !parsed.every((t) => typeof t === "string" && t.length <= 40) || parsed.length > 12) {
-                return { error: "Invalid dietary tags." };
+                return { error: "Étiquettes alimentaires invalides." };
             }
             dietary_tags = parsed;
         } catch {
-            return { error: "Invalid dietary tags." };
+            return { error: "Étiquettes alimentaires invalides." };
         }
     }
 
@@ -63,10 +63,10 @@ export async function addDish(formData: FormData) {
     if (imageFile && imageFile.size > 0) {
         const ext = ALLOWED_IMAGE_TYPES[imageFile.type];
         if (!ext) {
-            return { error: "Only JPEG, PNG, or WEBP images are allowed." };
+            return { error: "Seules les images JPEG, PNG ou WEBP sont acceptées." };
         }
         if (imageFile.size > MAX_IMAGE_BYTES) {
-            return { error: "Image must be 5MB or smaller." };
+            return { error: "L’image ne doit pas dépasser 5 Mo." };
         }
 
         // Store under a per-user folder so storage policies can enforce ownership
@@ -78,7 +78,7 @@ export async function addDish(formData: FormData) {
 
         if (uploadError) {
             console.error("Storage upload error:", uploadError);
-            return { error: "Failed to upload image. Please try again." };
+            return { error: "Échec de l’envoi de l’image. Veuillez réessayer." };
         }
 
         const { data: { publicUrl } } = supabase.storage
@@ -88,7 +88,7 @@ export async function addDish(formData: FormData) {
         finalImageUrl = publicUrl;
     } else if (imageUrl) {
         if (!/^https?:\/\//.test(imageUrl) || imageUrl.length > 2048) {
-            return { error: "The image link must be a valid http(s) URL." };
+            return { error: "Le lien de l’image doit être une URL http(s) valide." };
         }
         finalImageUrl = imageUrl;
     }
@@ -116,7 +116,7 @@ export async function deleteDish(dishId: string) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    if (!user) return { error: "Not authenticated" };
+    if (!user) return { error: "Vous devez être connecté." };
 
     const { error } = await supabase
         .from('dishes')

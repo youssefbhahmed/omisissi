@@ -39,7 +39,7 @@ const buttonStyle: React.CSSProperties = {
     transition: "background-color 0.2s ease",
 };
 
-export default function OAuthButtons({ role, action = "Continue", next }: { role?: "family" | "cook"; action?: string; next?: string | null }) {
+export default function OAuthButtons({ role, action = "Continuer", next }: { role?: "family" | "cook"; action?: string; next?: string | null }) {
     const [loading, setLoading] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -63,7 +63,7 @@ export default function OAuthButtons({ role, action = "Continue", next }: { role
             }
             // On success the browser navigates away to the provider.
         } catch {
-            setError("Could not start the sign-in. Please try again.");
+            setError("Impossible de démarrer la connexion. Veuillez réessayer.");
             setLoading(null);
         }
     };
@@ -72,15 +72,15 @@ export default function OAuthButtons({ role, action = "Continue", next }: { role
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "4px 0" }}>
                 <div style={{ flex: 1, height: "1px", backgroundColor: "var(--border-light)" }} />
-                <span style={{ fontSize: "13px", color: "var(--text-muted)", fontWeight: 600 }}>or</span>
+                <span style={{ fontSize: "13px", color: "var(--text-muted)", fontWeight: 600 }}>ou</span>
                 <div style={{ flex: 1, height: "1px", backgroundColor: "var(--border-light)" }} />
             </div>
 
             <button type="button" onClick={() => signIn("google")} disabled={loading !== null} style={{ ...buttonStyle, opacity: loading && loading !== "google" ? 0.6 : 1 }}>
-                <GoogleIcon /> {loading === "google" ? "Redirecting..." : `${action} with Google`}
+                <GoogleIcon /> {loading === "google" ? "Redirection…" : `${action} avec Google`}
             </button>
             <button type="button" onClick={() => signIn("facebook")} disabled={loading !== null} style={{ ...buttonStyle, opacity: loading && loading !== "facebook" ? 0.6 : 1 }}>
-                <FacebookIcon /> {loading === "facebook" ? "Redirecting..." : `${action} with Facebook`}
+                <FacebookIcon /> {loading === "facebook" ? "Redirection…" : `${action} avec Facebook`}
             </button>
 
             {error && (

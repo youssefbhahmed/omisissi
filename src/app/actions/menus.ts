@@ -8,12 +8,12 @@ export async function createMenu(formData: FormData, selectedDishIds: string[]) 
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return { error: "Not authenticated" };
+        return { error: "Vous devez être connecté." };
     }
 
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
     if (profile?.role !== 'cook') {
-        return { error: "Only cooks can create menus." };
+        return { error: "Seuls les cuisiniers peuvent créer des menus." };
     }
 
     const name = ((formData.get("name") as string) || "").trim().slice(0, 120);
@@ -22,7 +22,7 @@ export async function createMenu(formData: FormData, selectedDishIds: string[]) 
     const dishIds = [...new Set(selectedDishIds)];
 
     if (!name || !Number.isFinite(price) || price < 0 || dishIds.length === 0) {
-        return { error: "Name, price, and at least one dish are required." };
+        return { error: "Le nom, le prix et au moins un plat sont requis." };
     }
 
     // Every dish in the package must belong to this cook
@@ -33,7 +33,7 @@ export async function createMenu(formData: FormData, selectedDishIds: string[]) 
         .eq('cook_id', user.id);
 
     if (!ownedDishes || ownedDishes.length !== dishIds.length) {
-        return { error: "You can only add your own dishes to a menu." };
+        return { error: "Vous ne pouvez ajouter que vos propres plats à un menu." };
     }
 
     // 1. Insert the Menu
@@ -50,7 +50,7 @@ export async function createMenu(formData: FormData, selectedDishIds: string[]) 
 
     if (menuError || !newMenu) {
         console.error("Error creating menu:", menuError);
-        return { error: "Failed to create menu." };
+        return { error: "Échec de la création du menu." };
     }
 
     // 2. Insert into the junction table for each selected dish
@@ -67,7 +67,7 @@ export async function createMenu(formData: FormData, selectedDishIds: string[]) 
         console.error("Error linking dishes to menu:", junctionError);
         // Clean up the created menu since joining failed
         await supabase.from('menus').delete().eq('id', newMenu.id);
-        return { error: "Failed to link dishes to the new menu." };
+        return { error: "Échec de l’association des plats au nouveau menu." };
     }
 
     revalidatePath("/dashboard/cook/menus");
@@ -78,7 +78,7 @@ export async function deleteMenu(menuId: string) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    if (!user) return { error: "Not authenticated" };
+    if (!user) return { error: "Vous devez être connecté." };
 
     // Because of ON DELETE CASCADE in the database schema, 
     // deleting the menu will automatically delete the rows in menu_dishes.

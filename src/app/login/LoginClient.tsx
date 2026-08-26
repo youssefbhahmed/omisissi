@@ -37,8 +37,8 @@ export default function LoginClient({ initialError, next }: { initialError: stri
                         <span className="heading-font" style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-heading)" }}>foodie</span>
                     </div>
 
-                    <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, textAlign: "center", marginBottom: "8px", color: "var(--text-heading)" }}>Welcome back</h1>
-                    <p style={{ textAlign: "center", color: "var(--text-muted)", marginBottom: "40px" }}>Log in to manage your dinners and bookings.</p>
+                    <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, textAlign: "center", marginBottom: "8px", color: "var(--text-heading)" }}>Bon retour</h1>
+                    <p style={{ textAlign: "center", color: "var(--text-muted)", marginBottom: "40px" }}>Connectez-vous pour gérer vos dîners et vos réservations.</p>
 
                     <form action={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                         {next && <input type="hidden" name="next" value={next} />}
@@ -49,17 +49,17 @@ export default function LoginClient({ initialError, next }: { initialError: stri
                         )}
 
                         <div>
-                            <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "6px" }}>Email</label>
+                            <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "6px" }}>E-mail</label>
                             <input name="email" type="email" required style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-surface)", color: "var(--text-body)" }} placeholder="hello@example.com" />
                         </div>
 
                         <div>
-                            <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "6px" }}>Password</label>
+                            <label style={{ display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "6px" }}>Mot de passe</label>
                             <input name="password" type="password" required style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-surface)", color: "var(--text-body)" }} placeholder="••••••••" />
                         </div>
 
                         <button type="submit" disabled={loading} className="btn-primary" style={{ width: "100%", padding: "16px", marginTop: "16px", fontSize: "16px", opacity: loading ? 0.7 : 1 }}>
-                            {loading ? "Logging in..." : "Log In"} <ArrowRight size={18} />
+                            {loading ? "Connexion…" : "Se connecter"} <ArrowRight size={18} />
                         </button>
                     </form>
 
@@ -68,7 +68,7 @@ export default function LoginClient({ initialError, next }: { initialError: stri
                     </div>
 
                     <p style={{ textAlign: "center", marginTop: "32px", fontSize: "14px", color: "var(--text-muted)" }}>
-                        Need an account? <Link href="/signup" style={{ color: "var(--brand-primary)", fontWeight: 700, textDecoration: "none" }}>Sign up</Link>
+                        Besoin d’un compte ? <Link href="/signup" style={{ color: "var(--brand-primary)", fontWeight: 700, textDecoration: "none" }}>S’inscrire</Link>
                     </p>
                 </div>
             </div>

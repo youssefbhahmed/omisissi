@@ -38,7 +38,9 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
     const [scheduleStatus, setScheduleStatus] = useState<SaveStatus>(null);
     const [passwordStatus, setPasswordStatus] = useState<SaveStatus>(null);
 
-    const availableSpecialties = ["Traditional", "Vegan", "Pastries", "Healthy", "Comfort Food", "Seafood", "Couscous", "Baking"];
+    // Free-text values stored on cook_details.specialties — French, matching
+    // the discover-page filter chips (FilterControls.SPECIALTIES_LIST).
+    const availableSpecialties = ["Traditionnel", "Végane", "Pâtisseries", "Sain", "Plats réconfortants", "Fruits de mer", "Couscous", "Boulangerie"];
 
     const toggleSpecialty = (s: string) => {
         setSpecialties(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]);
