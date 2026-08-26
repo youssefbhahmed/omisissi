@@ -20,14 +20,19 @@ async function getFeaturedCooks(): Promise<LandingCook[]> {
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         );
 
-        const { data: details } = await supabase
+        // select("*") so this works both before and after the is_approved
+        // migration: only an explicit `false` hides a cook.
+        const { data: rawDetails } = await supabase
             .from("cook_details")
-            .select("id, bio, city, price_per_session, rating_average, total_reviews")
+            .select("*")
             .not("price_per_session", "is", null)
             .order("rating_average", { ascending: false })
-            .limit(3);
+            .limit(12);
 
-        if (!details || details.length === 0) return FALLBACK_COOKS;
+        const details = (rawDetails ?? [])
+            .filter((d) => d.is_approved !== false)
+            .slice(0, 3);
+        if (details.length === 0) return FALLBACK_COOKS;
 
         const { data: profiles } = await supabase
             .from("profiles")
@@ -45,7 +50,7 @@ async function getFeaturedCooks(): Promise<LandingCook[]> {
                 pricePerHour: Number(d.price_per_session) || 0,
                 city: d.city || "Tunisia",
                 img: profile?.avatar_url || "/cook-tunisian.png",
-                href: `/dashboard/cooks/${d.id}`,
+                href: `/cooks/${d.id}`,
             };
         });
     } catch {

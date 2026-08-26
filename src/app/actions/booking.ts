@@ -94,14 +94,19 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
     }
 
     // --- Load the cook and check availability ---
+    // select("*") so this works both before and after the is_approved
+    // migration (selecting a missing column would fail the whole query).
     const { data: cookDetails } = await supabase
         .from('cook_details')
-        .select('price_per_session, available_days')
+        .select('*')
         .eq('id', cookId)
         .single();
 
     if (!cookDetails) {
         return { error: "This cook is not available for bookings." };
+    }
+    if (cookDetails.is_approved === false) {
+        return { error: "This cook has not been approved by the Foodie team yet." };
     }
 
     const availableDays = normalizeStringArray(cookDetails.available_days);

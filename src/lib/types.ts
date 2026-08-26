@@ -13,6 +13,9 @@ export interface Profile {
     lat: number | null;
     lng: number | null;
     created_at: string;
+    // Granted via SQL only — lets the platform owner approve cooks.
+    // Optional: the column arrives with the cook-approval migration.
+    is_admin?: boolean | null;
 }
 
 export interface CookDetails {
@@ -28,6 +31,10 @@ export interface CookDetails {
     available_days: string[] | string | null;
     lat: number | null;
     lng: number | null;
+    // Optional: the column arrives with the cook-approval migration. Treat
+    // only an explicit `false` as "not approved" so the app keeps working
+    // before the migration has been applied.
+    is_approved?: boolean | null;
 }
 
 export type DishCategory = "starter" | "main" | "dessert" | "side" | "other";

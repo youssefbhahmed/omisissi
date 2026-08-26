@@ -10,6 +10,11 @@ export async function GET(request: Request) {
     const code = searchParams.get("code");
     const rolePref = searchParams.get("role");
 
+    // Optional local path to return to (e.g. the cook page a visitor was
+    // booking from). Never follow absolute/protocol-relative URLs.
+    const rawNext = searchParams.get("next");
+    const next = rawNext && rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : null;
+
     if (!code) {
         return NextResponse.redirect(`${origin}/login?error=oauth`);
     }
@@ -48,6 +53,9 @@ export async function GET(request: Request) {
         return NextResponse.redirect(`${origin}/auth/choose-role`);
     }
 
+    if (next) {
+        return NextResponse.redirect(`${origin}${next}`);
+    }
     return NextResponse.redirect(
         profile?.role === "cook" ? `${origin}/dashboard/cook` : `${origin}/dashboard`
     );

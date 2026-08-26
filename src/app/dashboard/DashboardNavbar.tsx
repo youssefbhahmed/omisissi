@@ -27,7 +27,7 @@ export default function DashboardNavbar() {
                 </Link>
 
                 <nav style={{ display: "flex", gap: "24px", height: "100%" }}>
-                    <NavLink href="/dashboard/discover">
+                    <NavLink href="/cooks">
                         <Search size={18} /> <span className="hidden md:inline">Discover Cooks</span>
                     </NavLink>
                     <NavLink href="/dashboard/family">

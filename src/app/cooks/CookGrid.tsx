@@ -136,7 +136,7 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: DiscoverCook[]
             {/* Cook Cards Grid */}
             <div className="auto-grid-3">
                 {filtered.length > 0 ? filtered.map((cook) => (
-                    <Link href={`/dashboard/cooks/${cook.id}`} key={cook.id} className="card" style={{ cursor: "pointer", textDecoration: "none", color: "inherit", display: "block" }}>
+                    <Link href={`/cooks/${cook.id}`} key={cook.id} className="card" style={{ cursor: "pointer", textDecoration: "none", color: "inherit", display: "block" }}>
                         <div style={{ position: "relative", height: "240px", overflow: "hidden" }}>
                             <img src={cook.avatar_url || "/hero-tunisian-food-1.png"} alt={cook.full_name || "Cook"} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }} />
                             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%)", pointerEvents: "none" }} />

@@ -6,7 +6,7 @@ import { ChefHat, ArrowRight } from "lucide-react";
 import { login } from "@/app/actions/auth";
 import OAuthButtons from "@/components/OAuthButtons";
 
-export default function LoginClient({ initialError }: { initialError: string | null }) {
+export default function LoginClient({ initialError, next }: { initialError: string | null; next?: string | null }) {
     const [error, setError] = useState<string | null>(initialError);
     const [loading, setLoading] = useState(false);
 
@@ -41,6 +41,7 @@ export default function LoginClient({ initialError }: { initialError: string | n
                     <p style={{ textAlign: "center", color: "var(--text-muted)", marginBottom: "40px" }}>Log in to manage your dinners and bookings.</p>
 
                     <form action={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                        {next && <input type="hidden" name="next" value={next} />}
                         {error && (
                             <div style={{ padding: "12px", backgroundColor: "rgba(220, 38, 38, 0.1)", color: "#dc2626", borderRadius: "8px", fontSize: "14px", fontWeight: 500 }}>
                                 {error}
@@ -63,7 +64,7 @@ export default function LoginClient({ initialError }: { initialError: string | n
                     </form>
 
                     <div style={{ marginTop: "20px" }}>
-                        <OAuthButtons />
+                        <OAuthButtons next={next} />
                     </div>
 
                     <p style={{ textAlign: "center", marginTop: "32px", fontSize: "14px", color: "var(--text-muted)" }}>

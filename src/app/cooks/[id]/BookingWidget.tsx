@@ -2,8 +2,9 @@
 
 import React, { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Clock, MapPin, ShoppingBag, Utensils, Plus, Minus, Users } from "lucide-react";
-import { submitBooking } from "../../../actions/booking";
+import Link from "next/link";
+import { Clock, MapPin, ShoppingBag, Utensils, Plus, Minus, Users, LogIn } from "lucide-react";
+import { submitBooking } from "@/app/actions/booking";
 import {
     COMPLEXITY_TIME,
     TRAVEL_FEE,
@@ -21,13 +22,15 @@ export default function BookingWidget({
     pricePerHour,
     availableDays = [],
     menus = [],
-    dishes = []
+    dishes = [],
+    isLoggedIn = true,
 }: {
     cookId: string,
     pricePerHour: number,
     availableDays: string[],
     menus: Menu[],
-    dishes: Dish[]
+    dishes: Dish[],
+    isLoggedIn?: boolean,
 }) {
     const router = useRouter();
     const [step, setStep] = useState(1);
@@ -434,10 +437,21 @@ export default function BookingWidget({
 
                     <div style={{ display: "flex", gap: "12px", marginTop: "4px" }}>
                         <button onClick={() => setStep(2)} className="btn-nav" style={{ flex: 1, padding: "14px", border: "1px solid var(--border-medium)" }}>Back</button>
-                        <button onClick={handleSubmit} disabled={isSubmitting} className="btn-primary" style={{ flex: 2, padding: "14px", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>
-                            {isSubmitting ? "Sending..." : `Book · ${totalEstimate} TND`}
-                        </button>
+                        {isLoggedIn ? (
+                            <button onClick={handleSubmit} disabled={isSubmitting} className="btn-primary" style={{ flex: 2, padding: "14px", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>
+                                {isSubmitting ? "Sending..." : `Book · ${totalEstimate} TND`}
+                            </button>
+                        ) : (
+                            <Link href={`/login?next=/cooks/${cookId}`} className="btn-primary" style={{ flex: 2, padding: "14px", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", textDecoration: "none" }}>
+                                <LogIn size={16} /> Log in to book
+                            </Link>
+                        )}
                     </div>
+                    {!isLoggedIn && (
+                        <p style={{ margin: 0, fontSize: "12px", color: "var(--text-muted)", textAlign: "center" }}>
+                            Browsing is free — an account is only needed to send a booking request.
+                        </p>
+                    )}
                 </div>
             )}
             <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }`}</style>

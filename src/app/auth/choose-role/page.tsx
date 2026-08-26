@@ -46,7 +46,8 @@ export default async function ChooseRolePage() {
                     Welcome{profile.full_name ? `, ${profile.full_name.split(' ')[0]}` : ""}!
                 </h1>
                 <p style={{ color: "var(--text-muted)", marginBottom: "32px" }}>
-                    One last thing — how will you use Foodie?
+                    One last thing — how will you use Foodie? Either way, you can
+                    always browse and book other cooks as a client.
                 </p>
 
                 <form action={chooseSignupRole} style={{ display: "flex", gap: "16px" }}>

@@ -5,6 +5,7 @@ import { Clock, CheckCircle, XCircle, MapPin, ChefHat, Calendar, Phone, Star } f
 import CancelBookingButton from "./CancelBookingButton";
 import ReviewForm from "./ReviewForm";
 import type { BookingListItem } from "@/lib/types";
+import Link from "next/link";
 
 const CANCEL_WINDOW_HOURS = 48;
 
@@ -20,16 +21,9 @@ export default async function FamilyBookingsPage() {
         redirect("/login");
     }
 
-    // Fetch user's profile to verify they are a family account
-    const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
-
-    if (profile?.role !== "family") {
-        redirect("/dashboard/profile");
-    }
+    // Any account can book as a client — including cooks booking other cooks —
+    // so this page is open to every logged-in user. Bookings are matched on
+    // family_id, which is the booker regardless of their role.
 
     // Fetch all bookings for this family. The cook's profile is fetched in a
     // second query because the bookings FKs reference auth.users, which
@@ -115,7 +109,7 @@ export default async function FamilyBookingsPage() {
                     <p style={{ margin: "0 0 24px 0", color: "var(--text-muted)", maxWidth: "400px", marginLeft: "auto", marginRight: "auto" }}>
                         You haven&apos;t requested any home-cooked meals yet. Head over to the discover page to find a cook near you.
                     </p>
-                    <a href="/dashboard/discover" className="btn-primary" style={{ display: "inline-flex", textDecoration: "none" }}>Discover Cooks</a>
+                    <Link href="/cooks" className="btn-primary" style={{ display: "inline-flex", textDecoration: "none" }}>Discover Cooks</Link>
                 </div>
             ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>

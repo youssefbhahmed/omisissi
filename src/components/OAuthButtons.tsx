@@ -39,7 +39,7 @@ const buttonStyle: React.CSSProperties = {
     transition: "background-color 0.2s ease",
 };
 
-export default function OAuthButtons({ role, action = "Continue" }: { role?: "family" | "cook"; action?: string }) {
+export default function OAuthButtons({ role, action = "Continue", next }: { role?: "family" | "cook"; action?: string; next?: string | null }) {
     const [loading, setLoading] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -48,7 +48,11 @@ export default function OAuthButtons({ role, action = "Continue" }: { role?: "fa
         setError(null);
         try {
             const supabase = createClient();
-            const redirectTo = `${window.location.origin}/auth/callback${role ? `?role=${role}` : ""}`;
+            const params = new URLSearchParams();
+            if (role) params.set("role", role);
+            if (next) params.set("next", next);
+            const query = params.toString();
+            const redirectTo = `${window.location.origin}/auth/callback${query ? `?${query}` : ""}`;
             const { error } = await supabase.auth.signInWithOAuth({
                 provider,
                 options: { redirectTo },

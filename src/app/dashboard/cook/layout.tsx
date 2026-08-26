@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ChefHat, Library, Utensils, Settings, LogOut, Clock } from "lucide-react";
+import { ChefHat, Library, Utensils, Settings, LogOut, Clock, Search } from "lucide-react";
 import { logout } from "@/app/actions/auth";
 import { NavLink } from "@/components/ui/NavLink";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -31,6 +31,10 @@ export default function CookDashboardLayout({ children }: { children: React.Reac
                         </NavLink>
                         <NavLink href="/dashboard/cook/profile">
                             <Settings size={18} /> <span className="hidden md:inline">Cook Profile</span>
+                        </NavLink>
+                        {/* Cooks are clients too: they can browse and book other cooks */}
+                        <NavLink href="/cooks">
+                            <Search size={18} /> <span className="hidden md:inline">Find a Cook</span>
                         </NavLink>
                     </nav>
 

@@ -265,7 +265,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             <h2 className="heading-font" style={{ fontSize: "36px", fontWeight: 800, margin: 0, color: "var(--text-heading)" }}>Meet Our Cooks</h2>
             <p style={{ margin: "8px 0 0 0", fontSize: "16px", color: "var(--text-muted)", maxWidth: "400px" }}>Each cook is recruited, verified, and trained by our team before her first booking.</p>
           </div>
-          <Link href="/dashboard/discover" className="btn-nav" style={{ color: "var(--brand-primary)", fontWeight: 700, display: "flex", alignItems: "center", gap: "4px", textDecoration: "none" }}>
+          <Link href="/cooks" className="btn-nav" style={{ color: "var(--brand-primary)", fontWeight: 700, display: "flex", alignItems: "center", gap: "4px", textDecoration: "none" }}>
             View All Cooks <ChevronRight size={16} strokeWidth={2.5} />
           </Link>
         </div>

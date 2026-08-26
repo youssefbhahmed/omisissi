@@ -29,6 +29,10 @@ export default async function CookDashboard() {
     // Check if they need to complete their profile setup
     const isProfileIncomplete = !cookDetails || !cookDetails.bio || !cookDetails.price_per_session;
 
+    // Only an explicit false counts — the column arrives with the
+    // cook-approval migration.
+    const awaitingApproval = cookDetails?.is_approved === false;
+
     // Real earnings and booking stats
     const { data: myBookings } = await supabase
         .from('bookings')
@@ -46,6 +50,11 @@ export default async function CookDashboard() {
 
     return (
         <div>
+            {profile?.is_admin === true && (
+                <Link href="/dashboard/admin" className="card" style={{ padding: "16px 24px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "12px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-medium)", textDecoration: "none", color: "var(--text-heading)", fontWeight: 700 }}>
+                    <ShieldAlert size={20} color="var(--brand-primary)" /> Admin — Cook Approvals <ArrowRight size={16} style={{ marginLeft: "auto" }} />
+                </Link>
+            )}
             <div style={{ marginBottom: "40px", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                 <div>
                     <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, margin: "0 0 8px 0", color: "var(--text-heading)" }}>
@@ -54,6 +63,20 @@ export default async function CookDashboard() {
                     <p style={{ margin: 0, fontSize: "16px", color: "var(--text-muted)" }}>Manage your cooking business.</p>
                 </div>
             </div>
+
+            {awaitingApproval && (
+                <div className="card" style={{ padding: "24px", display: "flex", gap: "16px", alignItems: "flex-start", backgroundColor: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.3)", marginBottom: "32px" }}>
+                    <div style={{ color: "#2563eb", marginTop: "4px" }}>
+                        <ShieldAlert size={24} />
+                    </div>
+                    <div>
+                        <h3 className="heading-font" style={{ margin: "0 0 4px 0", fontSize: "18px", fontWeight: 700, color: "#1d4ed8" }}>Your profile is awaiting approval</h3>
+                        <p style={{ margin: 0, fontSize: "14px", color: "#1e40af" }}>
+                            The Foodie team reviews every new cook before they appear in the directory. Until then, families can&apos;t find or book you — use the time to polish your <Link href={`/cooks/${user.id}`} style={{ color: "#1d4ed8", fontWeight: 700 }}>public profile</Link>, dishes and menus.
+                        </p>
+                    </div>
+                </div>
+            )}
 
             {isProfileIncomplete && (
                 <div className="card" style={{ padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "rgba(255,184,0,0.1)", border: "1px solid rgba(255,184,0,0.3)", marginBottom: "32px" }}>

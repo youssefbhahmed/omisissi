@@ -58,6 +58,14 @@ export async function login(formData: FormData) {
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user?.id).single();
 
     revalidatePath("/", "layout");
+
+    // Return to the page the visitor was on (e.g. a cook they were booking) —
+    // local paths only, never an absolute URL.
+    const next = formData.get("next") as string | null;
+    if (next && next.startsWith("/") && !next.startsWith("//")) {
+        redirect(next);
+    }
+
     if (profile?.role === 'cook') {
         redirect("/dashboard/cook");
     } else {
