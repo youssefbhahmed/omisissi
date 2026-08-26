@@ -375,8 +375,11 @@ body {
   display: flex;
   gap: 44px;
   width: max-content;
-  /* Back-and-forth: scrolls left, slows down, then comes back */
-  animation: marquee-scroll 45s ease-in-out infinite alternate;
+  /* Back-and-forth: scrolls left, slows down, then comes back. The negative
+     delay starts the ribbon mid-leg, so it's visibly moving on page load
+     instead of crawling through the ease-in. */
+  animation: marquee-scroll 32s ease-in-out infinite alternate;
+  animation-delay: -10s;
 }
 .marquee-item {
   font-size: 16px;
