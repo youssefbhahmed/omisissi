@@ -191,7 +191,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             </p>
 
             <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "48px" }}>
-              <Link href="/signup" className="btn-primary" style={{ padding: "16px 32px", fontSize: "16px", textDecoration: "none" }}>
+              <Link href="/cooks" className="btn-primary" style={{ padding: "16px 32px", fontSize: "16px", textDecoration: "none" }}>
                 Trouver un cuisinier <ArrowRight size={18} />
               </Link>
               <Link href="/signup" style={{ padding: "16px 32px", fontSize: "16px", fontWeight: 700, background: "rgba(255,255,255,0.12)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: "99px", color: "white", cursor: "pointer", transition: "all 0.25s ease", textDecoration: "none" }}>
@@ -340,7 +340,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             </div>
 
             <div className="reveal">
-              <Link href="/signup" className="btn-primary" style={{ padding: "14px 28px", textDecoration: "none" }}>
+              <Link href="/cooks" className="btn-primary" style={{ padding: "14px 28px", textDecoration: "none" }}>
                 Parcourir les cuisiniers près de chez vous <ArrowRight size={18} />
               </Link>
             </div>
@@ -444,7 +444,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               et zéro vaisselle — votre première réservation ne prend que deux minutes.
             </p>
             <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap", marginBottom: "36px" }}>
-              <Link href="/signup" className="btn-primary" style={{ padding: "16px 36px", fontSize: "16px", textDecoration: "none" }}>
+              <Link href="/cooks" className="btn-primary" style={{ padding: "16px 36px", fontSize: "16px", textDecoration: "none" }}>
                 Trouver un cuisinier près de chez vous <ArrowRight size={18} />
               </Link>
               <Link href="/signup" style={{ padding: "16px 32px", fontSize: "16px", fontWeight: 700, background: "rgba(255,255,255,0.1)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "99px", color: "white", textDecoration: "none" }}>
