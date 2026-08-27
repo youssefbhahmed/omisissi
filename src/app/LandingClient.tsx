@@ -221,9 +221,9 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               the hero photo sits under a dark overlay in both themes */}
           <div style={{ flex: "1 1 320px", display: "flex", justifyContent: "center" }}>
             <img
-              src="/brand/ommi-sissi-full-on-cream.svg"
+              src="/brand/ommi-sissi-full-light.svg"
               alt="Ommi Sissi — Tunisian Food"
-              style={{ width: "min(440px, 82vw)", height: "auto", borderRadius: "28px", boxShadow: "0 16px 45px rgba(0,0,0,0.45)" }}
+              style={{ width: "min(460px, 84vw)", height: "auto", filter: "drop-shadow(0 0 26px rgba(246,239,226,0.8)) drop-shadow(0 0 8px rgba(246,239,226,0.55))" }}
             />
           </div>
           </div>
