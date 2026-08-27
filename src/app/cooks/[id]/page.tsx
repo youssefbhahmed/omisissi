@@ -113,7 +113,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
             </div>
 
             {!isApproved && (
-                <div className="card" style={{ padding: "16px 24px", marginBottom: "24px", backgroundColor: "rgba(255, 184, 0,0.1)", border: "1px solid rgba(255, 184, 0,0.3)", display: "flex", alignItems: "center", gap: "12px" }}>
+                <div className="card" style={{ padding: "16px 24px", marginBottom: "24px", backgroundColor: "rgba(244, 193, 47,0.1)", border: "1px solid rgba(244, 193, 47,0.3)", display: "flex", alignItems: "center", gap: "12px" }}>
                     <Clock size={20} color="#d97706" />
                     <p style={{ margin: 0, fontSize: "14px", color: "#b45309", fontWeight: 600 }}>
                         Ce profil est en attente d’approbation par l’équipe Ommi Sissi — vous seul {viewerIsAdmin ? "(et les admins) " : ""}pouvez le voir pour l’instant.
@@ -187,7 +187,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                                                     fontWeight: 700,
                                                     textTransform: "uppercase",
                                                     letterSpacing: "0.5px",
-                                                    backgroundColor: dish.category === "main" ? "rgba(255, 184, 0, 0.12)" : dish.category === "starter" ? "rgba(34, 197, 94, 0.12)" : "rgba(168, 85, 247, 0.12)",
+                                                    backgroundColor: dish.category === "main" ? "rgba(244, 193, 47, 0.12)" : dish.category === "starter" ? "rgba(34, 197, 94, 0.12)" : "rgba(168, 85, 247, 0.12)",
                                                     color: dish.category === "main" ? "var(--brand-primary)" : dish.category === "starter" ? "#22c55e" : "#a855f7",
                                                 }}>{categoryFr(dish.category)}</span>
                                             </div>

@@ -1,37 +1,37 @@
 @import "tailwindcss";
 
 /* ============================================
-   OMMI SISSI — Golden Yellow + Terracotta accents
+   OMMI SISSI — Concept 6A: Saffron / Espresso / Olive / Cream
    Marketplace for families & home cooks
    ============================================ */
 
 :root,
 [data-theme="light"],
 html {
-  --bg-base: #F5EDE3;
+  --bg-base: #F6EFE2;
   --bg-surface: #ffffff;
   --bg-surface-alt: #ebe5d9;
   --bg-subtle: #faf8f4;
-  --bg-nav: rgba(245, 237, 227, 0.92);
+  --bg-nav: rgba(246, 239, 226, 0.92);
 
   --bg-dark: #121212;
   --bg-dark-surface: #1e1e1e;
-  --bg-hero-gradient: linear-gradient(180deg, #F5EDE3 0%, #ebe5d9 100%);
+  --bg-hero-gradient: linear-gradient(180deg, #F6EFE2 0%, #ebe5d9 100%);
 
   --text-heading: #121212;
   --text-body: #404040;
   --text-muted: #737373;
-  --text-inverse: #F5EDE3;
+  --text-inverse: #F6EFE2;
   --text-inverse-muted: #b3b3b3;
 
   --border-light: #e5ded3;
   --border-medium: #d6ccbc;
-  --border-warm: #ffb800;
+  --border-warm: #F4C12F;
   --border-dark: #121212;
 
-  --brand-primary: #ffb800;
-  --brand-primary-hover: #e0a200;
-  --brand-secondary: #C6462B;
+  --brand-primary: #F4C12F;
+  --brand-primary-hover: #DBA816;
+  --brand-secondary: #6F7A47;
   --brand-success: #22c55e;
 
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -58,12 +58,12 @@ html[data-theme="dark"] {
 
   --border-light: #1e1e1e;
   --border-medium: #2a2a2a;
-  --border-warm: #ffb800;
+  --border-warm: #F4C12F;
   --border-dark: #0a0a0a;
 
-  --brand-primary: #ffc436;
-  --brand-primary-hover: #ffb800;
-  --brand-secondary: #D65A3D;
+  --brand-primary: #F6CC4F;
+  --brand-primary-hover: #F4C12F;
+  --brand-secondary: #B1B77A;
   --brand-success: #4ade80;
 
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.6);

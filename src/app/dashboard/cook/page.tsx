@@ -79,7 +79,7 @@ export default async function CookDashboard() {
             )}
 
             {isProfileIncomplete && (
-                <div className="card" style={{ padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "rgba(255, 184, 0,0.1)", border: "1px solid rgba(255, 184, 0,0.3)", marginBottom: "32px" }}>
+                <div className="card" style={{ padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "rgba(244, 193, 47,0.1)", border: "1px solid rgba(244, 193, 47,0.3)", marginBottom: "32px" }}>
                     <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
                         <div style={{ color: "#d97706", marginTop: "4px" }}>
                             <ShieldAlert size={24} />
@@ -109,7 +109,7 @@ export default async function CookDashboard() {
                         <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Réservations confirmées</p>
                         <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: "var(--text-heading)" }}>{activeCount}</h3>
                     </div>
-                    <div className="card" style={{ padding: "24px", backgroundColor: pendingCount > 0 ? "rgba(255, 184, 0,0.08)" : "var(--bg-surface)", border: pendingCount > 0 ? "1px solid rgba(255, 184, 0,0.4)" : "1px solid var(--border-light)" }}>
+                    <div className="card" style={{ padding: "24px", backgroundColor: pendingCount > 0 ? "rgba(244, 193, 47,0.08)" : "var(--bg-surface)", border: pendingCount > 0 ? "1px solid rgba(244, 193, 47,0.4)" : "1px solid var(--border-light)" }}>
                         <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Demandes en attente</p>
                         <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: pendingCount > 0 ? "var(--brand-primary)" : "var(--text-heading)" }}>{pendingCount}</h3>
                     </div>
@@ -117,8 +117,8 @@ export default async function CookDashboard() {
 
                 {/* Orders Area */}
                 {pendingCount > 0 ? (
-                    <div className="card" style={{ padding: "40px", textAlign: "center", backgroundColor: "var(--bg-surface)", border: "2px solid rgba(255, 184, 0,0.35)", display: "flex", flexGrow: 1, flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "300px" }}>
-                        <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(255, 184, 0,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 20px auto" }}>
+                    <div className="card" style={{ padding: "40px", textAlign: "center", backgroundColor: "var(--bg-surface)", border: "2px solid rgba(244, 193, 47,0.35)", display: "flex", flexGrow: 1, flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "300px" }}>
+                        <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(244, 193, 47,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 20px auto" }}>
                             <ShoppingBag size={32} />
                         </div>
                         <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>
@@ -133,7 +133,7 @@ export default async function CookDashboard() {
                     </div>
                 ) : (
                     <div className="card" style={{ padding: "40px", textAlign: "center", backgroundColor: "var(--bg-surface)", border: "1px dashed var(--border-medium)", display: "flex", flexGrow: 1, flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "300px" }}>
-                        <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(255, 184, 0,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 20px auto" }}>
+                        <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(244, 193, 47,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 20px auto" }}>
                             <ShoppingBag size={32} />
                         </div>
                         <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>Aucune demande en attente</h3>

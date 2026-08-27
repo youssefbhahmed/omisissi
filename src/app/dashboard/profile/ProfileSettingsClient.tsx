@@ -257,7 +257,7 @@ export default function ProfileSettingsClient({ profile, email, isCook, cookDeta
                                                     display: "flex", alignItems: "center", justifyContent: "space-between",
                                                     padding: "16px 20px", borderRadius: "12px",
                                                     border: `1.5px solid ${isAvailable ? "var(--brand-primary)" : "var(--border-medium)"}`,
-                                                    backgroundColor: isAvailable ? "rgba(255, 184, 0, 0.05)" : "var(--bg-base)",
+                                                    backgroundColor: isAvailable ? "rgba(244, 193, 47, 0.05)" : "var(--bg-base)",
                                                     cursor: "pointer", transition: "all 0.2s ease"
                                                 }}
                                             >

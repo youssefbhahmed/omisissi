@@ -124,7 +124,7 @@ function SectionHeader({ badge, title, subtitle, align = "center" }: { badge?: s
   return (
     <div className="reveal" style={{ textAlign: align, marginBottom: "48px", maxWidth: align === "center" ? "640px" : "100%", margin: align === "center" ? "0 auto 48px auto" : "0 0 48px 0" }}>
       {badge && (
-        <span style={{ display: "inline-block", backgroundColor: "var(--brand-secondary)", color: "#F5EDE3", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "16px" }}>
+        <span style={{ display: "inline-block", backgroundColor: "var(--brand-secondary)", color: "#F6EFE2", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "16px" }}>
           {badge}
         </span>
       )}
@@ -178,8 +178,8 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
         <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 10 }}>
           <div className="reveal" style={{ display: "flex", alignItems: "center", gap: "48px", flexWrap: "wrap-reverse", paddingTop: "120px", paddingBottom: "100px" }}>
           <div style={{ maxWidth: "620px", flex: "1 1 420px" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(255, 184, 0,0.15)", backdropFilter: "blur(10px)", border: "1px solid rgba(255, 184, 0,0.35)", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, color: "#F5EDE3", marginBottom: "28px" }}>
-              <span style={{ width: "7px", height: "7px", backgroundColor: "#F5EDE3", borderRadius: "50%" }} />
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(244, 193, 47,0.15)", backdropFilter: "blur(10px)", border: "1px solid rgba(244, 193, 47,0.35)", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, color: "#F6EFE2", marginBottom: "28px" }}>
+              <span style={{ width: "7px", height: "7px", backgroundColor: "#F6EFE2", borderRadius: "50%" }} />
               Des repas faits maison, par de vraies personnes
             </div>
 
@@ -260,7 +260,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                 <div style={{ position: "absolute", top: "14px", right: "14px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "var(--brand-primary)", color: "#121212", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "14px" }}>
                   {step.n}
                 </div>
-                <div style={{ width: "56px", height: "56px", borderRadius: "16px", backgroundColor: "rgba(255, 184, 0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 16px auto" }}>
+                <div style={{ width: "56px", height: "56px", borderRadius: "16px", backgroundColor: "rgba(244, 193, 47,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 16px auto" }}>
                   <Icon size={28} />
                 </div>
                 <h3 className="heading-font" style={{ margin: "0 0 10px 0", fontSize: "18px", fontWeight: 800, color: "var(--text-heading)" }}>{step.title}</h3>
@@ -275,7 +275,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       <Section id="cooks">
         <div className="reveal" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px", flexWrap: "wrap", gap: "16px" }}>
           <div>
-            <span style={{ display: "inline-block", backgroundColor: "var(--brand-secondary)", color: "#F5EDE3", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "12px" }}>Les mieux notés</span>
+            <span style={{ display: "inline-block", backgroundColor: "var(--brand-secondary)", color: "#F6EFE2", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "12px" }}>Les mieux notés</span>
             <h2 className="heading-font" style={{ fontSize: "36px", fontWeight: 800, margin: 0, color: "var(--text-heading)" }}>Découvrez nos cuisiniers</h2>
             <p style={{ margin: "8px 0 0 0", fontSize: "16px", color: "var(--text-muted)", maxWidth: "400px" }}>Chaque cuisinière est recrutée, vérifiée et formée par notre équipe avant sa première réservation.</p>
           </div>
@@ -339,7 +339,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                 const Icon = perk.icon;
                 return (
                   <div key={i} className="reveal" style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
-                    <div style={{ width: "44px", height: "44px", borderRadius: "14px", backgroundColor: "rgba(255, 184, 0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", flexShrink: 0 }}>
+                    <div style={{ width: "44px", height: "44px", borderRadius: "14px", backgroundColor: "rgba(244, 193, 47,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", flexShrink: 0 }}>
                       <Icon size={22} />
                     </div>
                     <div>
@@ -368,7 +368,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", alignItems: "center" }}>
             <div style={{ flex: "1 1 500px" }}>
               <div className="reveal">
-                <span style={{ display: "inline-block", backgroundColor: "rgba(255, 184, 0,0.2)", color: "#F5EDE3", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "20px", border: "1px solid rgba(255, 184, 0,0.3)" }}>Pour les mamans</span>
+                <span style={{ display: "inline-block", backgroundColor: "rgba(244, 193, 47,0.2)", color: "#F6EFE2", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "20px", border: "1px solid rgba(244, 193, 47,0.3)" }}>Pour les mamans</span>
                 <h2 className="heading-font" style={{ fontSize: "clamp(32px, 4vw, 44px)", fontWeight: 800, margin: "0 0 16px 0", lineHeight: 1.1, color: "white" }}>
                   Transformez vos talents de cuisinière en revenu flexible
                 </h2>
@@ -382,7 +382,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                   const Icon = b.icon;
                   return (
                     <div key={i} className="reveal" style={{ backgroundColor: "rgba(255,255,255,0.08)", backdropFilter: "blur(8px)", padding: "24px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.1)" }}>
-                      <div style={{ width: "40px", height: "40px", borderRadius: "12px", backgroundColor: "rgba(255, 184, 0,0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#F5EDE3", marginBottom: "12px" }}>
+                      <div style={{ width: "40px", height: "40px", borderRadius: "12px", backgroundColor: "rgba(244, 193, 47,0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#F6EFE2", marginBottom: "12px" }}>
                         <Icon size={20} />
                       </div>
                       <h4 className="heading-font" style={{ margin: "0 0 6px 0", fontSize: "16px", fontWeight: 700, color: "white" }}>{b.title}</h4>
@@ -395,7 +395,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               <div className="reveal" style={{ display: "flex", gap: "24px", flexWrap: "wrap", marginBottom: "36px" }}>
                 {[{ v: "900+ TND", l: "Revenu mensuel moyen" }, { v: "100%", l: "Horaires flexibles" }].map(stat => (
                   <div key={stat.l} style={{ textAlign: "center" }}>
-                    <p className="heading-font" style={{ margin: "0 0 2px 0", fontSize: "32px", fontWeight: 800, color: "#F5EDE3" }}>{stat.v}</p>
+                    <p className="heading-font" style={{ margin: "0 0 2px 0", fontSize: "32px", fontWeight: 800, color: "#F6EFE2" }}>{stat.v}</p>
                     <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.6)", fontWeight: 600 }}>{stat.l}</p>
                   </div>
                 ))}
@@ -442,14 +442,14 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
 
       {/* ─────────── CTA ─────────── */}
       <Section>
-        <div className="reveal" style={{ backgroundImage: "url('/hero-feast.png')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "32px", position: "relative", overflow: "hidden", border: "2px solid rgba(255, 184, 0,0.35)" }}>
+        <div className="reveal" style={{ backgroundImage: "url('/hero-feast.png')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "32px", position: "relative", overflow: "hidden", border: "2px solid rgba(244, 193, 47,0.35)" }}>
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 55%, rgba(120,40,0,0.45) 100%)" }} />
           <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "88px 32px" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(255, 184, 0,0.16)", border: "1px solid rgba(255, 184, 0,0.4)", backdropFilter: "blur(8px)", color: "#F5EDE3", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "24px" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(244, 193, 47,0.16)", border: "1px solid rgba(244, 193, 47,0.4)", backdropFilter: "blur(8px)", color: "#F6EFE2", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "24px" }}>
               <span className="pulse-dot" /> Des cuisiniers disponibles cette semaine à Tunis, La Marsa et Ariana
             </div>
             <h2 className="heading-font" style={{ fontSize: "clamp(32px, 5vw, 54px)", fontWeight: 800, margin: "0 0 12px 0", lineHeight: 1.08, color: "white", letterSpacing: "-1px" }}>
-              Ce soir, on mange<br />comme chez <span style={{ color: "#F5EDE3" }}>Mama</span>. 🌶
+              Ce soir, on mange<br />comme chez <span style={{ color: "#F6EFE2" }}>Mama</span>. 🌶
             </h2>
             <p style={{ fontSize: "17px", color: "rgba(255,255,255,0.85)", margin: "0 auto 32px auto", lineHeight: 1.6, maxWidth: "520px" }}>
               De vraies mamans tunisiennes qui cuisinent dans votre cuisine. Des vendredis couscous, une brik qui croustille,

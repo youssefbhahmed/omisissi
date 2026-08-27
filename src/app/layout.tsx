@@ -14,6 +14,11 @@ export const metadata: Metadata = {
   icons: {
     apple: "/icons/apple-touch-icon.png",
   },
+  openGraph: {
+    title: "Ommi Sissi — Des plats faits maison, préparés avec amour",
+    description: "Trouvez des cuisiniers à domicile talentueux près de chez vous.",
+    images: ["/og.jpg"],
+  },
 };
 
 export const viewport: Viewport = {
@@ -21,7 +26,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F5EDE3" },
+    { media: "(prefers-color-scheme: light)", color: "#F6EFE2" },
     { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
   ],
 };

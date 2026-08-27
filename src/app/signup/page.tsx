@@ -57,7 +57,7 @@ export default function SignupPage() {
                             style={{
                                 flex: 1, padding: "16px", borderRadius: "16px",
                                 border: roleType === "family" ? "2px solid var(--brand-primary)" : "2px solid var(--border-light)",
-                                backgroundColor: roleType === "family" ? "rgba(255, 184, 0,0.05)" : "var(--bg-surface)",
+                                backgroundColor: roleType === "family" ? "rgba(244, 193, 47,0.05)" : "var(--bg-surface)",
                                 cursor: "pointer", transition: "all 0.2s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px"
                             }}
                         >
@@ -69,7 +69,7 @@ export default function SignupPage() {
                             style={{
                                 flex: 1, padding: "16px", borderRadius: "16px",
                                 border: roleType === "cook" ? "2px solid var(--brand-primary)" : "2px solid var(--border-light)",
-                                backgroundColor: roleType === "cook" ? "rgba(255, 184, 0,0.05)" : "var(--bg-surface)",
+                                backgroundColor: roleType === "cook" ? "rgba(244, 193, 47,0.05)" : "var(--bg-surface)",
                                 cursor: "pointer", transition: "all 0.2s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px"
                             }}
                         >

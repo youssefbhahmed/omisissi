@@ -53,7 +53,7 @@ export default function ReviewForm({ bookingId, cookName }: { bookingId: string;
     }
 
     return (
-        <div style={{ padding: "16px", borderRadius: "12px", border: "1.5px solid var(--brand-primary)", backgroundColor: "rgba(255, 184, 0, 0.05)", display: "flex", flexDirection: "column", gap: "12px" }}>
+        <div style={{ padding: "16px", borderRadius: "12px", border: "1.5px solid var(--brand-primary)", backgroundColor: "rgba(244, 193, 47, 0.05)", display: "flex", flexDirection: "column", gap: "12px" }}>
             <div style={{ fontWeight: 700, fontSize: "14px", color: "var(--text-heading)" }}>
                 Comment était le repas avec {cookName} ?
             </div>

@@ -1,18 +1,16 @@
-# Ommi Sissi — Charte graphique
+# Ommi Sissi — Concept 6A Production Pack
 
-Sources de la marque (le site sert ses propres copies depuis `public/brand/`).
+Final approved direction: saffron-yellow ladybug shell, espresso structure, **MMI in Poppins Bold style**, saffron script **Sissi**, olive **TUNISIAN FOOD**. The ladybug mark replaces the O — there is no extra O.
 
-## Dossiers
-- `svg/` — vecteurs propres (à privilégier pour le web et l'impression)
-- `pdf/` — versions print
-- `webp/` — rendus bitmap en plusieurs tailles
-- `brand-colors.css` — variables de couleurs approuvées
+## Use
+- `svg/ommi-sissi-full-light.svg`: default on light/cream UI
+- `svg/ommi-sissi-full-dark.svg`: dark-mode UI
+- `svg/ommi-sissi-no-tagline-light.svg`: navbar/header where tagline is too small
+- `svg/ommi-sissi-icon-light.svg`: favicon/app avatar
+- `icons/favicon.ico`: browser favicon
+- `icons/apple-touch-icon.png`: iOS
+- `icons/android-chrome-192x192.png` and `512x512.png`: PWA
 
-## Variantes (déclinées en svg/pdf/webp)
-- `*-full-*` — logo complet « Ommi Sissi · Tunisian Food »
-- `*-wordmark-*` — wordmark seul
-- `*-icon-*` — la marque coccinelle-piment seule
-- `*-light` — pour fonds clairs · `*-dark` — pour fonds sombres · `*-mono-*` — monochrome
+Includes SVG, transparent PNG up to 4096px, WebP, JPG previews, PDF/EPS print masters, favicon/app icons, social cards and CSS/JSON brand tokens.
 
-## Palette
-- Rouge `#C6462B` · Brun `#2B2115` · Olive `#6B6F3D` · Crème `#F5EDE3`
+The SVG artwork is path-based and does not require font files.
