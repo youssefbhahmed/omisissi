@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ============================================
-   OMMI SISSI — Cream + Terracotta Theme
+   OMMI SISSI — Golden Yellow + Terracotta accents
    Marketplace for families & home cooks
    ============================================ */
 
@@ -26,12 +26,12 @@ html {
 
   --border-light: #e5ded3;
   --border-medium: #d6ccbc;
-  --border-warm: #C6462B;
+  --border-warm: #ffb800;
   --border-dark: #121212;
 
-  --brand-primary: #C6462B;
-  --brand-primary-hover: #A83A22;
-  --brand-secondary: #6B6F3D;
+  --brand-primary: #ffb800;
+  --brand-primary-hover: #e0a200;
+  --brand-secondary: #C6462B;
   --brand-success: #22c55e;
 
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -58,18 +58,18 @@ html[data-theme="dark"] {
 
   --border-light: #1e1e1e;
   --border-medium: #2a2a2a;
-  --border-warm: #C6462B;
+  --border-warm: #ffb800;
   --border-dark: #0a0a0a;
 
-  --brand-primary: #D65A3D;
-  --brand-primary-hover: #C6462B;
-  --brand-secondary: #8A8F52;
+  --brand-primary: #ffc436;
+  --brand-primary-hover: #ffb800;
+  --brand-secondary: #D65A3D;
   --brand-success: #4ade80;
 
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.6);
   --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.7);
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.8);
-  --shadow-hover: 0 25px 40px -10px rgba(198, 70, 43, 0.15);
+  --shadow-hover: 0 25px 40px -10px rgba(255, 184, 0, 0.15);
 }
 
 /* ─── Reset ─── */
@@ -187,7 +187,7 @@ html[data-theme="dark"] .logo-when-dark {
 /* ─── Buttons ─── */
 .btn-primary {
   background: var(--brand-primary);
-  color: #F5EDE3;
+  color: #121212;
   border: none;
   border-radius: 9999px;
   cursor: pointer;
@@ -205,7 +205,7 @@ html[data-theme="dark"] .logo-when-dark {
 .btn-primary:hover {
   transform: translateY(-2px);
   background: var(--brand-primary-hover);
-  box-shadow: 0 8px 20px rgba(198, 70, 43, 0.35);
+  box-shadow: 0 8px 20px rgba(255, 184, 0, 0.35);
 }
 
 .btn-primary:active {
@@ -217,7 +217,7 @@ html[data-theme="dark"] .logo-when-dark {
   height: 44px;
   border-radius: 50%;
   background: var(--brand-primary);
-  color: #F5EDE3;
+  color: #121212;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -229,7 +229,7 @@ html[data-theme="dark"] .logo-when-dark {
 
 .btn-icon-rounded:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(198, 70, 43, 0.3);
+  box-shadow: 0 6px 12px rgba(255, 184, 0, 0.3);
 }
 
 .btn-nav {
@@ -399,7 +399,7 @@ html[data-theme="dark"] .logo-when-dark {
   font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: #F5EDE3;
+  color: #121212;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;

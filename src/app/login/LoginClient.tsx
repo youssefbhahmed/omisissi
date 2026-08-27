@@ -32,8 +32,7 @@ export default function LoginClient({ initialError, next }: { initialError: stri
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px" }}>
                 <div style={{ maxWidth: "400px", width: "100%" }}>
                     <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "40px", justifyContent: "center" }}>
-                        <BrandMark size={40} />
-                        <span className="heading-font" style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-heading)" }}>Ommi Sissi</span>
+                        <BrandMark size={56} />
                     </div>
 
                     <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, textAlign: "center", marginBottom: "8px", color: "var(--text-heading)" }}>Bon retour</h1>

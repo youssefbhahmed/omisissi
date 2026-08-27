@@ -14,8 +14,8 @@ export default function CookDashboardLayout({ children }: { children: React.Reac
                 <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
                     <Link href="/dashboard/cook" style={{ display: "flex", gap: "10px", alignItems: "center", textDecoration: "none" }}>
-                        <BrandMark size={36} />
-                        <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)", whiteSpace: "nowrap" }}>Ommi Sissi <span className="hidden sm:inline" style={{ color: "var(--brand-primary)", fontSize: "14px" }}>Cuisine</span></span>
+                        <BrandMark size={44} />
+                        <span className="heading-font hidden sm:inline" style={{ color: "var(--brand-primary)", fontSize: "14px", fontWeight: 800 }}>Cuisine</span>
                     </Link>
 
                     <nav style={{ display: "flex", gap: "clamp(12px, 2.5vw, 20px)", height: "100%" }}>

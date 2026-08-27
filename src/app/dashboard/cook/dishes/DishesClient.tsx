@@ -227,7 +227,7 @@ export default function DishesClient({ dishes }: { dishes: Dish[] }) {
                                             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px", flexWrap: "wrap" }}>
                                                 <h3 className="heading-font" style={{ margin: 0, fontSize: "20px", fontWeight: 800, color: "var(--text-heading)" }}>{dish.name}</h3>
                                                 <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", padding: "4px 8px", borderRadius: "6px", backgroundColor: "var(--bg-subtle)", color: "var(--text-muted)" }}>{categoryFr(dish.category)}</span>
-                                                <span style={{ fontSize: "11px", fontWeight: 700, padding: "4px 10px", borderRadius: "6px", display: "flex", alignItems: "center", gap: "5px", backgroundColor: dish.complexity === 1 ? "rgba(34,197,94,0.1)" : dish.complexity === 2 ? "rgba(198, 70, 43,0.1)" : dish.complexity === 3 ? "rgba(249,115,22,0.1)" : "rgba(239,68,68,0.1)", color: dish.complexity === 1 ? "#22c55e" : dish.complexity === 2 ? "var(--brand-primary)" : dish.complexity === 3 ? "#f97316" : "#ef4444" }}>
+                                                <span style={{ fontSize: "11px", fontWeight: 700, padding: "4px 10px", borderRadius: "6px", display: "flex", alignItems: "center", gap: "5px", backgroundColor: dish.complexity === 1 ? "rgba(34,197,94,0.1)" : dish.complexity === 2 ? "rgba(255, 184, 0,0.1)" : dish.complexity === 3 ? "rgba(249,115,22,0.1)" : "rgba(239,68,68,0.1)", color: dish.complexity === 1 ? "#22c55e" : dish.complexity === 2 ? "var(--brand-primary)" : dish.complexity === 3 ? "#f97316" : "#ef4444" }}>
                                                     <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "currentColor" }} />
                                                     {dish.complexity === 1 ? "Facile" : dish.complexity === 2 ? "Moyen" : dish.complexity === 3 ? "Difficile" : "Expert"}
                                                 </span>
@@ -241,7 +241,7 @@ export default function DishesClient({ dishes }: { dishes: Dish[] }) {
 
                                     <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                                         {dish.dietary_tags?.map((tag: string) => (
-                                            <span key={tag} style={{ fontSize: "12px", fontWeight: 600, color: "var(--brand-primary)", backgroundColor: "rgba(198, 70, 43, 0.1)", padding: "4px 10px", borderRadius: "99px" }}>
+                                            <span key={tag} style={{ fontSize: "12px", fontWeight: 600, color: "var(--brand-primary)", backgroundColor: "rgba(255, 184, 0, 0.1)", padding: "4px 10px", borderRadius: "99px" }}>
                                                 {tagFr(tag)}
                                             </span>
                                         ))}

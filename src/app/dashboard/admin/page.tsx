@@ -32,7 +32,7 @@ function CookRow({ cook }: { cook: AdminCookRow }) {
                         <MapPin size={12} /> {cook.city}
                     </span>
                     {!cook.hasRate && (
-                        <span style={{ fontSize: "11px", fontWeight: 700, color: "#d97706", backgroundColor: "rgba(198, 70, 43,0.12)", padding: "2px 8px", borderRadius: "99px" }}>profil incomplet</span>
+                        <span style={{ fontSize: "11px", fontWeight: 700, color: "#d97706", backgroundColor: "rgba(255, 184, 0,0.12)", padding: "2px 8px", borderRadius: "99px" }}>profil incomplet</span>
                     )}
                 </div>
                 <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "var(--text-muted)", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
@@ -110,7 +110,7 @@ export default async function AdminPage() {
             </div>
 
             {!migrationApplied && (
-                <div className="card" style={{ padding: "20px 24px", marginBottom: "24px", backgroundColor: "rgba(198, 70, 43,0.1)", border: "1px solid rgba(198, 70, 43,0.3)" }}>
+                <div className="card" style={{ padding: "20px 24px", marginBottom: "24px", backgroundColor: "rgba(255, 184, 0,0.1)", border: "1px solid rgba(255, 184, 0,0.3)" }}>
                     <p style={{ margin: 0, fontSize: "14px", color: "#b45309", fontWeight: 600 }}>
                         Le système d’approbation n’est pas encore actif — exécutez <code>supabase/setup_cook_approval.sql</code> dans l’éditeur SQL de Supabase. D’ici là, chaque cuisinier est visible publiquement.
                     </p>
