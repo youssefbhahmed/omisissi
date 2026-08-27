@@ -73,7 +73,7 @@ export default async function FamilyBookingsPage() {
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case "pending": return { bg: "rgba(235, 171, 33, 0.1)", color: "var(--brand-primary)" };
+            case "pending": return { bg: "rgba(198, 70, 43, 0.1)", color: "var(--brand-primary)" };
             case "accepted": return { bg: "rgba(34, 197, 94, 0.1)", color: "var(--brand-success)" };
             case "declined": case "cancelled": return { bg: "rgba(239, 68, 68, 0.1)", color: "var(--danger)" };
             case "completed": return { bg: "rgba(59, 130, 246, 0.1)", color: "#3b82f6" };

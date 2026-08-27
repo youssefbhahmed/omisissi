@@ -300,7 +300,7 @@ export default function BookingWidget({
                                     const qty = selectedDishes[d.id] || 0;
                                     const isSelected = qty > 0;
                                     return (
-                                    <div key={d.id} style={{ padding: "12px", borderRadius: "14px", border: `1.5px solid ${isSelected ? "var(--brand-primary)" : "var(--border-light)"}`, backgroundColor: isSelected ? "rgba(235, 171, 33, 0.04)" : "var(--bg-base)", transition: "all 0.2s" }}>
+                                    <div key={d.id} style={{ padding: "12px", borderRadius: "14px", border: `1.5px solid ${isSelected ? "var(--brand-primary)" : "var(--border-light)"}`, backgroundColor: isSelected ? "rgba(198, 70, 43, 0.04)" : "var(--bg-base)", transition: "all 0.2s" }}>
                                         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                                             <img src={d.image_url || "/hero-tunisian-food.png"} alt={d.name} style={{ width: "44px", height: "44px", borderRadius: "10px", objectFit: "cover", flexShrink: 0 }} />
                                             <div style={{ flex: 1, minWidth: 0 }}>
@@ -325,7 +325,7 @@ export default function BookingWidget({
                                 })}
                             </div>
                             {totalDishCount > 0 && (
-                                <div style={{ padding: "12px 16px", borderRadius: "10px", backgroundColor: "rgba(235, 171, 33, 0.08)", border: "1px solid rgba(235, 171, 33, 0.2)", fontSize: "13px", color: "var(--text-body)" }}>
+                                <div style={{ padding: "12px 16px", borderRadius: "10px", backgroundColor: "rgba(198, 70, 43, 0.08)", border: "1px solid rgba(198, 70, 43, 0.2)", fontSize: "13px", color: "var(--text-body)" }}>
                                     <strong>{totalDishCount} plat{totalDishCount !== 1 ? "s" : ""}</strong> pour <strong>{guests} convive{guests !== 1 ? "s" : ""}</strong> → env. <strong>{estimatedHours}h</strong> de cuisine
                                 </div>
                             )}

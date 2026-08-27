@@ -3,13 +3,13 @@ import "./globals.css";
 import PwaRegister from "@/components/PwaRegister";
 
 export const metadata: Metadata = {
-  title: "Foodie — Des plats faits maison, préparés avec amour",
+  title: "Ommi Sissi — Des plats faits maison, préparés avec amour",
   description:
     "Trouvez des cuisiniers à domicile talentueux près de chez vous. Des plats frais faits maison, préparés par de vraies personnes — directement dans votre cuisine ou livrés chez vous.",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Foodie",
+    title: "Ommi Sissi",
   },
   icons: {
     apple: "/icons/apple-touch-icon.png",
@@ -21,7 +21,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f4efe6" },
+    { media: "(prefers-color-scheme: light)", color: "#F5EDE3" },
     { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
   ],
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ChefHat, Library, Utensils, Settings, LogOut, Clock, Search } from "lucide-react";
+import { Library, Utensils, Settings, LogOut, Clock, Search } from "lucide-react";
 import { logout } from "@/app/actions/auth";
 import { NavLink } from "@/components/ui/NavLink";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -13,10 +13,8 @@ export default function CookDashboardLayout({ children }: { children: React.Reac
                 <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
                     <Link href="/dashboard/cook" style={{ display: "flex", gap: "10px", alignItems: "center", textDecoration: "none" }}>
-                        <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <ChefHat color="#121212" size={20} />
-                        </div>
-                        <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)", whiteSpace: "nowrap" }}>foodie <span className="hidden sm:inline" style={{ color: "var(--brand-primary)", fontSize: "14px" }}>Cuisine</span></span>
+                        <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "36px", height: "36px", objectFit: "contain" }} />
+                        <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)", whiteSpace: "nowrap" }}>Ommi Sissi <span className="hidden sm:inline" style={{ color: "var(--brand-primary)", fontSize: "14px" }}>Cuisine</span></span>
                     </Link>
 
                     <nav style={{ display: "flex", gap: "clamp(12px, 2.5vw, 20px)", height: "100%" }}>

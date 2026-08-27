@@ -1,37 +1,37 @@
 @import "tailwindcss";
 
 /* ============================================
-   FOODIE — Warm Beige + Golden Yellow Theme
+   OMMI SISSI — Cream + Terracotta Theme
    Marketplace for families & home cooks
    ============================================ */
 
 :root,
 [data-theme="light"],
 html {
-  --bg-base: #f4efe6;
+  --bg-base: #F5EDE3;
   --bg-surface: #ffffff;
   --bg-surface-alt: #ebe5d9;
   --bg-subtle: #faf8f4;
-  --bg-nav: rgba(244, 239, 230, 0.92);
+  --bg-nav: rgba(245, 237, 227, 0.92);
 
   --bg-dark: #121212;
   --bg-dark-surface: #1e1e1e;
-  --bg-hero-gradient: linear-gradient(180deg, #f4efe6 0%, #ebe5d9 100%);
+  --bg-hero-gradient: linear-gradient(180deg, #F5EDE3 0%, #ebe5d9 100%);
 
   --text-heading: #121212;
   --text-body: #404040;
   --text-muted: #737373;
-  --text-inverse: #f4efe6;
+  --text-inverse: #F5EDE3;
   --text-inverse-muted: #b3b3b3;
 
   --border-light: #e5ded3;
   --border-medium: #d6ccbc;
-  --border-warm: #ffb800;
+  --border-warm: #C6462B;
   --border-dark: #121212;
 
-  --brand-primary: #ffb800;
-  --brand-primary-hover: #e0a200;
-  --brand-secondary: #ff8c00;
+  --brand-primary: #C6462B;
+  --brand-primary-hover: #A83A22;
+  --brand-secondary: #6B6F3D;
   --brand-success: #22c55e;
 
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -58,18 +58,18 @@ html[data-theme="dark"] {
 
   --border-light: #1e1e1e;
   --border-medium: #2a2a2a;
-  --border-warm: #ffb800;
+  --border-warm: #C6462B;
   --border-dark: #0a0a0a;
 
-  --brand-primary: #ffc436;
-  --brand-primary-hover: #ffb800;
-  --brand-secondary: #ff9d2e;
+  --brand-primary: #D65A3D;
+  --brand-primary-hover: #C6462B;
+  --brand-secondary: #8A8F52;
   --brand-success: #4ade80;
 
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.6);
   --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.7);
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.8);
-  --shadow-hover: 0 25px 40px -10px rgba(255, 184, 0, 0.15);
+  --shadow-hover: 0 25px 40px -10px rgba(198, 70, 43, 0.15);
 }
 
 /* ─── Reset ─── */
@@ -174,7 +174,7 @@ body {
 /* ─── Buttons ─── */
 .btn-primary {
   background: var(--brand-primary);
-  color: #121212;
+  color: #F5EDE3;
   border: none;
   border-radius: 9999px;
   cursor: pointer;
@@ -192,7 +192,7 @@ body {
 .btn-primary:hover {
   transform: translateY(-2px);
   background: var(--brand-primary-hover);
-  box-shadow: 0 8px 20px rgba(255, 184, 0, 0.35);
+  box-shadow: 0 8px 20px rgba(198, 70, 43, 0.35);
 }
 
 .btn-primary:active {
@@ -204,7 +204,7 @@ body {
   height: 44px;
   border-radius: 50%;
   background: var(--brand-primary);
-  color: #121212;
+  color: #F5EDE3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -216,7 +216,7 @@ body {
 
 .btn-icon-rounded:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(255, 184, 0, 0.3);
+  box-shadow: 0 6px 12px rgba(198, 70, 43, 0.3);
 }
 
 .btn-nav {
@@ -386,7 +386,7 @@ body {
   font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: #121212;
+  color: #F5EDE3;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;

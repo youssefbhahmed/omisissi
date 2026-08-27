@@ -96,7 +96,7 @@ export default function MenusClient({ menus, availableDishes }: { menus: MenuWit
                                     <DollarSign size={20} color="var(--text-muted)" style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)" }} />
                                     <input name="price" type="number" min="0" required placeholder="120" style={{ width: "100%", padding: "14px 14px 14px 44px", borderRadius: "12px", border: "1px solid var(--border-medium)", backgroundColor: "var(--bg-base)", color: "var(--text-body)", fontSize: "20px", fontWeight: 700 }} />
                                 </div>
-                                <div style={{ padding: "16px", borderRadius: "12px", backgroundColor: "rgba(235, 171, 33, 0.1)", color: "var(--brand-primary)", fontSize: "13px", lineHeight: 1.5 }}>
+                                <div style={{ padding: "16px", borderRadius: "12px", backgroundColor: "rgba(198, 70, 43, 0.1)", color: "var(--brand-primary)", fontSize: "13px", lineHeight: 1.5 }}>
                                     Proposer un prix de menu aide les familles à commander des repas complets avec une légère remise par rapport à la carte.
                                 </div>
                             </div>

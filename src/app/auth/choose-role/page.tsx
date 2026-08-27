@@ -1,7 +1,7 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { ChefHat, User, Utensils } from "lucide-react";
+import { User, Utensils } from "lucide-react";
 import { chooseSignupRole } from "@/app/actions/auth";
 
 // Outside the component: the react-hooks purity rule forbids Date.now()
@@ -36,17 +36,15 @@ export default async function ChooseRolePage() {
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "var(--bg-base)", padding: "24px" }}>
             <div style={{ maxWidth: "440px", width: "100%", textAlign: "center" }}>
                 <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "32px", justifyContent: "center" }}>
-                    <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <ChefHat color="#121212" size={24} />
-                    </div>
-                    <span className="heading-font" style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-heading)" }}>foodie</span>
+                    <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "40px", height: "40px", objectFit: "contain" }} />
+                    <span className="heading-font" style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-heading)" }}>Ommi Sissi</span>
                 </div>
 
                 <h1 className="heading-font" style={{ fontSize: "28px", fontWeight: 800, marginBottom: "8px", color: "var(--text-heading)" }}>
                     Bienvenue{profile.full_name ? `, ${profile.full_name.split(' ')[0]}` : ""} !
                 </h1>
                 <p style={{ color: "var(--text-muted)", marginBottom: "32px" }}>
-                    Une dernière chose — comment utiliserez-vous Foodie ? Dans tous les cas,
+                    Une dernière chose — comment utiliserez-vous Ommi Sissi ? Dans tous les cas,
                     vous pourrez toujours parcourir et réserver d’autres cuisiniers en tant que client.
                 </p>
 

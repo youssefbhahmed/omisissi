@@ -26,8 +26,8 @@ DECLARE
     -- Sans domaine vérifié chez Resend, l'expéditeur DOIT rester
     -- onboarding@resend.dev (et les emails ne partent que vers l'adresse du
     -- compte Resend). Après vérification d'un domaine, remplacez par ex.
-    -- 'Foodie <notifications@votredomaine.com>' et relancez ce script.
-    v_from text := 'Foodie <onboarding@resend.dev>';
+    -- 'Ommi Sissi <notifications@votredomaine.com>' et relancez ce script.
+    v_from text := 'Ommi Sissi <onboarding@resend.dev>';
     v_to text;
     v_subject text;
     v_html text;

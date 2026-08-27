@@ -34,7 +34,7 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case "pending": return { bg: "rgba(235, 171, 33, 0.1)", color: "var(--brand-primary)" };
+            case "pending": return { bg: "rgba(198, 70, 43, 0.1)", color: "var(--brand-primary)" };
             case "accepted": return { bg: "rgba(34, 197, 94, 0.1)", color: "var(--brand-success)" };
             case "declined": case "cancelled": return { bg: "rgba(239, 68, 68, 0.1)", color: "var(--danger)" };
             case "completed": return { bg: "rgba(59, 130, 246, 0.1)", color: "#3b82f6" };
@@ -67,8 +67,8 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                             const familyAvatar = req.partner?.avatar_url || "/hero-tunisian-food-1.png";
 
                             return (
-                                <div key={req.id} className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "2px solid rgba(235, 171, 33, 0.3)", position: "relative" }}>
-                                    <div style={{ position: "absolute", top: "24px", right: "24px", backgroundColor: "rgba(235, 171, 33, 0.1)", color: "var(--brand-primary)", padding: "4px 10px", borderRadius: "99px", fontSize: "11px", fontWeight: 700, textTransform: "uppercase" }}>
+                                <div key={req.id} className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "2px solid rgba(198, 70, 43, 0.3)", position: "relative" }}>
+                                    <div style={{ position: "absolute", top: "24px", right: "24px", backgroundColor: "rgba(198, 70, 43, 0.1)", color: "var(--brand-primary)", padding: "4px 10px", borderRadius: "99px", fontSize: "11px", fontWeight: 700, textTransform: "uppercase" }}>
                                         Nouvelle demande
                                     </div>
 
@@ -114,7 +114,7 @@ export default function BookingsClient({ pendingRequests, otherBookings }: { pen
                                         </div>
 
                                         {req.notes && (
-                                            <div style={{ marginTop: "12px", padding: "12px", backgroundColor: "rgba(235, 171, 33, 0.05)", borderRadius: "8px", borderLeft: "2px solid var(--brand-primary)", fontSize: "13px" }}>
+                                            <div style={{ marginTop: "12px", padding: "12px", backgroundColor: "rgba(198, 70, 43, 0.05)", borderRadius: "8px", borderLeft: "2px solid var(--brand-primary)", fontSize: "13px" }}>
                                                 <strong>Notes :</strong> {req.notes}
                                             </div>
                                         )}

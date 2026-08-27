@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ChefHat, Search, Calendar, User, LogOut } from "lucide-react";
+import { Search, Calendar, User, LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { NavLink } from "@/components/ui/NavLink";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -20,10 +20,8 @@ export default function DashboardNavbar() {
         <header style={{ backgroundColor: "var(--bg-surface)", borderBottom: "1px solid var(--border-light)", position: "sticky", top: 0, zIndex: 40 }}>
             <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <Link href="/dashboard" style={{ display: "flex", gap: "10px", alignItems: "center", textDecoration: "none" }}>
-                    <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <ChefHat color="#121212" size={20} />
-                    </div>
-                    <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)" }}>foodie</span>
+                    <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "36px", height: "36px", objectFit: "contain" }} />
+                    <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)" }}>Ommi Sissi</span>
                 </Link>
 
                 <nav style={{ display: "flex", gap: "24px", height: "100%" }}>

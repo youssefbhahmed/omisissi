@@ -107,7 +107,7 @@ export async function submitBooking(formData: FormData): Promise<ActionResult> {
         return { error: "Ce cuisinier n’est pas disponible à la réservation." };
     }
     if (cookDetails.is_approved === false) {
-        return { error: "Ce cuisinier n’a pas encore été approuvé par l’équipe Foodie." };
+        return { error: "Ce cuisinier n’a pas encore été approuvé par l’équipe Ommi Sissi." };
     }
 
     const availableDays = normalizeStringArray(cookDetails.available_days);

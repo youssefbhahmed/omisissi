@@ -2,16 +2,16 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: "Foodie — Plats faits maison",
-        short_name: "Foodie",
+        name: "Ommi Sissi — Plats faits maison",
+        short_name: "Ommi Sissi",
         description:
             "Trouvez des cuisiniers à domicile talentueux près de chez vous. Des plats frais faits maison, préparés par de vraies personnes.",
         start_url: "/dashboard",
         scope: "/",
         display: "standalone",
         orientation: "portrait",
-        background_color: "#f4efe6",
-        theme_color: "#f4efe6",
+        background_color: "#F5EDE3",
+        theme_color: "#F5EDE3",
         categories: ["food", "lifestyle"],
         icons: [
             {

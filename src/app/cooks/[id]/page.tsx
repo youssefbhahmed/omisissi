@@ -113,10 +113,10 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
             </div>
 
             {!isApproved && (
-                <div className="card" style={{ padding: "16px 24px", marginBottom: "24px", backgroundColor: "rgba(255,184,0,0.1)", border: "1px solid rgba(255,184,0,0.3)", display: "flex", alignItems: "center", gap: "12px" }}>
+                <div className="card" style={{ padding: "16px 24px", marginBottom: "24px", backgroundColor: "rgba(198, 70, 43,0.1)", border: "1px solid rgba(198, 70, 43,0.3)", display: "flex", alignItems: "center", gap: "12px" }}>
                     <Clock size={20} color="#d97706" />
                     <p style={{ margin: 0, fontSize: "14px", color: "#b45309", fontWeight: 600 }}>
-                        Ce profil est en attente d’approbation par l’équipe Foodie — vous seul {viewerIsAdmin ? "(et les admins) " : ""}pouvez le voir pour l’instant.
+                        Ce profil est en attente d’approbation par l’équipe Ommi Sissi — vous seul {viewerIsAdmin ? "(et les admins) " : ""}pouvez le voir pour l’instant.
                     </p>
                 </div>
             )}
@@ -187,7 +187,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                                                     fontWeight: 700,
                                                     textTransform: "uppercase",
                                                     letterSpacing: "0.5px",
-                                                    backgroundColor: dish.category === "main" ? "rgba(235, 171, 33, 0.12)" : dish.category === "starter" ? "rgba(34, 197, 94, 0.12)" : "rgba(168, 85, 247, 0.12)",
+                                                    backgroundColor: dish.category === "main" ? "rgba(198, 70, 43, 0.12)" : dish.category === "starter" ? "rgba(34, 197, 94, 0.12)" : "rgba(168, 85, 247, 0.12)",
                                                     color: dish.category === "main" ? "var(--brand-primary)" : dish.category === "starter" ? "#22c55e" : "#a855f7",
                                                 }}>{categoryFr(dish.category)}</span>
                                             </div>
@@ -227,7 +227,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                                         <div key={review.id} className="card" style={{ padding: "20px 24px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)" }}>
                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", flexWrap: "wrap", gap: "8px" }}>
                                                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                                                    <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "#121212", fontWeight: 700, fontSize: "14px", flexShrink: 0 }}>
+                                                    <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "#F5EDE3", fontWeight: 700, fontSize: "14px", flexShrink: 0 }}>
                                                         {reviewerName.split(" ").map((w: string) => w[0]).join("").slice(0, 2)}
                                                     </div>
                                                     <div>

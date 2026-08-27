@@ -3,7 +3,6 @@
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import {
-  ChefHat,
   Star,
   ShieldCheck,
   CreditCard,
@@ -63,7 +62,7 @@ const MOM_BENEFITS = [
 const TESTIMONIALS = [
   { name: "Sonia Bouazizi", role: "Maman de 3 enfants, Tunis", text: "Avant, le dîner était un stress quotidien. Maintenant, Fatma vient deux fois par semaine et mes enfants ont de nouveau hâte de manger à la maison." },
   { name: "Karim Jendoubi", role: "Papa actif, Sousse", text: "C’est comme avoir un chef personnel. Les vendredis couscous sont devenus sacrés chez nous. La meilleure décision que nous ayons prise." },
-  { name: "Fatma Ben Ali", role: "Cuisinière Foodie, La Marsa", text: "J’étais une maman au foyer sans revenu. Aujourd’hui, je gagne 900 TND par mois en faisant ce que j’aime — et l’équipe Foodie m’a aidée pour tout." },
+  { name: "Fatma Ben Ali", role: "Cuisinière Ommi Sissi, La Marsa", text: "J’étais une maman au foyer sans revenu. Aujourd’hui, je gagne 900 TND par mois en faisant ce que j’aime — et l’équipe Ommi Sissi m’a aidée pour tout." },
 ];
 
 /* ═══════════════════════════════════════════
@@ -124,7 +123,7 @@ function SectionHeader({ badge, title, subtitle, align = "center" }: { badge?: s
   return (
     <div className="reveal" style={{ textAlign: align, marginBottom: "48px", maxWidth: align === "center" ? "640px" : "100%", margin: align === "center" ? "0 auto 48px auto" : "0 0 48px 0" }}>
       {badge && (
-        <span style={{ display: "inline-block", backgroundColor: "var(--brand-primary)", color: "#121212", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "16px" }}>
+        <span style={{ display: "inline-block", backgroundColor: "var(--brand-primary)", color: "#F5EDE3", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "16px" }}>
           {badge}
         </span>
       )}
@@ -151,10 +150,8 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       <header style={{ position: "fixed", top: 0, left: 0, right: 0, height: "72px", backgroundColor: "var(--bg-nav)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", zIndex: 50, display: "flex", alignItems: "center", borderBottom: "1px solid var(--border-light)" }}>
         <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-            <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <ChefHat color="#121212" size={20} />
-            </div>
-            <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)" }}>foodie</span>
+            <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "36px", height: "36px", objectFit: "contain" }} />
+            <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)" }}>Ommi Sissi</span>
           </div>
 
           <nav style={{ gap: "28px", fontSize: "14px" }} className="hidden md:flex">
@@ -180,7 +177,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
 
         <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 10 }}>
           <div className="reveal" style={{ maxWidth: "620px", paddingTop: "140px", paddingBottom: "100px" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(255,184,0,0.15)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,184,0,0.35)", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, color: "#ffc436", marginBottom: "28px" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(198, 70, 43,0.15)", backdropFilter: "blur(10px)", border: "1px solid rgba(198, 70, 43,0.35)", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, color: "#ffc436", marginBottom: "28px" }}>
               <span style={{ width: "7px", height: "7px", backgroundColor: "#ffc436", borderRadius: "50%" }} />
               Des repas faits maison, par de vraies personnes
             </div>
@@ -205,7 +202,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
               <div style={{ display: "flex" }}>
                 {["F", "A", "L", "K", "S"].map((letter, i) => (
-                  <div key={letter} style={{ width: "36px", height: "36px", borderRadius: "50%", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#121212", fontSize: "13px", border: "2px solid rgba(0,0,0,0.3)", marginLeft: i > 0 ? "-10px" : "0" }}>
+                  <div key={letter} style={{ width: "36px", height: "36px", borderRadius: "50%", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#F5EDE3", fontSize: "13px", border: "2px solid rgba(0,0,0,0.3)", marginLeft: i > 0 ? "-10px" : "0" }}>
                     {letter}
                   </div>
                 ))}
@@ -248,10 +245,10 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             return (
               <div key={step.n} className="card reveal" style={{ padding: "32px 24px", textAlign: "center", position: "relative" }}>
                 {/* .card clips overflow, so the number chip must sit inside the edge */}
-                <div style={{ position: "absolute", top: "14px", right: "14px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "var(--brand-primary)", color: "#121212", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "14px" }}>
+                <div style={{ position: "absolute", top: "14px", right: "14px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "var(--brand-primary)", color: "#F5EDE3", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "14px" }}>
                   {step.n}
                 </div>
-                <div style={{ width: "56px", height: "56px", borderRadius: "16px", backgroundColor: "rgba(255,184,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 16px auto" }}>
+                <div style={{ width: "56px", height: "56px", borderRadius: "16px", backgroundColor: "rgba(198, 70, 43,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 16px auto" }}>
                   <Icon size={28} />
                 </div>
                 <h3 className="heading-font" style={{ margin: "0 0 10px 0", fontSize: "18px", fontWeight: 800, color: "var(--text-heading)" }}>{step.title}</h3>
@@ -266,7 +263,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       <Section id="cooks">
         <div className="reveal" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px", flexWrap: "wrap", gap: "16px" }}>
           <div>
-            <span style={{ display: "inline-block", backgroundColor: "var(--brand-primary)", color: "#121212", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "12px" }}>Les mieux notés</span>
+            <span style={{ display: "inline-block", backgroundColor: "var(--brand-primary)", color: "#F5EDE3", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "12px" }}>Les mieux notés</span>
             <h2 className="heading-font" style={{ fontSize: "36px", fontWeight: 800, margin: 0, color: "var(--text-heading)" }}>Découvrez nos cuisiniers</h2>
             <p style={{ margin: "8px 0 0 0", fontSize: "16px", color: "var(--text-muted)", maxWidth: "400px" }}>Chaque cuisinière est recrutée, vérifiée et formée par notre équipe avant sa première réservation.</p>
           </div>
@@ -330,7 +327,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                 const Icon = perk.icon;
                 return (
                   <div key={i} className="reveal" style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
-                    <div style={{ width: "44px", height: "44px", borderRadius: "14px", backgroundColor: "rgba(255,184,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", flexShrink: 0 }}>
+                    <div style={{ width: "44px", height: "44px", borderRadius: "14px", backgroundColor: "rgba(198, 70, 43,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", flexShrink: 0 }}>
                       <Icon size={22} />
                     </div>
                     <div>
@@ -359,7 +356,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", alignItems: "center" }}>
             <div style={{ flex: "1 1 500px" }}>
               <div className="reveal">
-                <span style={{ display: "inline-block", backgroundColor: "rgba(255,184,0,0.2)", color: "#ffc436", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "20px", border: "1px solid rgba(255,184,0,0.3)" }}>Pour les mamans</span>
+                <span style={{ display: "inline-block", backgroundColor: "rgba(198, 70, 43,0.2)", color: "#ffc436", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "20px", border: "1px solid rgba(198, 70, 43,0.3)" }}>Pour les mamans</span>
                 <h2 className="heading-font" style={{ fontSize: "clamp(32px, 4vw, 44px)", fontWeight: 800, margin: "0 0 16px 0", lineHeight: 1.1, color: "white" }}>
                   Transformez vos talents de cuisinière en revenu flexible
                 </h2>
@@ -373,7 +370,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                   const Icon = b.icon;
                   return (
                     <div key={i} className="reveal" style={{ backgroundColor: "rgba(255,255,255,0.08)", backdropFilter: "blur(8px)", padding: "24px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.1)" }}>
-                      <div style={{ width: "40px", height: "40px", borderRadius: "12px", backgroundColor: "rgba(255,184,0,0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffc436", marginBottom: "12px" }}>
+                      <div style={{ width: "40px", height: "40px", borderRadius: "12px", backgroundColor: "rgba(198, 70, 43,0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffc436", marginBottom: "12px" }}>
                         <Icon size={20} />
                       </div>
                       <h4 className="heading-font" style={{ margin: "0 0 6px 0", fontSize: "16px", fontWeight: 700, color: "white" }}>{b.title}</h4>
@@ -411,14 +408,14 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
 
       {/* ─────────── TESTIMONIALS ─────────── */}
       <Section bgVar="--bg-surface" id="reviews">
-        <SectionHeader badge="Témoignages" title="Adoré des familles et des cuisiniers" subtitle="Écoutez celles et ceux qui utilisent Foodie chaque semaine." />
+        <SectionHeader badge="Témoignages" title="Adoré des familles et des cuisiniers" subtitle="Écoutez celles et ceux qui utilisent Ommi Sissi chaque semaine." />
         <div className="auto-grid-3 reveal-stagger">
           {TESTIMONIALS.map((t, i) => (
             <div key={i} className="card reveal" style={{ padding: "28px", display: "flex", flexDirection: "column" }}>
               <div style={{ marginBottom: "12px" }}><Stars n={5} /></div>
               <p style={{ margin: "0 0 20px 0", fontSize: "15px", color: "var(--text-body)", lineHeight: 1.65, flexGrow: 1 }}>&ldquo;{t.text}&rdquo;</p>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", borderTop: "1px solid var(--border-light)", paddingTop: "16px" }}>
-                <div style={{ width: "42px", height: "42px", borderRadius: "50%", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "#121212", fontWeight: 700, fontSize: "15px" }}>
+                <div style={{ width: "42px", height: "42px", borderRadius: "50%", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "#F5EDE3", fontWeight: 700, fontSize: "15px" }}>
                   {t.name.split(" ").map(w => w[0]).join("")}
                 </div>
                 <div>
@@ -433,10 +430,10 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
 
       {/* ─────────── CTA ─────────── */}
       <Section>
-        <div className="reveal" style={{ backgroundImage: "url('/hero-feast.png')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "32px", position: "relative", overflow: "hidden", border: "2px solid rgba(255,184,0,0.35)" }}>
+        <div className="reveal" style={{ backgroundImage: "url('/hero-feast.png')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "32px", position: "relative", overflow: "hidden", border: "2px solid rgba(198, 70, 43,0.35)" }}>
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 55%, rgba(120,40,0,0.45) 100%)" }} />
           <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "88px 32px" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(255,184,0,0.16)", border: "1px solid rgba(255,184,0,0.4)", backdropFilter: "blur(8px)", color: "#ffc436", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "24px" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(198, 70, 43,0.16)", border: "1px solid rgba(198, 70, 43,0.4)", backdropFilter: "blur(8px)", color: "#ffc436", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "24px" }}>
               <span className="pulse-dot" /> Des cuisiniers disponibles cette semaine à Tunis, La Marsa et Ariana
             </div>
             <h2 className="heading-font" style={{ fontSize: "clamp(32px, 5vw, 54px)", fontWeight: 800, margin: "0 0 12px 0", lineHeight: 1.08, color: "white", letterSpacing: "-1px" }}>
@@ -469,10 +466,8 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", marginBottom: "48px" }}>
             <div style={{ flex: "2 1 250px" }}>
               <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "16px" }}>
-                <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <ChefHat color="#121212" size={20} />
-                </div>
-                <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "white" }}>foodie</span>
+                <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "36px", height: "36px", objectFit: "contain" }} />
+                <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "white" }}>Ommi Sissi</span>
               </div>
               <p style={{ fontSize: "14px", lineHeight: 1.65, maxWidth: "300px", margin: 0 }}>
                 Nous connectons les familles avec des cuisiniers à domicile talentueux. Des plats frais et authentiques — préparés avec amour dans votre propre cuisine.
@@ -496,7 +491,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           </div>
 
           <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "24px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", alignItems: "center", fontSize: "13px" }}>
-            <p style={{ margin: 0 }}>&copy; 2026 Foodie. Tous droits réservés.</p>
+            <p style={{ margin: 0 }}>&copy; 2026 Ommi Sissi. Tous droits réservés.</p>
             <p style={{ margin: 0, display: "flex", alignItems: "center", gap: "6px" }}>Fait avec <Heart size={14} fill="var(--brand-primary)" color="var(--brand-primary)" /> en Tunisie</p>
           </div>
         </div>

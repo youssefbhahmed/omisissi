@@ -39,7 +39,7 @@ export default async function FamilyDashboard() {
             </div>
 
             <div className="card" style={{ padding: "40px", textAlign: "center", backgroundColor: "var(--bg-surface)", border: "1px dashed var(--border-medium)" }}>
-                <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(255,184,0,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 20px auto" }}>
+                <div style={{ width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "rgba(198, 70, 43,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 20px auto" }}>
                     <Calendar size={32} />
                 </div>
                 <h3 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "8px" }}>Aucune réservation à venir</h3>

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ChefHat, ArrowRight, User, Utensils } from "lucide-react";
+import { ArrowRight, User, Utensils } from "lucide-react";
 import { signup } from "@/app/actions/auth";
 import OAuthButtons from "@/components/OAuthButtons";
 
@@ -44,10 +44,8 @@ export default function SignupPage() {
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px" }}>
                 <div style={{ maxWidth: "420px", width: "100%" }}>
                     <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "32px", justifyContent: "center" }}>
-                        <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <ChefHat color="#121212" size={24} />
-                        </div>
-                        <span className="heading-font" style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-heading)" }}>foodie</span>
+                        <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "40px", height: "40px", objectFit: "contain" }} />
+                        <span className="heading-font" style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-heading)" }}>Ommi Sissi</span>
                     </div>
 
                     <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, textAlign: "center", marginBottom: "8px", color: "var(--text-heading)" }}>Rejoignez la révolution culinaire</h1>
@@ -59,7 +57,7 @@ export default function SignupPage() {
                             style={{
                                 flex: 1, padding: "16px", borderRadius: "16px",
                                 border: roleType === "family" ? "2px solid var(--brand-primary)" : "2px solid var(--border-light)",
-                                backgroundColor: roleType === "family" ? "rgba(255,184,0,0.05)" : "var(--bg-surface)",
+                                backgroundColor: roleType === "family" ? "rgba(198, 70, 43,0.05)" : "var(--bg-surface)",
                                 cursor: "pointer", transition: "all 0.2s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px"
                             }}
                         >
@@ -71,7 +69,7 @@ export default function SignupPage() {
                             style={{
                                 flex: 1, padding: "16px", borderRadius: "16px",
                                 border: roleType === "cook" ? "2px solid var(--brand-primary)" : "2px solid var(--border-light)",
-                                backgroundColor: roleType === "cook" ? "rgba(255,184,0,0.05)" : "var(--bg-surface)",
+                                backgroundColor: roleType === "cook" ? "rgba(198, 70, 43,0.05)" : "var(--bg-surface)",
                                 cursor: "pointer", transition: "all 0.2s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px"
                             }}
                         >

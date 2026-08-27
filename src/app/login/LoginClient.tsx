@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ChefHat, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { login } from "@/app/actions/auth";
 import OAuthButtons from "@/components/OAuthButtons";
 
@@ -31,10 +31,8 @@ export default function LoginClient({ initialError, next }: { initialError: stri
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px" }}>
                 <div style={{ maxWidth: "400px", width: "100%" }}>
                     <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "40px", justifyContent: "center" }}>
-                        <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <ChefHat color="#121212" size={24} />
-                        </div>
-                        <span className="heading-font" style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-heading)" }}>foodie</span>
+                        <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "40px", height: "40px", objectFit: "contain" }} />
+                        <span className="heading-font" style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-heading)" }}>Ommi Sissi</span>
                     </div>
 
                     <h1 className="heading-font" style={{ fontSize: "32px", fontWeight: 800, textAlign: "center", marginBottom: "8px", color: "var(--text-heading)" }}>Bon retour</h1>
