@@ -171,7 +171,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       </header>
 
       {/* ─────────── HERO — Full-Bleed Parallax Cover ─────────── */}
-      <section ref={heroRef} className="snap-section parallax-bg" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden", backgroundImage: "url('/hero-tunisian-food.png')" }}>
+      <section ref={heroRef} className="snap-section parallax-bg" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden", backgroundImage: "url('/hero-tunisian-food-2x.png')" }}>
         {/* Dark overlay for text readability */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.2) 100%)", zIndex: 1 }} />
 
