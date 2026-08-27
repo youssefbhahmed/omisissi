@@ -223,7 +223,6 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             <img
               src="/brand/ommi-sissi-full-dark.svg"
               alt="Ommi Sissi — Tunisian Food"
-              className="float"
               style={{ width: "min(440px, 82vw)", height: "auto", filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.45))" }}
             />
           </div>
@@ -478,9 +477,11 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", marginBottom: "48px" }}>
             <div style={{ flex: "2 1 250px" }}>
-              <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "16px" }}>
-                <BrandMark size={44} />
-              </div>
+              <img
+                src="/brand/ommi-sissi-full-dark.svg"
+                alt="Ommi Sissi — Tunisian Food"
+                style={{ width: "180px", height: "auto", marginBottom: "20px", display: "block" }}
+              />
               <p style={{ fontSize: "14px", lineHeight: 1.65, maxWidth: "300px", margin: 0 }}>
                 Nous connectons les familles avec des cuisiniers à domicile talentueux. Des plats frais et authentiques — préparés avec amour dans votre propre cuisine.
               </p>

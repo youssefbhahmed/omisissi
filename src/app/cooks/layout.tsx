@@ -26,6 +26,13 @@ export default async function CooksLayout({ children }: { children: React.ReactN
                         <BrandMark size={44} />
                     </Link>
 
+                    <nav style={{ gap: "28px", fontSize: "14px" }} className="hidden md:flex">
+                        <Link href="/" className="nav-link">Accueil</Link>
+                        <Link href="/cooks" className="nav-link" style={{ color: "var(--brand-primary)" }}>Trouver un cuisinier</Link>
+                        <Link href="/#how-it-works" className="nav-link">Comment ça marche</Link>
+                        <Link href="/signup" className="nav-link">Devenir cuisinière</Link>
+                    </nav>
+
                     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                         <ThemeToggle />
                         {user ? (
