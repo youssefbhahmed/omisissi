@@ -176,8 +176,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.2) 100%)", zIndex: 1 }} />
 
         <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 10 }}>
-          <div className="reveal" style={{ display: "flex", alignItems: "center", gap: "48px", flexWrap: "wrap-reverse", paddingTop: "120px", paddingBottom: "100px" }}>
-          <div style={{ maxWidth: "620px", flex: "1 1 420px" }}>
+          <div className="reveal" style={{ maxWidth: "620px", paddingTop: "140px", paddingBottom: "100px" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(244, 193, 47,0.15)", backdropFilter: "blur(10px)", border: "1px solid rgba(244, 193, 47,0.35)", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, color: "#F6EFE2", marginBottom: "28px" }}>
               <span style={{ width: "7px", height: "7px", backgroundColor: "#F6EFE2", borderRadius: "50%" }} />
               Des repas faits maison, par de vraies personnes
@@ -216,17 +215,6 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               </div>
             </div>
           </div>
-
-          {/* Full brand logo facing the headline — dark-background variant,
-              the hero photo sits under a dark overlay in both themes */}
-          <div style={{ flex: "1 1 320px", display: "flex", justifyContent: "center" }}>
-            <img
-              src="/brand/ommi-sissi-full-light.svg"
-              alt="Ommi Sissi — Tunisian Food"
-              style={{ width: "min(460px, 84vw)", height: "auto" }}
-            />
-          </div>
-          </div>
         </div>
       </section>
 
@@ -246,6 +234,23 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             ))
           )}
         </div>
+      </div>
+
+      {/* ─────────── BRAND BAND — the full logo on a clean light background ─────────── */}
+      <div style={{ backgroundColor: "var(--bg-surface)", paddingTop: "72px", display: "flex", justifyContent: "center" }}>
+        <img
+          src="/brand/ommi-sissi-full-light.svg"
+          alt="Ommi Sissi — Tunisian Food"
+          className="logo-when-light"
+          style={{ width: "min(360px, 70vw)", height: "auto" }}
+        />
+        <img
+          src="/brand/ommi-sissi-full-dark.svg"
+          alt=""
+          aria-hidden="true"
+          className="logo-when-dark"
+          style={{ width: "min(360px, 70vw)", height: "auto" }}
+        />
       </div>
 
       {/* ─────────── HOW IT WORKS ─────────── */}
