@@ -1,12 +1,18 @@
-/* Foodie service worker.
+/* Ommi Sissi service worker.
  *
  * Strategy:
- *  - Static assets (images, fonts, /_next/static) → cache-first
+ *  - /_next/static (content-hashed, immutable) → cache-first
+ *  - Other same-origin static assets (brand SVGs, icons, photos) →
+ *    stale-while-revalidate: serve the cache instantly, refresh it in the
+ *    background so asset updates propagate by the next visit
  *  - Page navigations → network-first, offline fallback page when unreachable
  *  - Everything else (Supabase API, auth, server actions) → network only,
  *    never cached: booking and auth data must always be fresh.
+ *
+ * Bump CACHE_VERSION when cached assets change in place — activation deletes
+ * every older cache.
  */
-const CACHE_VERSION = "foodie-v1";
+const CACHE_VERSION = "ommi-sissi-v2";
 const OFFLINE_URL = "/offline";
 
 self.addEventListener("install", (event) => {
@@ -46,8 +52,8 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
-    // Same-origin static assets: cache first, then network (and store)
-    if (STATIC_DESTINATIONS.has(request.destination) || url.pathname.startsWith("/_next/static/")) {
+    // Content-hashed build assets never change under the same URL: cache-first
+    if (url.pathname.startsWith("/_next/static/")) {
         event.respondWith(
             caches.match(request).then(
                 (cached) =>
@@ -59,6 +65,25 @@ self.addEventListener("fetch", (event) => {
                         }
                         return response;
                     })
+            )
+        );
+        return;
+    }
+
+    // Mutable same-origin statics (logos, icons, photos): serve the cache
+    // instantly but refresh it in the background (stale-while-revalidate)
+    if (STATIC_DESTINATIONS.has(request.destination)) {
+        event.respondWith(
+            caches.open(CACHE_VERSION).then((cache) =>
+                cache.match(request).then((cached) => {
+                    const refresh = fetch(request)
+                        .then((response) => {
+                            if (response.ok) cache.put(request, response.clone());
+                            return response;
+                        })
+                        .catch(() => cached ?? Response.error());
+                    return cached ?? refresh;
+                })
             )
         );
     }
