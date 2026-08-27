@@ -1,4 +1,5 @@
 import React from "react";
+import BrandMark from "@/components/BrandMark";
 
 export const metadata = { title: "Hors ligne — Ommi Sissi" };
 
@@ -6,7 +7,7 @@ export default function OfflinePage() {
     return (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "var(--bg-base)", padding: "24px" }}>
             <div style={{ textAlign: "center", maxWidth: "360px" }}>
-                <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "64px", height: "64px", objectFit: "contain", margin: "0 auto 24px auto" }} />
+                <BrandMark size={64} style={{ margin: "0 auto 24px auto" }} />
                 <h1 className="heading-font" style={{ fontSize: "26px", fontWeight: 800, color: "var(--text-heading)", margin: "0 0 12px 0" }}>
                     Vous êtes hors ligne
                 </h1>

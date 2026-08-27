@@ -1,4 +1,5 @@
 import React from "react";
+import BrandMark from "@/components/BrandMark";
 import Link from "next/link";
 import { Calendar, LayoutDashboard, LogIn } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -22,7 +23,7 @@ export default async function CooksLayout({ children }: { children: React.ReactN
             <header style={{ backgroundColor: "var(--bg-surface)", borderBottom: "1px solid var(--border-light)", position: "sticky", top: 0, zIndex: 40 }}>
                 <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <Link href="/" style={{ display: "flex", gap: "10px", alignItems: "center", textDecoration: "none" }}>
-                        <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "36px", height: "36px", objectFit: "contain" }} />
+                        <BrandMark size={36} />
                         <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)" }}>Ommi Sissi</span>
                     </Link>
 

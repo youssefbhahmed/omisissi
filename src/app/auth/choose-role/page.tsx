@@ -1,4 +1,5 @@
 import React from "react";
+import BrandMark from "@/components/BrandMark";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { User, Utensils } from "lucide-react";
@@ -36,7 +37,7 @@ export default async function ChooseRolePage() {
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "var(--bg-base)", padding: "24px" }}>
             <div style={{ maxWidth: "440px", width: "100%", textAlign: "center" }}>
                 <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "32px", justifyContent: "center" }}>
-                    <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "40px", height: "40px", objectFit: "contain" }} />
+                    <BrandMark size={40} />
                     <span className="heading-font" style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-heading)" }}>Ommi Sissi</span>
                 </div>
 

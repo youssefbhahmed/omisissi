@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import BrandMark from "@/components/BrandMark";
 import Link from "next/link";
 import { ArrowRight, User, Utensils } from "lucide-react";
 import { signup } from "@/app/actions/auth";
@@ -44,7 +45,7 @@ export default function SignupPage() {
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px" }}>
                 <div style={{ maxWidth: "420px", width: "100%" }}>
                     <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "32px", justifyContent: "center" }}>
-                        <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "40px", height: "40px", objectFit: "contain" }} />
+                        <BrandMark size={40} />
                         <span className="heading-font" style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-heading)" }}>Ommi Sissi</span>
                     </div>
 

@@ -1,4 +1,5 @@
 import React from "react";
+import BrandMark from "@/components/BrandMark";
 import Link from "next/link";
 import { Library, Utensils, Settings, LogOut, Clock, Search } from "lucide-react";
 import { logout } from "@/app/actions/auth";
@@ -13,7 +14,7 @@ export default function CookDashboardLayout({ children }: { children: React.Reac
                 <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
                     <Link href="/dashboard/cook" style={{ display: "flex", gap: "10px", alignItems: "center", textDecoration: "none" }}>
-                        <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "36px", height: "36px", objectFit: "contain" }} />
+                        <BrandMark size={36} />
                         <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)", whiteSpace: "nowrap" }}>Ommi Sissi <span className="hidden sm:inline" style={{ color: "var(--brand-primary)", fontSize: "14px" }}>Cuisine</span></span>
                     </Link>
 

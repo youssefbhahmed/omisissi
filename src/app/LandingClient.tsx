@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import BrandMark from "@/components/BrandMark";
 import Link from "next/link";
 import {
   Star,
@@ -150,7 +151,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       <header style={{ position: "fixed", top: 0, left: 0, right: 0, height: "72px", backgroundColor: "var(--bg-nav)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", zIndex: 50, display: "flex", alignItems: "center", borderBottom: "1px solid var(--border-light)" }}>
         <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-            <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "36px", height: "36px", objectFit: "contain" }} />
+            <BrandMark size={36} />
             <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-heading)" }}>Ommi Sissi</span>
           </div>
 
@@ -176,9 +177,16 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.2) 100%)", zIndex: 1 }} />
 
         <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 10 }}>
-          <div className="reveal" style={{ maxWidth: "620px", paddingTop: "140px", paddingBottom: "100px" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(198, 70, 43,0.15)", backdropFilter: "blur(10px)", border: "1px solid rgba(198, 70, 43,0.35)", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, color: "#ffc436", marginBottom: "28px" }}>
-              <span style={{ width: "7px", height: "7px", backgroundColor: "#ffc436", borderRadius: "50%" }} />
+          <div className="reveal" style={{ maxWidth: "620px", paddingTop: "120px", paddingBottom: "100px" }}>
+            {/* Full brand logo — the dark-background variant, since the hero
+                photo sits under a dark overlay in both themes */}
+            <img
+              src="/brand/ommi-sissi-full-dark.svg"
+              alt="Ommi Sissi — Tunisian Food"
+              style={{ width: "min(240px, 55vw)", height: "auto", marginBottom: "28px", display: "block", filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.35))" }}
+            />
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(198, 70, 43,0.15)", backdropFilter: "blur(10px)", border: "1px solid rgba(198, 70, 43,0.35)", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, color: "#F5EDE3", marginBottom: "28px" }}>
+              <span style={{ width: "7px", height: "7px", backgroundColor: "#F5EDE3", borderRadius: "50%" }} />
               Des repas faits maison, par de vraies personnes
             </div>
 
@@ -356,7 +364,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", alignItems: "center" }}>
             <div style={{ flex: "1 1 500px" }}>
               <div className="reveal">
-                <span style={{ display: "inline-block", backgroundColor: "rgba(198, 70, 43,0.2)", color: "#ffc436", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "20px", border: "1px solid rgba(198, 70, 43,0.3)" }}>Pour les mamans</span>
+                <span style={{ display: "inline-block", backgroundColor: "rgba(198, 70, 43,0.2)", color: "#F5EDE3", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "20px", border: "1px solid rgba(198, 70, 43,0.3)" }}>Pour les mamans</span>
                 <h2 className="heading-font" style={{ fontSize: "clamp(32px, 4vw, 44px)", fontWeight: 800, margin: "0 0 16px 0", lineHeight: 1.1, color: "white" }}>
                   Transformez vos talents de cuisinière en revenu flexible
                 </h2>
@@ -370,7 +378,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                   const Icon = b.icon;
                   return (
                     <div key={i} className="reveal" style={{ backgroundColor: "rgba(255,255,255,0.08)", backdropFilter: "blur(8px)", padding: "24px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.1)" }}>
-                      <div style={{ width: "40px", height: "40px", borderRadius: "12px", backgroundColor: "rgba(198, 70, 43,0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffc436", marginBottom: "12px" }}>
+                      <div style={{ width: "40px", height: "40px", borderRadius: "12px", backgroundColor: "rgba(198, 70, 43,0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#F5EDE3", marginBottom: "12px" }}>
                         <Icon size={20} />
                       </div>
                       <h4 className="heading-font" style={{ margin: "0 0 6px 0", fontSize: "16px", fontWeight: 700, color: "white" }}>{b.title}</h4>
@@ -383,7 +391,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               <div className="reveal" style={{ display: "flex", gap: "24px", flexWrap: "wrap", marginBottom: "36px" }}>
                 {[{ v: "900+ TND", l: "Revenu mensuel moyen" }, { v: "100%", l: "Horaires flexibles" }].map(stat => (
                   <div key={stat.l} style={{ textAlign: "center" }}>
-                    <p className="heading-font" style={{ margin: "0 0 2px 0", fontSize: "32px", fontWeight: 800, color: "#ffc436" }}>{stat.v}</p>
+                    <p className="heading-font" style={{ margin: "0 0 2px 0", fontSize: "32px", fontWeight: 800, color: "#F5EDE3" }}>{stat.v}</p>
                     <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.6)", fontWeight: 600 }}>{stat.l}</p>
                   </div>
                 ))}
@@ -433,11 +441,11 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
         <div className="reveal" style={{ backgroundImage: "url('/hero-feast.png')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "32px", position: "relative", overflow: "hidden", border: "2px solid rgba(198, 70, 43,0.35)" }}>
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 55%, rgba(120,40,0,0.45) 100%)" }} />
           <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "88px 32px" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(198, 70, 43,0.16)", border: "1px solid rgba(198, 70, 43,0.4)", backdropFilter: "blur(8px)", color: "#ffc436", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "24px" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(198, 70, 43,0.16)", border: "1px solid rgba(198, 70, 43,0.4)", backdropFilter: "blur(8px)", color: "#F5EDE3", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "24px" }}>
               <span className="pulse-dot" /> Des cuisiniers disponibles cette semaine à Tunis, La Marsa et Ariana
             </div>
             <h2 className="heading-font" style={{ fontSize: "clamp(32px, 5vw, 54px)", fontWeight: 800, margin: "0 0 12px 0", lineHeight: 1.08, color: "white", letterSpacing: "-1px" }}>
-              Ce soir, on mange<br />comme chez <span style={{ color: "#ffc436" }}>Mama</span>. 🌶
+              Ce soir, on mange<br />comme chez <span style={{ color: "#F5EDE3" }}>Mama</span>. 🌶
             </h2>
             <p style={{ fontSize: "17px", color: "rgba(255,255,255,0.85)", margin: "0 auto 32px auto", lineHeight: 1.6, maxWidth: "520px" }}>
               De vraies mamans tunisiennes qui cuisinent dans votre cuisine. Des vendredis couscous, une brik qui croustille,
@@ -466,7 +474,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", marginBottom: "48px" }}>
             <div style={{ flex: "2 1 250px" }}>
               <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "16px" }}>
-                <img src="/brand/ommi-sissi-icon.svg" alt="Ommi Sissi" style={{ width: "36px", height: "36px", objectFit: "contain" }} />
+                <BrandMark size={36} />
                 <span className="heading-font" style={{ fontSize: "22px", fontWeight: 800, color: "white" }}>Ommi Sissi</span>
               </div>
               <p style={{ fontSize: "14px", lineHeight: 1.65, maxWidth: "300px", margin: 0 }}>
