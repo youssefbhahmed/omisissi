@@ -223,7 +223,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             <img
               src="/brand/ommi-sissi-full-light.svg"
               alt="Ommi Sissi — Tunisian Food"
-              style={{ width: "min(460px, 84vw)", height: "auto", filter: "drop-shadow(0 0 26px rgba(246,239,226,0.8)) drop-shadow(0 0 8px rgba(246,239,226,0.55))" }}
+              style={{ width: "min(460px, 84vw)", height: "auto" }}
             />
           </div>
           </div>
