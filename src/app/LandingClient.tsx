@@ -179,7 +179,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div className="reveal" style={{ maxWidth: "620px", paddingTop: "140px", paddingBottom: "100px" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(244, 193, 47,0.15)", backdropFilter: "blur(10px)", border: "1px solid rgba(244, 193, 47,0.35)", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, color: "#F6EFE2", marginBottom: "28px" }}>
               <span style={{ width: "7px", height: "7px", backgroundColor: "#F6EFE2", borderRadius: "50%" }} />
-              Des repas faits maison, par de vraies personnes
+              Le goût de chez Mama, dans votre cuisine
             </div>
 
             <h1 className="heading-font" style={{ fontSize: "clamp(40px, 6vw, 68px)", fontWeight: 800, margin: "0 0 24px 0", lineHeight: 1.05, color: "white", letterSpacing: "-1.5px" }}>
@@ -493,15 +493,28 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             </div>
 
             {[
-              { title: "Familles", links: ["Trouver un cuisinier", "Comment ça marche", "Tarifs", "FAQ"] },
-              { title: "Cuisiniers", links: ["Devenir cuisinière", "Revenus", "Formation", "Ressources"] },
-              { title: "Entreprise", links: ["À propos", "Blog", "Carrières", "Conditions"] },
+              { title: "Familles", links: [
+                { label: "Trouver un cuisinier", href: "/cooks" },
+                { label: "Comment ça marche", href: "/#how-it-works" },
+                { label: "Pour les familles", href: "/#families" },
+                { label: "Avis", href: "/#reviews" },
+              ] },
+              { title: "Cuisiniers", links: [
+                { label: "Devenir cuisinière", href: "/signup" },
+                { label: "Pour les mamans", href: "/#for-moms" },
+                { label: "Espace cuisinier", href: "/login" },
+              ] },
+              { title: "Ommi Sissi", links: [
+                { label: "Nos cuisiniers", href: "/#cooks" },
+                { label: "Se connecter", href: "/login" },
+                { label: "Créer un compte", href: "/signup" },
+              ] },
             ].map(col => (
               <div key={col.title} style={{ flex: "1 1 120px" }}>
                 <h4 style={{ color: "white", fontSize: "14px", fontWeight: 700, margin: "0 0 16px 0" }}>{col.title}</h4>
                 <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
                   {col.links.map(l => (
-                    <li key={l}><a href="#" className="nav-link" style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)" }}>{l}</a></li>
+                    <li key={l.label}><a href={l.href} className="nav-link" style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)" }}>{l.label}</a></li>
                   ))}
                 </ul>
               </div>

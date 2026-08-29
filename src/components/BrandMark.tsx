@@ -10,8 +10,8 @@ export default function BrandMark({ size = 44, style }: { size?: number; style?:
     const common: React.CSSProperties = { height: `${size}px`, width: "auto", ...style };
     return (
         <>
-            <img src="/brand/ommi-sissi-no-tagline-light.svg" alt="Ommi Sissi" className="logo-when-light" style={common} />
-            <img src="/brand/ommi-sissi-no-tagline-dark.svg" alt="" aria-hidden="true" className="logo-when-dark" style={common} />
+            <img src="/brand/ommi-sissi-header-light.svg" alt="Ommi Sissi" className="logo-when-light" style={common} />
+            <img src="/brand/ommi-sissi-header-dark.svg" alt="" aria-hidden="true" className="logo-when-dark" style={common} />
         </>
     );
 }
