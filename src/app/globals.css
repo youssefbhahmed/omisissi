@@ -448,29 +448,32 @@ html[data-theme="dark"] .logo-when-dark {
   border-radius: 9999px;
 }
 
-/* ─── Cream editorial hero (restaurant style) ─── */
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 64px;
+/* ─── Full-bleed cinematic hero ─── */
+.hero-full {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
   align-items: center;
+  overflow: hidden;
+  background-color: #121212;
 }
 
-@media (min-width: 1024px) {
-  .hero-grid {
-    grid-template-columns: 1.05fr 0.95fr;
-  }
-}
-
-.hero-blob {
+.hero-full-bg {
   position: absolute;
-  top: -180px;
-  right: -160px;
-  width: 680px;
-  height: 680px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(244, 193, 47, 0.32), transparent 66%);
-  pointer-events: none;
+  left: 0;
+  top: -10%;
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  will-change: transform;
+  transform-origin: center;
+}
+
+.hero-full-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.18) 100%);
+  z-index: 1;
 }
 
 /* Big soft-radius photo frame */
@@ -484,82 +487,6 @@ html[data-theme="dark"] .logo-when-dark {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.hero-compo {
-  position: relative;
-  max-width: 500px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.hero-arch {
-  aspect-ratio: 4 / 5;
-  box-shadow: var(--shadow-lg);
-}
-
-.sticker {
-  position: absolute;
-  top: 30px;
-  left: -16px;
-  transform: rotate(-8deg);
-  background: var(--brand-primary);
-  color: #121212;
-  font-weight: 800;
-  font-size: 13px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  padding: 10px 18px;
-  border-radius: 999px;
-  border: 2px dashed rgba(18, 18, 18, 0.55);
-  box-shadow: var(--shadow-md);
-  z-index: 3;
-  animation: float-gentle 6s ease-in-out infinite;
-}
-
-.hero-portrait {
-  position: absolute;
-  bottom: -26px;
-  left: -34px;
-  width: 132px;
-  height: 132px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 5px solid var(--bg-base);
-  box-shadow: var(--shadow-lg);
-  z-index: 3;
-}
-
-.hero-portrait img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-}
-
-.hero-rating-card {
-  position: absolute;
-  bottom: 38px;
-  right: -18px;
-  background: var(--bg-surface);
-  border-radius: 16px;
-  padding: 14px 18px;
-  box-shadow: var(--shadow-lg);
-  z-index: 3;
-}
-
-@media (max-width: 640px) {
-  .hero-portrait {
-    left: -6px;
-  }
-
-  .hero-rating-card {
-    right: -6px;
-  }
-
-  .sticker {
-    left: -4px;
-  }
 }
 
 /* Outline pill (secondary CTA on light backgrounds) */
@@ -671,36 +598,6 @@ html[data-theme="dark"] .logo-when-dark {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-/* ─── Full-bleed parallax band (image drifts slower than the page) ─── */
-.parallax-band {
-  position: relative;
-  height: 62vh;
-  min-height: 420px;
-  overflow: hidden;
-}
-
-.parallax-band>img {
-  position: absolute;
-  left: 0;
-  top: -22%;
-  width: 100%;
-  height: 144%;
-  object-fit: cover;
-  will-change: transform;
-}
-
-.parallax-band-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(18, 18, 18, 0.55) 0%, rgba(18, 18, 18, 0.35) 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0 24px;
 }
 
 /* ─── Cards ─── */

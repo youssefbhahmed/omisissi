@@ -89,6 +89,39 @@ function Rise({ children, d = 0 }: { children: React.ReactNode; d?: number }) {
   );
 }
 
+/** Cinematic hero: the photo zooms and drifts while the text parts faster
+ *  and fades — the scroll is FELT from the first pixel. */
+function useHeroCinematic() {
+  const bgRef = useRef<HTMLImageElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const p = Math.min(y / window.innerHeight, 1);
+        if (bgRef.current) {
+          bgRef.current.style.transform = `translateY(${y * 0.32}px) scale(${1 + p * 0.14})`;
+        }
+        if (contentRef.current) {
+          contentRef.current.style.opacity = String(Math.max(1 - p * 1.15, 0));
+          contentRef.current.style.transform = `translateY(${y * 0.14}px)`;
+        }
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  return { bgRef, contentRef };
+}
+
 /** Gentle parallax: drifts the element against the scroll direction */
 function useParallax(factor = 0.1, scale = 1.15) {
   const ref = useRef<HTMLImageElement>(null);
@@ -188,82 +221,61 @@ function SectionHeader({ badge, title, subtitle, align = "center" }: { badge?: s
 export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
   const heroRef = useReveal();
   const momsRef = useReveal();
-  const heroImgRef = useParallax(0.12);
   const familyImgRef = useParallax(0.06);
-  const bandImgRef = useParallax(0.22, 1);
   const statementRef = useReveal();
-  const bandRef = useReveal();
+  const { bgRef: heroBgRef, contentRef: heroContentRef } = useHeroCinematic();
 
   return (
     <div style={{ backgroundColor: "var(--bg-base)", color: "var(--text-body)", overflowX: "hidden" }}>
       <SmoothScroll />
 
       {/* ─────────── NAVBAR ─────────── */}
-      <SiteNav active="/" />
+      <SiteNav variant="overlay" active="/" />
 
-      {/* ─────────── HERO — Cream editorial (restaurant style) ─────────── */}
-      <section ref={heroRef} style={{ position: "relative", backgroundColor: "var(--bg-base)", overflow: "hidden" }}>
-        <div className="hero-blob" aria-hidden="true" />
+      {/* ─────────── HERO — Full-bleed photo, cinematic on scroll ─────────── */}
+      <section ref={heroRef} className="hero-full">
+        <img ref={heroBgRef} className="hero-full-bg" src="/hands-serving-couscous.jpg" alt="" aria-hidden="true" />
+        <div className="hero-full-overlay" aria-hidden="true" />
 
-        <div style={{ maxWidth: "1240px", margin: "0 auto", padding: "64px 24px 110px 24px", position: "relative", zIndex: 5 }}>
-          <div className="hero-grid">
-            {/* Text column */}
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <p className="eyebrow" style={{ marginBottom: "22px" }}>
-                Cuisinières tunisiennes à domicile — Tunis · La Marsa · Ariana
-              </p>
+        <div ref={heroContentRef} style={{ maxWidth: "1240px", width: "100%", margin: "0 auto", padding: "170px 24px 120px 24px", position: "relative", zIndex: 5, willChange: "transform, opacity" }}>
+          <div style={{ maxWidth: "700px" }}>
+            <p className="eyebrow" style={{ marginBottom: "24px", color: "#F6CC4F" }}>
+              Cuisinières tunisiennes à domicile — Tunis · La Marsa · Ariana
+            </p>
 
-              <h1 className="display-font" style={{ fontSize: "clamp(44px, 5.6vw, 80px)", fontWeight: 600, margin: "0 0 28px 0", lineHeight: 1.04, color: "var(--text-heading)" }}>
-                <Rise d={0}>Le&nbsp;goût&nbsp;de&nbsp;chez</Rise>{" "}
-                <Rise d={0.12}><em className="display-italic-ink">Mama</em>,</Rise>
-                <br />
-                <Rise d={0.24}>dans&nbsp;votre</Rise>{" "}
-                <Rise d={0.36}>cuisine.</Rise>
-              </h1>
+            <h1 className="display-font" style={{ fontSize: "clamp(44px, 6vw, 86px)", fontWeight: 600, margin: "0 0 28px 0", lineHeight: 1.04, color: "white" }}>
+              <Rise d={0}>Le&nbsp;goût&nbsp;de&nbsp;chez</Rise>{" "}
+              <Rise d={0.12}><em className="display-italic">Mama</em>,</Rise>
+              <br />
+              <Rise d={0.24}>dans&nbsp;votre</Rise>{" "}
+              <Rise d={0.36}>cuisine.</Rise>
+            </h1>
 
-              <p className="reveal" style={{ fontSize: "18px", color: "var(--text-body)", lineHeight: 1.7, margin: "0 0 38px 0", maxWidth: "480px" }}>
-                Découvrez des mamans talentueuses près de chez vous, choisissez un menu, et elle viendra cuisiner des plats frais et authentiques directement dans votre cuisine. C’est aussi simple que ça.
-              </p>
+            <p className="reveal" style={{ fontSize: "19px", color: "rgba(255,255,255,0.88)", lineHeight: 1.7, margin: "0 0 40px 0", maxWidth: "500px" }}>
+              Découvrez des mamans talentueuses près de chez vous, choisissez un menu, et elle viendra cuisiner des plats frais et authentiques directement dans votre cuisine. C’est aussi simple que ça.
+            </p>
 
-              <div className="reveal" style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "44px" }}>
-                <Link href="/cooks" className="btn-primary" style={{ padding: "16px 32px", fontSize: "16px", textDecoration: "none" }}>
-                  Réserver une cuisinière <ArrowRight size={18} />
-                </Link>
-                <Link href="/signup" className="btn-outline" style={{ padding: "16px 32px", fontSize: "16px" }}>
-                  Je veux cuisiner
-                </Link>
-              </div>
-
-              <div className="reveal" style={{ display: "flex", gap: "14px", alignItems: "center" }}>
-                <div style={{ display: "flex" }}>
-                  {["F", "A", "L", "K", "S"].map((letter, i) => (
-                    <div key={letter} style={{ width: "36px", height: "36px", borderRadius: "50%", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#121212", fontSize: "13px", border: "2px solid var(--bg-base)", marginLeft: i > 0 ? "-10px" : "0" }}>
-                      {letter}
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <Stars n={5} />
-                  <p style={{ margin: "2px 0 0 0", fontSize: "13px", color: "var(--text-muted)", fontWeight: 500 }}>
-                    Plus de <strong style={{ color: "var(--text-heading)" }}>2 000</strong> familles nous font confiance
-                  </p>
-                </div>
-              </div>
+            <div className="reveal" style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "46px" }}>
+              <Link href="/cooks" className="btn-primary" style={{ padding: "16px 32px", fontSize: "16px", textDecoration: "none" }}>
+                Réserver une cuisinière <ArrowRight size={18} />
+              </Link>
+              <Link href="/signup" style={{ padding: "16px 32px", fontSize: "16px", fontWeight: 700, background: "rgba(255,255,255,0.12)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "99px", color: "white", textDecoration: "none" }}>
+                Je veux cuisiner
+              </Link>
             </div>
 
-            {/* Photo composition: arch + portrait + sticker + rating card */}
-            <div className="reveal hero-compo">
-              <div className="arch-frame hero-arch">
-                <img ref={heroImgRef} src="/tunisian-feast-platter.jpg" alt="Festin tunisien fait maison" />
+            <div className="reveal" style={{ display: "flex", gap: "14px", alignItems: "center" }}>
+              <div style={{ display: "flex" }}>
+                {["F", "A", "L", "K", "S"].map((letter, i) => (
+                  <div key={letter} style={{ width: "36px", height: "36px", borderRadius: "50%", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#121212", fontSize: "13px", border: "2px solid rgba(0,0,0,0.35)", marginLeft: i > 0 ? "-10px" : "0" }}>
+                    {letter}
+                  </div>
+                ))}
               </div>
-              <span className="sticker">100 % fait maison 🌶</span>
-              <div className="hero-portrait">
-                <img src="/cook-fatma.jpg" alt="Cuisinière tunisienne à domicile" />
-              </div>
-              <div className="hero-rating-card">
+              <div>
                 <Stars n={5} />
-                <p style={{ margin: "4px 0 0 0", fontSize: "13px", fontWeight: 700, color: "var(--text-heading)" }}>
-                  4,9 <span style={{ color: "var(--text-muted)", fontWeight: 500 }}>· note moyenne</span>
+                <p style={{ margin: "2px 0 0 0", fontSize: "13px", color: "rgba(255,255,255,0.75)", fontWeight: 500 }}>
+                  Plus de <strong style={{ color: "white" }}>2 000</strong> familles nous font confiance
                 </p>
               </div>
             </div>
@@ -292,18 +304,20 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       {/* ─────────── STATEMENT — the brand moment, à la "Food shared is a memory made" ─────────── */}
       <section ref={statementRef} style={{ backgroundColor: "var(--bg-surface)", padding: "110px 24px 30px 24px" }}>
         <div className="reveal" style={{ maxWidth: "980px", margin: "0 auto", textAlign: "center" }}>
+          {/* Tailwind's preflight makes img display:block, so text-align:center
+              doesn't apply — center with auto margins instead. */}
           <img
             src="/brand/ommi-sissi-full-light.svg"
             alt="Ommi Sissi — Tunisian Food"
             className="logo-when-light"
-            style={{ width: "min(190px, 45vw)", height: "auto", marginBottom: "44px" }}
+            style={{ width: "min(190px, 45vw)", height: "auto", margin: "0 auto 44px auto" }}
           />
           <img
             src="/brand/ommi-sissi-full-dark.svg"
             alt=""
             aria-hidden="true"
             className="logo-when-dark"
-            style={{ width: "min(190px, 45vw)", height: "auto", marginBottom: "44px" }}
+            style={{ width: "min(190px, 45vw)", height: "auto", margin: "0 auto 44px auto" }}
           />
           <p className="display-font statement">
             Un plat partagé,<br />un souvenir <em className="display-italic-ink">créé</em>.
@@ -348,19 +362,6 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           })}
         </div>
       </Section>
-
-      {/* ─────────── PARALLAX BAND — full-bleed breather with a derja wink ─────────── */}
-      <section ref={bandRef} className="parallax-band">
-        <img ref={bandImgRef} src="/hands-serving-couscous.jpg" alt="" aria-hidden="true" />
-        <div className="parallax-band-overlay">
-          <p className="reveal display-font" style={{ fontSize: "clamp(38px, 6vw, 84px)", fontWeight: 600, fontStyle: "italic", color: "#F6EFE2", margin: 0, lineHeight: 1.05 }}>
-            « Bessa7a w erra7a »
-          </p>
-          <p className="reveal eyebrow" style={{ color: "rgba(246,239,226,0.85)", marginTop: "20px" }}>
-            — comme on dit chez nous, à la fin de chaque repas
-          </p>
-        </div>
-      </section>
 
       {/* ─────────── BROWSE COOKS ─────────── */}
       <Section id="cooks">
