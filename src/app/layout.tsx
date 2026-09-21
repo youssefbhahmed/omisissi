@@ -31,14 +31,16 @@ export const viewport: Viewport = {
   ],
 };
 
+// Light is the brand's primary mode: dark only applies when the visitor
+// explicitly picked it with the toggle — the OS preference is ignored.
 const themeScript = `
   (function() {
     try {
-      var localTheme = localStorage.getItem('theme');
-      var systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      var theme = localTheme || systemTheme;
+      var theme = localStorage.getItem('theme') === 'dark' ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', theme);
-    } catch (e) {}
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
   })();
 `;
 

@@ -247,21 +247,6 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(115deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.18) 100%)", zIndex: 1 }} />
 
         <div ref={heroContentRef} style={{ maxWidth: "1240px", width: "100%", margin: "0 auto", padding: "170px 24px 120px 24px", position: "relative", zIndex: 5, willChange: "transform, opacity" }}>
-          {/* Floating accents filling the right side (desktop only) */}
-          <div className="hidden lg:block" aria-hidden="true">
-            {/* the float animation owns `transform`, so the rotation lives on a wrapper */}
-            <span style={{ position: "absolute", top: "190px", right: "120px", transform: "rotate(-7deg)", display: "block" }}>
-              <span className="float" style={{ display: "inline-block", background: "var(--brand-primary)", color: "#121212", fontWeight: 800, fontSize: "13px", letterSpacing: "0.5px", textTransform: "uppercase", padding: "12px 22px", borderRadius: "999px", border: "2px dashed rgba(18,18,18,0.55)", boxShadow: "0 10px 24px rgba(0,0,0,0.35)" }}>
-                100 % fait maison 🌶
-              </span>
-            </span>
-            <div className="float" style={{ position: "absolute", bottom: "150px", right: "60px", animationDelay: "-3s", background: "rgba(18,18,18,0.55)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.18)", borderRadius: "20px", padding: "18px 22px" }}>
-              <Stars n={5} />
-              <p style={{ margin: "8px 0 2px 0", fontSize: "15px", fontWeight: 800, color: "white" }}>4,9 · note moyenne</p>
-              <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.75)", fontWeight: 500 }}>à partir de 40 TND / heure</p>
-            </div>
-          </div>
-
           <div style={{ maxWidth: "700px" }}>
             <p className="eyebrow" style={{ marginBottom: "24px", color: "#F6CC4F" }}>
               Cuisinières tunisiennes à domicile — Tunis · La Marsa · Ariana
