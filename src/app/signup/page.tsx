@@ -34,7 +34,7 @@ export default function SignupPage() {
             {/* Left Panel - Image */}
             <div style={{ flex: 1, position: "relative" }} className="hidden md:block">
                 <img
-                    src={roleType === "family" ? "/family-tunisian.png" : "/cook-tunisian.png"}
+                    src={roleType === "family" ? "/hands-serving-couscous.jpg" : "/cook-leila.jpg"}
                     alt="Arrière-plan d’inscription"
                     style={{ width: "100%", height: "100%", objectFit: "cover", transition: "all 0.5s ease" }}
                 />

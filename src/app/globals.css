@@ -626,6 +626,83 @@ html[data-theme="dark"] .logo-when-dark {
   clip-path: inset(0 0 0% 0);
 }
 
+/* ─── Auto-scrolling photo gallery (restaurant-site image marquee) ─── */
+.photo-marquee {
+  overflow: hidden;
+  padding: 18px 0 30px 0;
+}
+
+.photo-marquee-track {
+  display: flex;
+  gap: 22px;
+  width: max-content;
+  animation: photo-scroll 46s linear infinite;
+}
+
+.photo-marquee:hover .photo-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes photo-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.photo-tile {
+  width: 250px;
+  height: 310px;
+  border-radius: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-md);
+}
+
+.photo-marquee-track .photo-tile:nth-child(odd) {
+  transform: rotate(-1.6deg);
+}
+
+.photo-marquee-track .photo-tile:nth-child(even) {
+  transform: rotate(1.6deg);
+  margin-top: 16px;
+}
+
+.photo-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ─── Full-bleed parallax band (image drifts slower than the page) ─── */
+.parallax-band {
+  position: relative;
+  height: 62vh;
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.parallax-band>img {
+  position: absolute;
+  left: 0;
+  top: -22%;
+  width: 100%;
+  height: 144%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.parallax-band-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(18, 18, 18, 0.55) 0%, rgba(18, 18, 18, 0.35) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 24px;
+}
+
 /* ─── Cards ─── */
 .card {
   background-color: var(--bg-surface);

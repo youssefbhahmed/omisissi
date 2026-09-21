@@ -6,9 +6,9 @@ export const revalidate = 300;
 
 // Marketing fallback shown when no real cooks are available yet
 const FALLBACK_COOKS: LandingCook[] = [
-    { id: "1", name: "Fatma Ben Ali", bio: "Cuisine tunisienne traditionnelle · 12 ans d’expérience", rating: 4.9, reviews: 127, pricePerHour: 45, city: "Tunis, La Marsa", img: "/cook-tunisian.png", href: "/signup" },
-    { id: "2", name: "Amira Trabelsi", bio: "Cuisine tunisienne saine et végane", rating: 4.8, reviews: 89, pricePerHour: 40, city: "Sousse", img: "/tunisian-mechouia.png", href: "/signup" },
-    { id: "3", name: "Leila Mansouri", bio: "Pâtisseries, desserts et plats réconfortants", rating: 5.0, reviews: 64, pricePerHour: 55, city: "Sfax", img: "/tunisian-pastries.png", href: "/signup" },
+    { id: "1", name: "Fatma Ben Ali", bio: "Cuisine tunisienne traditionnelle · 12 ans d’expérience", rating: 4.9, reviews: 127, pricePerHour: 45, city: "Tunis, La Marsa", img: "/cook-fatma.jpg", href: "/signup" },
+    { id: "2", name: "Amira Trabelsi", bio: "Cuisine tunisienne saine et végane", rating: 4.8, reviews: 89, pricePerHour: 40, city: "Sousse", img: "/cook-amira.jpg", href: "/signup" },
+    { id: "3", name: "Leila Mansouri", bio: "Pâtisseries, desserts et plats réconfortants", rating: 5.0, reviews: 64, pricePerHour: 55, city: "Sfax", img: "/cook-leila.jpg", href: "/signup" },
 ];
 
 async function getFeaturedCooks(): Promise<LandingCook[]> {
@@ -49,7 +49,7 @@ async function getFeaturedCooks(): Promise<LandingCook[]> {
                 reviews: d.total_reviews || 0,
                 pricePerHour: Number(d.price_per_session) || 0,
                 city: d.city || "Tunisie",
-                img: profile?.avatar_url || "/cook-tunisian.png",
+                img: profile?.avatar_url || "/cook-fatma.jpg",
                 href: `/cooks/${d.id}`,
             };
         });

@@ -90,7 +90,7 @@ function Rise({ children, d = 0 }: { children: React.ReactNode; d?: number }) {
 }
 
 /** Gentle parallax: drifts the element against the scroll direction */
-function useParallax(factor = 0.1) {
+function useParallax(factor = 0.1, scale = 1.15) {
   const ref = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
@@ -102,7 +102,7 @@ function useParallax(factor = 0.1) {
       raf = requestAnimationFrame(() => {
         const r = el.getBoundingClientRect();
         const offset = (r.top + r.height / 2 - window.innerHeight / 2) * factor;
-        el.style.transform = `scale(1.15) translateY(${-offset}px)`;
+        el.style.transform = `scale(${scale}) translateY(${-offset}px)`;
       });
     };
     onScroll();
@@ -111,10 +111,23 @@ function useParallax(factor = 0.1) {
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);
     };
-  }, [factor]);
+  }, [factor, scale]);
 
   return ref;
 }
+
+const GALLERY = [
+  { src: "/tunisian-lablabi.jpg", alt: "Lablabi" },
+  { src: "/mint-tea-pouring.jpg", alt: "Thé à la menthe" },
+  { src: "/tunisian-ojja.jpg", alt: "Ojja merguez" },
+  { src: "/market-fresh-ingredients.jpg", alt: "Ingrédients frais du marché" },
+  { src: "/tunisian-mloukhia.jpg", alt: "Mloukhia" },
+  { src: "/tunisian-makroudh.jpg", alt: "Makroudh au miel" },
+  { src: "/tunisian-kafteji.jpg", alt: "Kafteji" },
+  { src: "/tunisian-almond-sweets.jpg", alt: "Gâteaux aux amandes" },
+  { src: "/tunisian-vegan-couscous.jpg", alt: "Couscous végane" },
+  { src: "/tunisian-cheese-brik.jpg", alt: "Brik fromage et herbes" },
+];
 
 /** Intersection Observer hook for scroll-reveal */
 function useReveal() {
@@ -175,9 +188,11 @@ function SectionHeader({ badge, title, subtitle, align = "center" }: { badge?: s
 export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
   const heroRef = useReveal();
   const momsRef = useReveal();
-  const heroImgRef = useParallax(0.08);
+  const heroImgRef = useParallax(0.12);
   const familyImgRef = useParallax(0.06);
+  const bandImgRef = useParallax(0.22, 1);
   const statementRef = useReveal();
+  const bandRef = useReveal();
 
   return (
     <div style={{ backgroundColor: "var(--bg-base)", color: "var(--text-body)", overflowX: "hidden" }}>
@@ -239,11 +254,11 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             {/* Photo composition: arch + portrait + sticker + rating card */}
             <div className="reveal hero-compo">
               <div className="arch-frame hero-arch">
-                <img ref={heroImgRef} src="/hero-feast.png" alt="Festin tunisien fait maison" />
+                <img ref={heroImgRef} src="/tunisian-feast-platter.jpg" alt="Festin tunisien fait maison" />
               </div>
               <span className="sticker">100 % fait maison 🌶</span>
               <div className="hero-portrait">
-                <img src="/cook-portrait.png" alt="Cuisinière tunisienne à domicile" />
+                <img src="/cook-fatma.jpg" alt="Cuisinière tunisienne à domicile" />
               </div>
               <div className="hero-rating-card">
                 <Stars n={5} />
@@ -295,6 +310,19 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           </p>
           <p className="eyebrow" style={{ marginTop: "28px" }}>— La table tunisienne, chez vous —</p>
         </div>
+
+        {/* Auto-scrolling gallery: the dishes do the talking */}
+        <div className="photo-marquee" style={{ marginTop: "70px" }}>
+          <div className="photo-marquee-track">
+            {Array.from({ length: 2 }).flatMap((_, r) =>
+              GALLERY.map((photo, i) => (
+                <div key={`${r}-${i}`} className="photo-tile">
+                  <img src={photo.src} alt={r === 0 ? photo.alt : ""} aria-hidden={r === 1} loading="lazy" />
+                </div>
+              ))
+            )}
+          </div>
+        </div>
       </section>
 
       {/* ─────────── HOW IT WORKS ─────────── */}
@@ -320,6 +348,19 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           })}
         </div>
       </Section>
+
+      {/* ─────────── PARALLAX BAND — full-bleed breather with a derja wink ─────────── */}
+      <section ref={bandRef} className="parallax-band">
+        <img ref={bandImgRef} src="/hands-serving-couscous.jpg" alt="" aria-hidden="true" />
+        <div className="parallax-band-overlay">
+          <p className="reveal display-font" style={{ fontSize: "clamp(38px, 6vw, 84px)", fontWeight: 600, fontStyle: "italic", color: "#F6EFE2", margin: 0, lineHeight: 1.05 }}>
+            « Bessa7a w erra7a »
+          </p>
+          <p className="reveal eyebrow" style={{ color: "rgba(246,239,226,0.85)", marginTop: "20px" }}>
+            — comme on dit chez nous, à la fin de chaque repas
+          </p>
+        </div>
+      </section>
 
       {/* ─────────── BROWSE COOKS ─────────── */}
       <Section id="cooks">
@@ -410,7 +451,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       </Section>
 
       {/* ─────────── FOR MOMS / COOKS — Full-Bleed Parallax ─────────── */}
-      <section id="for-moms" className="snap-section parallax-bg" style={{ position: "relative", padding: "120px 0", overflow: "hidden", backgroundImage: "url('/hero-feast.png')" }}>
+      <section id="for-moms" className="snap-section parallax-bg" style={{ position: "relative", padding: "120px 0", overflow: "hidden", backgroundImage: "url('/market-fresh-ingredients.jpg')" }}>
         <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.72)", zIndex: 1 }} />
 
         <div ref={momsRef} style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 10 }}>
@@ -459,7 +500,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
 
             <div className="reveal" style={{ flex: "1 1 350px" }}>
               <div className="arch-frame reveal-img" style={{ aspectRatio: "3/4", maxWidth: "420px", margin: "0 auto", border: "1px solid rgba(255,255,255,0.14)" }}>
-                <img src="/cook-portrait.png" alt="Cuisinière tunisienne à domicile" style={{ objectPosition: "top" }} />
+                <img src="/cook-amira.jpg" alt="Cuisinière tunisienne à domicile" style={{ objectPosition: "top" }} />
               </div>
             </div>
           </div>
@@ -490,7 +531,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
 
       {/* ─────────── CTA ─────────── */}
       <Section>
-        <div className="reveal" style={{ backgroundImage: "url('/hero-feast.png')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "32px", position: "relative", overflow: "hidden", border: "2px solid rgba(244, 193, 47,0.35)" }}>
+        <div className="reveal" style={{ backgroundImage: "url('/cook-arriving-home.jpg')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "32px", position: "relative", overflow: "hidden", border: "2px solid rgba(244, 193, 47,0.35)" }}>
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 55%, rgba(120,40,0,0.45) 100%)" }} />
           <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "88px 32px" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(244, 193, 47,0.16)", border: "1px solid rgba(244, 193, 47,0.4)", backdropFilter: "blur(8px)", color: "#F6EFE2", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "24px" }}>
