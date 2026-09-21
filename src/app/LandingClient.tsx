@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import BrandMark from "@/components/BrandMark";
+import SiteNav from "@/components/SiteNav";
 import Link from "next/link";
 import {
   Star,
@@ -21,7 +21,6 @@ import {
   BookOpen,
   Smartphone,
 } from "lucide-react";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 /* ═══════════════════════════════════════════
    DATA
@@ -128,7 +127,7 @@ function SectionHeader({ badge, title, subtitle, align = "center" }: { badge?: s
           {badge}
         </span>
       )}
-      <h2 className="heading-font" style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 800, margin: "0 0 12px 0", lineHeight: 1.15, color: "var(--text-heading)" }}>
+      <h2 className="display-font" style={{ fontSize: "clamp(30px, 4vw, 44px)", fontWeight: 600, margin: "0 0 12px 0", lineHeight: 1.12, color: "var(--text-heading)" }}>
         {title}
       </h2>
       {subtitle && <p style={{ fontSize: "17px", color: "var(--text-muted)", margin: 0, lineHeight: 1.6, maxWidth: "560px", marginLeft: align === "center" ? "auto" : undefined, marginRight: align === "center" ? "auto" : undefined }}>{subtitle}</p>}
@@ -148,27 +147,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
     <div style={{ backgroundColor: "var(--bg-base)", color: "var(--text-body)", overflowX: "hidden" }}>
 
       {/* ─────────── NAVBAR ─────────── */}
-      <header style={{ position: "fixed", top: 0, left: 0, right: 0, height: "72px", backgroundColor: "var(--bg-nav)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", zIndex: 50, display: "flex", alignItems: "center", borderBottom: "1px solid var(--border-light)" }}>
-        <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-            <BrandMark size={44} />
-          </div>
-
-          <nav style={{ gap: "28px", fontSize: "14px" }} className="hidden md:flex">
-            <a href="#how-it-works" className="nav-link">Comment ça marche</a>
-            <a href="#cooks" className="nav-link">Nos cuisiniers</a>
-            <a href="#families" className="nav-link">Pour les familles</a>
-            <a href="#for-moms" className="nav-link">Pour les mamans</a>
-            <a href="#reviews" className="nav-link">Avis</a>
-          </nav>
-
-          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-            <ThemeToggle />
-            <Link href="/login" className="btn-nav hidden sm:block" style={{ textDecoration: "none" }}>Se connecter</Link>
-            <Link href="/signup" className="btn-primary" style={{ padding: "10px 20px", textDecoration: "none" }}>Commencer <ArrowRight size={16} /></Link>
-          </div>
-        </div>
-      </header>
+      <SiteNav variant="overlay" active="/" />
 
       {/* ─────────── HERO — Full-Bleed Parallax Cover ─────────── */}
       <section ref={heroRef} className="snap-section parallax-bg" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden", backgroundImage: "url('/hero-tunisian-food-2x.png')" }}>
@@ -182,8 +161,8 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               Le goût de chez Mama, dans votre cuisine
             </div>
 
-            <h1 className="heading-font" style={{ fontSize: "clamp(40px, 6vw, 68px)", fontWeight: 800, margin: "0 0 24px 0", lineHeight: 1.05, color: "white", letterSpacing: "-1.5px" }}>
-              Un cuisinier à domicile<br />pour chaque famille
+            <h1 className="display-font" style={{ fontSize: "clamp(42px, 6.5vw, 76px)", fontWeight: 600, margin: "0 0 24px 0", lineHeight: 1.04, color: "white" }}>
+              Un cuisinier à domicile,<br />pour <em className="display-italic">chaque famille</em>.
             </h1>
 
             <p style={{ fontSize: "19px", color: "rgba(255,255,255,0.85)", lineHeight: 1.65, margin: "0 0 40px 0", maxWidth: "500px" }}>
@@ -281,7 +260,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
         <div className="reveal" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px", flexWrap: "wrap", gap: "16px" }}>
           <div>
             <span style={{ display: "inline-block", backgroundColor: "var(--brand-secondary)", color: "#F6EFE2", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "12px" }}>Les mieux notés</span>
-            <h2 className="heading-font" style={{ fontSize: "36px", fontWeight: 800, margin: 0, color: "var(--text-heading)" }}>Découvrez nos cuisiniers</h2>
+            <h2 className="display-font" style={{ fontSize: "38px", fontWeight: 600, margin: 0, color: "var(--text-heading)" }}>Découvrez nos cuisinières</h2>
             <p style={{ margin: "8px 0 0 0", fontSize: "16px", color: "var(--text-muted)", maxWidth: "400px" }}>Chaque cuisinière est recrutée, vérifiée et formée par notre équipe avant sa première réservation.</p>
           </div>
           <Link href="/cooks" className="btn-nav" style={{ color: "var(--brand-primary)", fontWeight: 700, display: "flex", alignItems: "center", gap: "4px", textDecoration: "none" }}>
@@ -374,8 +353,8 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             <div style={{ flex: "1 1 500px" }}>
               <div className="reveal">
                 <span style={{ display: "inline-block", backgroundColor: "rgba(244, 193, 47,0.2)", color: "#F6EFE2", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "20px", border: "1px solid rgba(244, 193, 47,0.3)" }}>Pour les mamans</span>
-                <h2 className="heading-font" style={{ fontSize: "clamp(32px, 4vw, 44px)", fontWeight: 800, margin: "0 0 16px 0", lineHeight: 1.1, color: "white" }}>
-                  Transformez vos talents de cuisinière en revenu flexible
+                <h2 className="display-font" style={{ fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 600, margin: "0 0 16px 0", lineHeight: 1.08, color: "white" }}>
+                  Transformez vos talents de cuisinière en <em className="display-italic">revenu flexible</em>
                 </h2>
                 <p style={{ fontSize: "17px", color: "rgba(255,255,255,0.8)", margin: "0 0 40px 0", lineHeight: 1.65, maxWidth: "480px" }}>
                   Pas besoin d’être à l’aise avec la technologie. Notre équipe vous recrute, crée votre profil, vous forme à l’hygiène alimentaire et vous aide à obtenir votre première réservation. Vous n’avez qu’à cuisiner.
@@ -453,8 +432,8 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(244, 193, 47,0.16)", border: "1px solid rgba(244, 193, 47,0.4)", backdropFilter: "blur(8px)", color: "#F6EFE2", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "24px" }}>
               <span className="pulse-dot" /> Des cuisiniers disponibles cette semaine à Tunis, La Marsa et Ariana
             </div>
-            <h2 className="heading-font" style={{ fontSize: "clamp(32px, 5vw, 54px)", fontWeight: 800, margin: "0 0 12px 0", lineHeight: 1.08, color: "white", letterSpacing: "-1px" }}>
-              Ce soir, on mange<br />comme chez <span style={{ color: "#F6EFE2" }}>Mama</span>. 🌶
+            <h2 className="display-font" style={{ fontSize: "clamp(34px, 5vw, 60px)", fontWeight: 600, margin: "0 0 12px 0", lineHeight: 1.06, color: "white" }}>
+              Ce soir, on mange<br />comme chez <em className="display-italic">Mama</em>. 🌶
             </h2>
             <p style={{ fontSize: "17px", color: "rgba(255,255,255,0.85)", margin: "0 auto 32px auto", lineHeight: 1.6, maxWidth: "520px" }}>
               De vraies mamans tunisiennes qui cuisinent dans votre cuisine. Des vendredis couscous, une brik qui croustille,

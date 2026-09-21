@@ -135,6 +135,19 @@ html[data-theme="dark"] .logo-when-dark {
   font-family: "Outfit", sans-serif;
 }
 
+/* Statement serif for big editorial headlines (restaurant-site feel) */
+.display-font {
+  font-family: "Fraunces", Georgia, serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.5px;
+}
+
+.display-italic {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--brand-primary);
+}
+
 /* ─── Grids ─── */
 .auto-grid-2 {
   display: grid;
@@ -256,6 +269,154 @@ html[data-theme="dark"] .logo-when-dark {
 
 .nav-link:hover {
   color: var(--brand-primary);
+}
+
+/* ─── Site navigation (see components/SiteNav.tsx) ─── */
+.announce-bar {
+  background: #121212;
+  color: #F6EFE2;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-align: center;
+  padding: 0 16px;
+  line-height: 40px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: max-height 0.3s ease;
+}
+
+.site-nav {
+  color: var(--text-heading);
+}
+
+/* Over the hero photo, before any scroll: light text on the dark image */
+.site-nav.nav-transparent {
+  color: #F6EFE2;
+}
+
+.site-nav-link {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 6px 0;
+  white-space: nowrap;
+}
+
+.site-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--brand-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.site-nav-link:hover::after,
+.site-nav-link.active::after {
+  transform: scaleX(1);
+}
+
+.nav-burger {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  margin-right: -8px;
+}
+
+/* This rule (not Tailwind's lg:hidden) hides the burger on desktop: the
+   .nav-burger display:flex above would win the cascade over the utility. */
+@media (min-width: 1024px) {
+  .site-nav .nav-burger {
+    display: none;
+  }
+}
+
+/* Force the on-dark logo while the bar is transparent over the hero photo,
+   whatever the theme (overrides the .logo-when-* theme swap). */
+.force-dark-logo .logo-when-light {
+  display: none;
+}
+
+.force-dark-logo .logo-when-dark {
+  display: inline-block;
+}
+
+/* Full-screen mobile menu */
+@keyframes menu-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes menu-link-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: var(--bg-base);
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px;
+  overflow-y: auto;
+  animation: menu-fade-in 0.25s ease;
+}
+
+.mobile-menu-link {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(28px, 7vw, 38px);
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--text-heading);
+  text-decoration: none;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: menu-link-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.mobile-menu-link:active {
+  color: var(--brand-primary);
+}
+
+.mobile-menu-secondary {
+  text-align: center;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-heading);
+  text-decoration: none;
+  padding: 14px;
+  border: 1.5px solid var(--border-medium);
+  border-radius: 9999px;
 }
 
 /* ─── Cards ─── */
