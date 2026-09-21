@@ -43,7 +43,7 @@ VALUES
     ARRAY['Traditionnel', 'Plats réconfortants', 'Couscous'],
     'La Manouba', 4.7, 38, 40,
     36.8093, 10.0863,
-    ARRAY['Monday', 'Wednesday', 'Friday', 'Sunday'],
+    '["Monday", "Wednesday", "Friday", "Sunday"]'::jsonb,
     true
   ),
   (
@@ -52,7 +52,7 @@ VALUES
     ARRAY['Traditionnel', 'Plats réconfortants'],
     'Ben Arous', 4.8, 52, 42,
     36.7531, 10.2189,
-    ARRAY['Tuesday', 'Thursday', 'Friday', 'Saturday'],
+    '["Tuesday", "Thursday", "Friday", "Saturday"]'::jsonb,
     true
   )
 ON CONFLICT (id) DO UPDATE SET
