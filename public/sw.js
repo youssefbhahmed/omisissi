@@ -12,7 +12,7 @@
  * Bump CACHE_VERSION when cached assets change in place — activation deletes
  * every older cache.
  */
-const CACHE_VERSION = "ommi-sissi-v2";
+const CACHE_VERSION = "ommi-sissi-v3";
 const OFFLINE_URL = "/offline";
 
 self.addEventListener("install", (event) => {

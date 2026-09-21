@@ -233,9 +233,18 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       <SiteNav variant="overlay" active="/" />
 
       {/* ─────────── HERO — Full-bleed photo, cinematic on scroll ─────────── */}
-      <section ref={heroRef} className="hero-full">
-        <img ref={heroBgRef} className="hero-full-bg" src="/hands-serving-couscous.jpg" alt="" aria-hidden="true" />
-        <div className="hero-full-overlay" aria-hidden="true" />
+      {/* Styling inline on purpose: a stale service-worker CSS cache once
+          rendered this section unstyled (natural-size image, text below the
+          fold). Inline styles ship with the HTML and can't go stale. */}
+      <section ref={heroRef} className="hero-full" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden", backgroundColor: "#121212" }}>
+        <img
+          ref={heroBgRef}
+          src="/hands-serving-couscous.jpg"
+          alt=""
+          aria-hidden="true"
+          style={{ position: "absolute", left: 0, top: "-10%", width: "100%", maxWidth: "none", height: "120%", objectFit: "cover", willChange: "transform", transformOrigin: "center" }}
+        />
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(115deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.18) 100%)", zIndex: 1 }} />
 
         <div ref={heroContentRef} style={{ maxWidth: "1240px", width: "100%", margin: "0 auto", padding: "170px 24px 120px 24px", position: "relative", zIndex: 5, willChange: "transform, opacity" }}>
           <div style={{ maxWidth: "700px" }}>

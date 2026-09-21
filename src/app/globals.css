@@ -448,33 +448,8 @@ html[data-theme="dark"] .logo-when-dark {
   border-radius: 9999px;
 }
 
-/* ─── Full-bleed cinematic hero ─── */
-.hero-full {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  background-color: #121212;
-}
-
-.hero-full-bg {
-  position: absolute;
-  left: 0;
-  top: -10%;
-  width: 100%;
-  height: 120%;
-  object-fit: cover;
-  will-change: transform;
-  transform-origin: center;
-}
-
-.hero-full-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.18) 100%);
-  z-index: 1;
-}
+/* The full-bleed hero is styled inline in LandingClient.tsx — a stale
+   service-worker CSS cache once broke it when styled from here. */
 
 /* Big soft-radius photo frame */
 .arch-frame {
