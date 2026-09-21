@@ -125,14 +125,22 @@ function useHeroCinematic() {
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    // Fallback: visitors who don't scroll still get the reveal after a beat
-    const timer = window.setTimeout(() => {
+
+    // The reveal also plays on hover (instantly) and after a short delay for
+    // visitors who neither scroll nor hover — three triggers, zero misses.
+    const revealAll = (stagger: number) => () => {
       mapRef.current?.querySelectorAll(".map-chip, .map-link").forEach((el, i) => {
-        window.setTimeout(() => el.classList.add("on"), (i % 5) * 300);
+        window.setTimeout(() => el.classList.add("on"), (i % 5) * stagger);
       });
-    }, 2500);
+    };
+    const onHover = revealAll(120);
+    const mapEl = mapRef.current;
+    mapEl?.addEventListener("mouseenter", onHover, { once: true });
+    const timer = window.setTimeout(revealAll(300), 2500);
+
     return () => {
       window.removeEventListener("scroll", onScroll);
+      mapEl?.removeEventListener("mouseenter", onHover);
       cancelAnimationFrame(raf);
       window.clearTimeout(timer);
     };
