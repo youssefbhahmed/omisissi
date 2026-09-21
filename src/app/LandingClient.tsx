@@ -112,9 +112,11 @@ function useHeroCinematic() {
           contentRef.current.style.transform = `translateY(${y * 0.14}px)`;
         }
         if (mapRef.current) {
-          // The cooks pop out of the map one by one as the visitor scrolls
-          mapRef.current.querySelectorAll(".map-chip").forEach((el, i) => el.classList.toggle("on", p > 0.03 + i * 0.05));
-          mapRef.current.querySelectorAll(".map-link").forEach((el, i) => el.classList.toggle("on", p > 0.03 + i * 0.05));
+          // The cooks pop out one by one from the first scrolled pixels.
+          // add() only — once out, they stay out.
+          mapRef.current.querySelectorAll(".map-chip, .map-link").forEach((el, i) => {
+            if (p > 0.01 + (i % 3) * 0.035) el.classList.add("on");
+          });
           // ...and the map fades later than the text, staying readable longer
           mapRef.current.style.opacity = String(Math.max(1 - Math.max(p - 0.4, 0) * 2.2, 0));
           mapRef.current.style.transform = `translateY(${y * 0.06}px)`;
@@ -123,9 +125,16 @@ function useHeroCinematic() {
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+    // Fallback: visitors who don't scroll still get the reveal after a beat
+    const timer = window.setTimeout(() => {
+      mapRef.current?.querySelectorAll(".map-chip, .map-link").forEach((el, i) => {
+        window.setTimeout(() => el.classList.add("on"), (i % 3) * 350);
+      });
+    }, 2500);
     return () => {
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);
+      window.clearTimeout(timer);
     };
   }, []);
 
