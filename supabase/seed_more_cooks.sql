@@ -35,16 +35,15 @@ ON CONFLICT (id) DO UPDATE SET full_name = EXCLUDED.full_name, role = EXCLUDED.r
 
 -- 3. Détails cuisinières (approuvées d'office : lancé depuis l'éditeur SQL,
 --    le trigger protect_cook_approval laisse passer)
-INSERT INTO public.cook_details (id, bio, specialties, city, rating_average, total_reviews, price_per_session, location, lat, lng, available_days, is_approved)
+INSERT INTO public.cook_details (id, bio, specialties, city, rating_average, total_reviews, price_per_session, lat, lng, available_days, is_approved)
 VALUES
   (
     'e1111111-1111-1111-1111-111111111111',
     'Cuisine familiale généreuse de la Manouba : couscous du dimanche, mloukhia longuement mijotée et pain maison. Chez moi, personne ne quitte la table avec une petite faim.',
     ARRAY['Traditionnel', 'Plats réconfortants', 'Couscous'],
     'La Manouba', 4.7, 38, 40,
-    ST_SetSRID(ST_Point(10.0863, 36.8093), 4326)::geography,
     36.8093, 10.0863,
-    '["Monday", "Wednesday", "Friday", "Sunday"]'::jsonb,
+    ARRAY['Monday', 'Wednesday', 'Friday', 'Sunday'],
     true
   ),
   (
@@ -52,9 +51,8 @@ VALUES
     'À Ben Arous, je prépare l''ojja, le kafteji et les grillades comme au marché — des plats francs, épicés juste comme il faut, prêts quand vous rentrez du travail.',
     ARRAY['Traditionnel', 'Plats réconfortants'],
     'Ben Arous', 4.8, 52, 42,
-    ST_SetSRID(ST_Point(10.2189, 36.7531), 4326)::geography,
     36.7531, 10.2189,
-    '["Tuesday", "Thursday", "Friday", "Saturday"]'::jsonb,
+    ARRAY['Tuesday', 'Thursday', 'Friday', 'Saturday'],
     true
   )
 ON CONFLICT (id) DO UPDATE SET
@@ -64,7 +62,6 @@ ON CONFLICT (id) DO UPDATE SET
   rating_average = EXCLUDED.rating_average,
   total_reviews = EXCLUDED.total_reviews,
   price_per_session = EXCLUDED.price_per_session,
-  location = EXCLUDED.location,
   lat = EXCLUDED.lat,
   lng = EXCLUDED.lng,
   available_days = EXCLUDED.available_days,
