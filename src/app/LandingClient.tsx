@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import SiteNav from "@/components/SiteNav";
+import SmoothScroll from "@/components/SmoothScroll";
 import Link from "next/link";
 import {
   Star,
@@ -79,6 +80,42 @@ function Stars({ n = 5 }: { n?: number }) {
   );
 }
 
+/** One word of the headline, rising out of an overflow mask */
+function Rise({ children, d = 0 }: { children: React.ReactNode; d?: number }) {
+  return (
+    <span className="word-mask">
+      <span className="word-rise" style={{ animationDelay: `${d}s` }}>{children}</span>
+    </span>
+  );
+}
+
+/** Gentle parallax: drifts the element against the scroll direction */
+function useParallax(factor = 0.1) {
+  const ref = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect();
+        const offset = (r.top + r.height / 2 - window.innerHeight / 2) * factor;
+        el.style.transform = `scale(1.15) translateY(${-offset}px)`;
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [factor]);
+
+  return ref;
+}
+
 /** Intersection Observer hook for scroll-reveal */
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
@@ -122,11 +159,7 @@ function Section({ children, bgVar = "--bg-base", id }: { children: React.ReactN
 function SectionHeader({ badge, title, subtitle, align = "center" }: { badge?: string; title: string; subtitle?: string; align?: "center" | "left" }) {
   return (
     <div className="reveal" style={{ textAlign: align, marginBottom: "48px", maxWidth: align === "center" ? "640px" : "100%", margin: align === "center" ? "0 auto 48px auto" : "0 0 48px 0" }}>
-      {badge && (
-        <span style={{ display: "inline-block", backgroundColor: "var(--brand-secondary)", color: "#F6EFE2", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "16px" }}>
-          {badge}
-        </span>
-      )}
+      {badge && <p className="eyebrow" style={{ marginBottom: "16px" }}>{badge}</p>}
       <h2 className="display-font" style={{ fontSize: "clamp(30px, 4vw, 44px)", fontWeight: 600, margin: "0 0 12px 0", lineHeight: 1.12, color: "var(--text-heading)" }}>
         {title}
       </h2>
@@ -142,54 +175,80 @@ function SectionHeader({ badge, title, subtitle, align = "center" }: { badge?: s
 export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
   const heroRef = useReveal();
   const momsRef = useReveal();
+  const heroImgRef = useParallax(0.08);
+  const familyImgRef = useParallax(0.06);
+  const statementRef = useReveal();
 
   return (
     <div style={{ backgroundColor: "var(--bg-base)", color: "var(--text-body)", overflowX: "hidden" }}>
+      <SmoothScroll />
 
       {/* ─────────── NAVBAR ─────────── */}
-      <SiteNav variant="overlay" active="/" />
+      <SiteNav active="/" />
 
-      {/* ─────────── HERO — Full-Bleed Parallax Cover ─────────── */}
-      <section ref={heroRef} className="snap-section parallax-bg" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden", backgroundImage: "url('/hero-tunisian-food-2x.png')" }}>
-        {/* Dark overlay for text readability */}
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.2) 100%)", zIndex: 1 }} />
+      {/* ─────────── HERO — Cream editorial (restaurant style) ─────────── */}
+      <section ref={heroRef} style={{ position: "relative", backgroundColor: "var(--bg-base)", overflow: "hidden" }}>
+        <div className="hero-blob" aria-hidden="true" />
 
-        <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 10 }}>
-          <div className="reveal" style={{ maxWidth: "620px", paddingTop: "140px", paddingBottom: "100px" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", backgroundColor: "rgba(244, 193, 47,0.15)", backdropFilter: "blur(10px)", border: "1px solid rgba(244, 193, 47,0.35)", padding: "8px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, color: "#F6EFE2", marginBottom: "28px" }}>
-              <span style={{ width: "7px", height: "7px", backgroundColor: "#F6EFE2", borderRadius: "50%" }} />
-              Le goût de chez Mama, dans votre cuisine
-            </div>
+        <div style={{ maxWidth: "1240px", margin: "0 auto", padding: "64px 24px 110px 24px", position: "relative", zIndex: 5 }}>
+          <div className="hero-grid">
+            {/* Text column */}
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <p className="eyebrow" style={{ marginBottom: "22px" }}>
+                Cuisinières tunisiennes à domicile — Tunis · La Marsa · Ariana
+              </p>
 
-            <h1 className="display-font" style={{ fontSize: "clamp(42px, 6.5vw, 76px)", fontWeight: 600, margin: "0 0 24px 0", lineHeight: 1.04, color: "white" }}>
-              Un cuisinier à domicile,<br />pour <em className="display-italic">chaque famille</em>.
-            </h1>
+              <h1 className="display-font" style={{ fontSize: "clamp(44px, 5.6vw, 80px)", fontWeight: 600, margin: "0 0 28px 0", lineHeight: 1.04, color: "var(--text-heading)" }}>
+                <Rise d={0}>Le&nbsp;goût&nbsp;de&nbsp;chez</Rise>{" "}
+                <Rise d={0.12}><em className="display-italic-ink">Mama</em>,</Rise>
+                <br />
+                <Rise d={0.24}>dans&nbsp;votre</Rise>{" "}
+                <Rise d={0.36}>cuisine.</Rise>
+              </h1>
 
-            <p style={{ fontSize: "19px", color: "rgba(255,255,255,0.85)", lineHeight: 1.65, margin: "0 0 40px 0", maxWidth: "500px" }}>
-              Découvrez des mamans talentueuses près de chez vous, choisissez un menu, et elle viendra cuisiner des plats frais et authentiques directement dans votre cuisine. C’est aussi simple que ça.
-            </p>
+              <p className="reveal" style={{ fontSize: "18px", color: "var(--text-body)", lineHeight: 1.7, margin: "0 0 38px 0", maxWidth: "480px" }}>
+                Découvrez des mamans talentueuses près de chez vous, choisissez un menu, et elle viendra cuisiner des plats frais et authentiques directement dans votre cuisine. C’est aussi simple que ça.
+              </p>
 
-            <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "48px" }}>
-              <Link href="/cooks" className="btn-primary" style={{ padding: "16px 32px", fontSize: "16px", textDecoration: "none" }}>
-                Trouver un cuisinier <ArrowRight size={18} />
-              </Link>
-              <Link href="/signup" style={{ padding: "16px 32px", fontSize: "16px", fontWeight: 700, background: "rgba(255,255,255,0.12)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: "99px", color: "white", cursor: "pointer", transition: "all 0.25s ease", textDecoration: "none" }}>
-                Je veux cuisiner
-              </Link>
-            </div>
-
-            <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
-              <div style={{ display: "flex" }}>
-                {["F", "A", "L", "K", "S"].map((letter, i) => (
-                  <div key={letter} style={{ width: "36px", height: "36px", borderRadius: "50%", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#121212", fontSize: "13px", border: "2px solid rgba(0,0,0,0.3)", marginLeft: i > 0 ? "-10px" : "0" }}>
-                    {letter}
-                  </div>
-                ))}
+              <div className="reveal" style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "44px" }}>
+                <Link href="/cooks" className="btn-primary" style={{ padding: "16px 32px", fontSize: "16px", textDecoration: "none" }}>
+                  Réserver une cuisinière <ArrowRight size={18} />
+                </Link>
+                <Link href="/signup" className="btn-outline" style={{ padding: "16px 32px", fontSize: "16px" }}>
+                  Je veux cuisiner
+                </Link>
               </div>
-              <div>
+
+              <div className="reveal" style={{ display: "flex", gap: "14px", alignItems: "center" }}>
+                <div style={{ display: "flex" }}>
+                  {["F", "A", "L", "K", "S"].map((letter, i) => (
+                    <div key={letter} style={{ width: "36px", height: "36px", borderRadius: "50%", background: "var(--brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#121212", fontSize: "13px", border: "2px solid var(--bg-base)", marginLeft: i > 0 ? "-10px" : "0" }}>
+                      {letter}
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <Stars n={5} />
+                  <p style={{ margin: "2px 0 0 0", fontSize: "13px", color: "var(--text-muted)", fontWeight: 500 }}>
+                    Plus de <strong style={{ color: "var(--text-heading)" }}>2 000</strong> familles nous font confiance
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Photo composition: arch + portrait + sticker + rating card */}
+            <div className="reveal hero-compo">
+              <div className="arch-frame hero-arch">
+                <img ref={heroImgRef} src="/hero-feast.png" alt="Festin tunisien fait maison" />
+              </div>
+              <span className="sticker">100 % fait maison 🌶</span>
+              <div className="hero-portrait">
+                <img src="/cook-portrait.png" alt="Cuisinière tunisienne à domicile" />
+              </div>
+              <div className="hero-rating-card">
                 <Stars n={5} />
-                <p style={{ margin: "2px 0 0 0", fontSize: "13px", color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>
-                  Plus de <strong style={{ color: "white" }}>2 000</strong> familles nous font confiance
+                <p style={{ margin: "4px 0 0 0", fontSize: "13px", fontWeight: 700, color: "var(--text-heading)" }}>
+                  4,9 <span style={{ color: "var(--text-muted)", fontWeight: 500 }}>· note moyenne</span>
                 </p>
               </div>
             </div>
@@ -215,22 +274,28 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
         </div>
       </div>
 
-      {/* ─────────── BRAND BAND — the full logo on a clean light background ─────────── */}
-      <div style={{ backgroundColor: "var(--bg-surface)", paddingTop: "72px", display: "flex", justifyContent: "center" }}>
-        <img
-          src="/brand/ommi-sissi-full-light.svg"
-          alt="Ommi Sissi — Tunisian Food"
-          className="logo-when-light"
-          style={{ width: "min(360px, 70vw)", height: "auto" }}
-        />
-        <img
-          src="/brand/ommi-sissi-full-dark.svg"
-          alt=""
-          aria-hidden="true"
-          className="logo-when-dark"
-          style={{ width: "min(360px, 70vw)", height: "auto" }}
-        />
-      </div>
+      {/* ─────────── STATEMENT — the brand moment, à la "Food shared is a memory made" ─────────── */}
+      <section ref={statementRef} style={{ backgroundColor: "var(--bg-surface)", padding: "110px 24px 30px 24px" }}>
+        <div className="reveal" style={{ maxWidth: "980px", margin: "0 auto", textAlign: "center" }}>
+          <img
+            src="/brand/ommi-sissi-full-light.svg"
+            alt="Ommi Sissi — Tunisian Food"
+            className="logo-when-light"
+            style={{ width: "min(190px, 45vw)", height: "auto", marginBottom: "44px" }}
+          />
+          <img
+            src="/brand/ommi-sissi-full-dark.svg"
+            alt=""
+            aria-hidden="true"
+            className="logo-when-dark"
+            style={{ width: "min(190px, 45vw)", height: "auto", marginBottom: "44px" }}
+          />
+          <p className="display-font statement">
+            Un plat partagé,<br />un souvenir <em className="display-italic-ink">créé</em>.
+          </p>
+          <p className="eyebrow" style={{ marginTop: "28px" }}>— La table tunisienne, chez vous —</p>
+        </div>
+      </section>
 
       {/* ─────────── HOW IT WORKS ─────────── */}
       <Section bgVar="--bg-surface" id="how-it-works">
@@ -239,13 +304,14 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           {STEPS.map((step) => {
             const Icon = step.icon;
             return (
-              <div key={step.n} className="card reveal" style={{ padding: "32px 24px", textAlign: "center", position: "relative" }}>
-                {/* .card clips overflow, so the number chip must sit inside the edge */}
-                <div style={{ position: "absolute", top: "14px", right: "14px", width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "var(--brand-primary)", color: "#121212", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "14px" }}>
-                  {step.n}
-                </div>
-                <div style={{ width: "56px", height: "56px", borderRadius: "16px", backgroundColor: "rgba(244, 193, 47,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", margin: "0 auto 16px auto" }}>
-                  <Icon size={28} />
+              <div key={step.n} className="reveal" style={{ borderTop: "2px solid var(--border-medium)", paddingTop: "24px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
+                  <span className="display-font" style={{ fontSize: "44px", fontWeight: 600, lineHeight: 1, color: "var(--brand-ink)" }}>
+                    0{step.n}
+                  </span>
+                  <span style={{ width: "44px", height: "44px", borderRadius: "50%", backgroundColor: "rgba(244, 193, 47,0.14)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--brand-ink)" }}>
+                    <Icon size={22} />
+                  </span>
                 </div>
                 <h3 className="heading-font" style={{ margin: "0 0 10px 0", fontSize: "18px", fontWeight: 800, color: "var(--text-heading)" }}>{step.title}</h3>
                 <p style={{ margin: 0, fontSize: "14px", lineHeight: 1.6, color: "var(--text-body)" }}>{step.desc}</p>
@@ -259,7 +325,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       <Section id="cooks">
         <div className="reveal" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px", flexWrap: "wrap", gap: "16px" }}>
           <div>
-            <span style={{ display: "inline-block", backgroundColor: "var(--brand-secondary)", color: "#F6EFE2", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "12px" }}>Les mieux notés</span>
+            <p className="eyebrow" style={{ marginBottom: "12px" }}>Les mieux notées</p>
             <h2 className="display-font" style={{ fontSize: "38px", fontWeight: 600, margin: 0, color: "var(--text-heading)" }}>Découvrez nos cuisinières</h2>
             <p style={{ margin: "8px 0 0 0", fontSize: "16px", color: "var(--text-muted)", maxWidth: "400px" }}>Chaque cuisinière est recrutée, vérifiée et formée par notre équipe avant sa première réservation.</p>
           </div>
@@ -309,9 +375,8 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       <Section bgVar="--bg-surface-alt" id="families">
         <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", alignItems: "center" }}>
           <div className="reveal" style={{ flex: "1 1 450px" }}>
-            <div className="image-card" style={{ aspectRatio: "4/3" }}>
-              <img src="/family-tunisian.png" alt="Famille tunisienne partageant un dîner" />
-              <div className="image-card-overlay" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 40%)" }} />
+            <div className="arch-frame reveal-img" style={{ aspectRatio: "4/4.6", maxWidth: "460px", margin: "0 auto", boxShadow: "var(--shadow-lg)" }}>
+              <img ref={familyImgRef} src="/family-tunisian.png" alt="Famille tunisienne partageant un dîner" />
             </div>
           </div>
 
@@ -352,7 +417,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", alignItems: "center" }}>
             <div style={{ flex: "1 1 500px" }}>
               <div className="reveal">
-                <span style={{ display: "inline-block", backgroundColor: "rgba(244, 193, 47,0.2)", color: "#F6EFE2", padding: "6px 18px", borderRadius: "99px", fontSize: "13px", fontWeight: 700, marginBottom: "20px", border: "1px solid rgba(244, 193, 47,0.3)" }}>Pour les mamans</span>
+                <p className="eyebrow" style={{ marginBottom: "20px", color: "#F6CC4F" }}>Pour les mamans</p>
                 <h2 className="display-font" style={{ fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 600, margin: "0 0 16px 0", lineHeight: 1.08, color: "white" }}>
                   Transformez vos talents de cuisinière en <em className="display-italic">revenu flexible</em>
                 </h2>
@@ -393,9 +458,8 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             </div>
 
             <div className="reveal" style={{ flex: "1 1 350px" }}>
-              <div className="image-card" style={{ aspectRatio: "3/4", border: "1px solid rgba(255,255,255,0.1)" }}>
+              <div className="arch-frame reveal-img" style={{ aspectRatio: "3/4", maxWidth: "420px", margin: "0 auto", border: "1px solid rgba(255,255,255,0.14)" }}>
                 <img src="/cook-portrait.png" alt="Cuisinière tunisienne à domicile" style={{ objectPosition: "top" }} />
-                <div className="image-card-overlay" />
               </div>
             </div>
           </div>

@@ -33,6 +33,8 @@ html {
   --brand-primary-hover: #DBA816;
   --brand-secondary: #6F7A47;
   --brand-success: #22c55e;
+  /* Saffron dark enough to stay readable as TEXT on cream backgrounds */
+  --brand-ink: #A97908;
 
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
@@ -65,6 +67,7 @@ html[data-theme="dark"] {
   --brand-primary-hover: #F4C12F;
   --brand-secondary: #B1B77A;
   --brand-success: #4ade80;
+  --brand-ink: #F6CC4F;
 
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.6);
   --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.7);
@@ -81,9 +84,9 @@ html[data-theme="dark"] {
   padding: 0;
 }
 
+/* No CSS scroll-snap / smooth-behavior: the Lenis inertial scroll
+   (components/SmoothScroll.tsx) owns the scrolling feel, anchors included. */
 html {
-  scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
   -webkit-tap-highlight-color: transparent;
   background-color: var(--bg-base);
 }
@@ -146,6 +149,32 @@ html[data-theme="dark"] .logo-when-dark {
   font-style: italic;
   font-weight: 600;
   color: var(--brand-primary);
+}
+
+/* Same accent, but for light (cream/white) backgrounds */
+.display-italic-ink {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--brand-ink);
+}
+
+/* Editorial section kicker, replaces the pill badges */
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--brand-secondary);
+  margin: 0;
+}
+
+/* Giant centered statement (à la "Food shared is a memory made") */
+.statement {
+  font-size: clamp(36px, 5.5vw, 70px);
+  font-weight: 600;
+  line-height: 1.08;
+  color: var(--text-heading);
+  margin: 0;
 }
 
 /* ─── Grids ─── */
@@ -417,6 +446,184 @@ html[data-theme="dark"] .logo-when-dark {
   padding: 14px;
   border: 1.5px solid var(--border-medium);
   border-radius: 9999px;
+}
+
+/* ─── Cream editorial hero (restaurant style) ─── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+}
+
+.hero-blob {
+  position: absolute;
+  top: -180px;
+  right: -160px;
+  width: 680px;
+  height: 680px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 193, 47, 0.32), transparent 66%);
+  pointer-events: none;
+}
+
+/* Moorish arch photo frame */
+.arch-frame {
+  overflow: hidden;
+  border-radius: 999px 999px 28px 28px;
+  background-color: var(--bg-subtle);
+}
+
+.arch-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-compo {
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.hero-arch {
+  aspect-ratio: 4 / 5;
+  box-shadow: var(--shadow-lg);
+}
+
+.sticker {
+  position: absolute;
+  top: 30px;
+  left: -16px;
+  transform: rotate(-8deg);
+  background: var(--brand-primary);
+  color: #121212;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 2px dashed rgba(18, 18, 18, 0.55);
+  box-shadow: var(--shadow-md);
+  z-index: 3;
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.hero-portrait {
+  position: absolute;
+  bottom: -26px;
+  left: -34px;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 5px solid var(--bg-base);
+  box-shadow: var(--shadow-lg);
+  z-index: 3;
+}
+
+.hero-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.hero-rating-card {
+  position: absolute;
+  bottom: 38px;
+  right: -18px;
+  background: var(--bg-surface);
+  border-radius: 16px;
+  padding: 14px 18px;
+  box-shadow: var(--shadow-lg);
+  z-index: 3;
+}
+
+@media (max-width: 640px) {
+  .hero-portrait {
+    left: -6px;
+  }
+
+  .hero-rating-card {
+    right: -6px;
+  }
+
+  .sticker {
+    left: -4px;
+  }
+}
+
+/* Outline pill (secondary CTA on light backgrounds) */
+.btn-outline {
+  border: 1.5px solid var(--text-heading);
+  color: var(--text-heading);
+  background: transparent;
+  border-radius: 9999px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  background: var(--text-heading);
+  color: var(--bg-base);
+}
+
+/* Arrows glide on hover — small "rou7" everywhere a pill has an arrow */
+.btn-primary svg,
+.btn-outline svg {
+  transition: transform 0.25s ease;
+}
+
+.btn-primary:hover svg,
+.btn-outline:hover svg {
+  transform: translateX(4px);
+}
+
+/* ─── Word-by-word headline reveal ─── */
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+.word-rise {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: word-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes word-rise {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* ─── Curtain image reveal on scroll (pairs with .reveal / .visible) ─── */
+.reveal-img {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-img.visible,
+.reveal.visible .reveal-img {
+  clip-path: inset(0 0 0% 0);
 }
 
 /* ─── Cards ─── */

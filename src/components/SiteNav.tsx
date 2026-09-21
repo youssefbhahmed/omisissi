@@ -56,7 +56,8 @@ export default function SiteNav({
 
     return (
         <>
-            <div style={{ position: variant === "overlay" ? "fixed" : "sticky", top: 0, left: 0, right: 0, zIndex: 60 }}>
+            {/* sticky top:-40px = the 40px announcement bar scrolls away, the bar itself sticks */}
+            <div style={{ position: variant === "overlay" ? "fixed" : "sticky", top: variant === "overlay" ? 0 : "-40px", left: 0, right: 0, zIndex: 60 }}>
                 {/* ── Announcement bar (scrolls away) ── */}
                 <div className="announce-bar" style={{ maxHeight: transparent || variant === "solid" ? "40px" : scrolled ? "0px" : "40px" }}>
                     Des cuisinières disponibles cette semaine à Tunis, La Marsa &amp; Ariana&nbsp;
