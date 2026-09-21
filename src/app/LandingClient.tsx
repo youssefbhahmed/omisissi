@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import SiteNav from "@/components/SiteNav";
 import SmoothScroll from "@/components/SmoothScroll";
+import TunisiaMap from "@/components/TunisiaMap";
 import Link from "next/link";
 import {
   Star,
@@ -94,6 +95,7 @@ function Rise({ children, d = 0 }: { children: React.ReactNode; d?: number }) {
 function useHeroCinematic() {
   const bgRef = useRef<HTMLImageElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let raf = 0;
@@ -109,6 +111,14 @@ function useHeroCinematic() {
           contentRef.current.style.opacity = String(Math.max(1 - p * 1.15, 0));
           contentRef.current.style.transform = `translateY(${y * 0.14}px)`;
         }
+        if (mapRef.current) {
+          // The cooks pop out of the map one by one as the visitor scrolls
+          mapRef.current.querySelectorAll(".map-chip").forEach((el, i) => el.classList.toggle("on", p > 0.03 + i * 0.05));
+          mapRef.current.querySelectorAll(".map-link").forEach((el, i) => el.classList.toggle("on", p > 0.03 + i * 0.05));
+          // ...and the map fades later than the text, staying readable longer
+          mapRef.current.style.opacity = String(Math.max(1 - Math.max(p - 0.4, 0) * 2.2, 0));
+          mapRef.current.style.transform = `translateY(${y * 0.06}px)`;
+        }
       });
     };
     onScroll();
@@ -119,7 +129,7 @@ function useHeroCinematic() {
     };
   }, []);
 
-  return { bgRef, contentRef };
+  return { bgRef, contentRef, mapRef };
 }
 
 /** Gentle parallax: drifts the element against the scroll direction */
@@ -223,7 +233,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
   const momsRef = useReveal();
   const familyImgRef = useParallax(0.06);
   const statementRef = useReveal();
-  const { bgRef: heroBgRef, contentRef: heroContentRef } = useHeroCinematic();
+  const { bgRef: heroBgRef, contentRef: heroContentRef, mapRef: heroMapRef } = useHeroCinematic();
 
   return (
     <div style={{ backgroundColor: "var(--bg-base)", color: "var(--text-body)", overflowX: "hidden" }}>
@@ -246,8 +256,8 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
         />
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(115deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.18) 100%)", zIndex: 1 }} />
 
-        <div ref={heroContentRef} style={{ maxWidth: "1240px", width: "100%", margin: "0 auto", padding: "170px 24px 120px 24px", position: "relative", zIndex: 5, willChange: "transform, opacity", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "56px" }}>
-          <div style={{ maxWidth: "700px" }}>
+        <div style={{ maxWidth: "1240px", width: "100%", margin: "0 auto", padding: "170px 24px 120px 24px", position: "relative", zIndex: 5, display: "flex", alignItems: "center", justifyContent: "space-between", gap: "56px" }}>
+          <div ref={heroContentRef} style={{ maxWidth: "700px", willChange: "transform, opacity" }}>
             <p className="eyebrow" style={{ marginBottom: "24px", color: "#F6CC4F" }}>
               Cuisinières tunisiennes à domicile — Tunis · La Marsa · Ariana
             </p>
@@ -290,44 +300,9 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             </div>
           </div>
 
-          {/* Right side: availability card wired into the layout (desktop only) */}
-          <div className="hidden lg:block" style={{ position: "relative", width: "375px", flexShrink: 0 }}>
-            <Link href="/cooks" className="hero-side-card" style={{ display: "block", background: "rgba(18,18,18,0.55)", backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)", border: "1px solid rgba(255,255,255,0.16)", borderRadius: "24px", padding: "26px", textDecoration: "none" }}>
-              <p style={{ margin: "0 0 18px 0", display: "flex", alignItems: "center", gap: "10px", fontSize: "13px", fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase", color: "#F6EFE2" }}>
-                <span className="pulse-dot" /> Disponibles cette semaine
-              </p>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "20px" }}>
-                {[
-                  { img: "/cook-fatma.jpg", name: "Fatma", city: "La Marsa", note: "4,9" },
-                  { img: "/cook-amira.jpg", name: "Amira", city: "Tunis", note: "4,8" },
-                  { img: "/cook-leila.jpg", name: "Leila", city: "Ariana", note: "5,0" },
-                ].map((c) => (
-                  <div key={c.name} style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-                    <img src={c.img} alt="" style={{ width: "46px", height: "46px", borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(244, 193, 47, 0.7)" }} />
-                    <div style={{ flexGrow: 1 }}>
-                      <p style={{ margin: 0, fontSize: "15px", fontWeight: 700, color: "white" }}>{c.name}</p>
-                      <p style={{ margin: 0, fontSize: "12.5px", color: "rgba(255,255,255,0.65)" }}>{c.city}</p>
-                    </div>
-                    <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--brand-primary)" }}>★ {c.note}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ borderTop: "1px solid rgba(255,255,255,0.14)", paddingTop: "16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>à partir de 40 TND / heure</p>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 800, color: "var(--brand-primary)" }}>
-                  Réserver <ArrowRight size={15} />
-                </span>
-              </div>
-            </Link>
-
-            {/* the sticker caps the card instead of floating alone */}
-            <span style={{ position: "absolute", top: "-16px", right: "-12px", transform: "rotate(6deg)", display: "block" }}>
-              <span style={{ display: "inline-block", background: "var(--brand-primary)", color: "#121212", fontWeight: 800, fontSize: "12px", letterSpacing: "0.5px", textTransform: "uppercase", padding: "9px 16px", borderRadius: "999px", border: "2px dashed rgba(18,18,18,0.55)", boxShadow: "0 10px 24px rgba(0,0,0,0.35)" }}>
-                100 % fait maison 🌶
-              </span>
-            </span>
+          {/* Right side: where we operate — the cooks pop out on scroll (desktop only) */}
+          <div ref={heroMapRef} className="hidden lg:block" style={{ position: "relative", width: "420px", flexShrink: 0, willChange: "transform, opacity" }}>
+            <TunisiaMap />
           </div>
         </div>
       </section>

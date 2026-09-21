@@ -451,14 +451,46 @@ html[data-theme="dark"] .logo-when-dark {
 /* The full-bleed hero is styled inline in LandingClient.tsx — a stale
    service-worker CSS cache once broke it when styled from here. */
 
-/* Hero availability card: lifts on hover like the directory cards */
-.hero-side-card {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease;
+/* Tunisia map: cook chips and their leader lines, revealed on scroll
+   (the `on` class comes from the hero scroll handler) */
+.map-chip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(18, 18, 18, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 6px 14px 6px 6px;
+  opacity: 0;
+  transform: translateY(14px) scale(0.9);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  white-space: nowrap;
 }
 
-.hero-side-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(244, 193, 47, 0.55) !important;
+.map-chip img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(244, 193, 47, 0.8);
+}
+
+.map-chip.on {
+  opacity: 1;
+  transform: none;
+}
+
+.map-link {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.map-link.on {
+  opacity: 1;
 }
 
 /* Big soft-radius photo frame */
