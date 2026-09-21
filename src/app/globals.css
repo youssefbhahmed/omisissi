@@ -451,6 +451,16 @@ html[data-theme="dark"] .logo-when-dark {
 /* The full-bleed hero is styled inline in LandingClient.tsx — a stale
    service-worker CSS cache once broke it when styled from here. */
 
+/* Hero availability card: lifts on hover like the directory cards */
+.hero-side-card {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease;
+}
+
+.hero-side-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(244, 193, 47, 0.55) !important;
+}
+
 /* Big soft-radius photo frame */
 .arch-frame {
   overflow: hidden;
