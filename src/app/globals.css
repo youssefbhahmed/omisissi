@@ -473,10 +473,10 @@ html[data-theme="dark"] .logo-when-dark {
   pointer-events: none;
 }
 
-/* Moorish arch photo frame */
+/* Big soft-radius photo frame */
 .arch-frame {
   overflow: hidden;
-  border-radius: 999px 999px 28px 28px;
+  border-radius: 32px;
   background-color: var(--bg-subtle);
 }
 
