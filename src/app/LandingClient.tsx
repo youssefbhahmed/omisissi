@@ -115,7 +115,7 @@ function useHeroCinematic() {
           // The cooks pop out one by one from the first scrolled pixels.
           // add() only — once out, they stay out.
           mapRef.current.querySelectorAll(".map-chip, .map-link").forEach((el, i) => {
-            if (p > 0.01 + (i % 3) * 0.035) el.classList.add("on");
+            if (p > 0.01 + (i % 5) * 0.03) el.classList.add("on");
           });
           // ...and the map fades later than the text, staying readable longer
           mapRef.current.style.opacity = String(Math.max(1 - Math.max(p - 0.4, 0) * 2.2, 0));
@@ -128,7 +128,7 @@ function useHeroCinematic() {
     // Fallback: visitors who don't scroll still get the reveal after a beat
     const timer = window.setTimeout(() => {
       mapRef.current?.querySelectorAll(".map-chip, .map-link").forEach((el, i) => {
-        window.setTimeout(() => el.classList.add("on"), (i % 3) * 350);
+        window.setTimeout(() => el.classList.add("on"), (i % 5) * 300);
       });
     }, 2500);
     return () => {
