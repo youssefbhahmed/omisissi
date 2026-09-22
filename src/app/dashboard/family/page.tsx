@@ -1,4 +1,5 @@
 import React from "react";
+import { Reveal } from "@/components/motion-bits";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Clock, CheckCircle, XCircle, MapPin, ChefHat, Calendar, Phone, Star } from "lucide-react";
@@ -120,7 +121,7 @@ export default async function FamilyBookingsPage() {
                         const cookAvatar = booking.partner?.avatar_url || "/hero-tunisian-food-1.png";
 
                         return (
-                            <div key={booking.id} className="card" style={{ backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", overflow: "hidden" }}>
+                            <Reveal key={booking.id} y={24}><div className="card" style={{ backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)", overflow: "hidden" }}>
                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px", borderBottom: "1px solid var(--border-light)", flexWrap: "wrap", gap: "12px" }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                                         <div style={{ width: "48px", height: "48px", borderRadius: "50%", overflow: "hidden", flexShrink: 0 }}>
@@ -216,7 +217,7 @@ export default async function FamilyBookingsPage() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></Reveal>
                         );
                     })}
                 </div>

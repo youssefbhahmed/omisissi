@@ -1,4 +1,5 @@
 import React from "react";
+import { Reveal } from "@/components/motion-bits";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ShoppingBag, ShieldAlert, ArrowRight } from "lucide-react";
@@ -98,6 +99,7 @@ export default async function CookDashboard() {
             <div style={{ gap: "32px" }} className="grid grid-cols-1 md:grid-cols-[1fr_3fr]">
                 {/* Quick Stats */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                    <Reveal delay={0.00} y={24}>
                     <div className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)" }}>
                         <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Revenus cette semaine</p>
                         <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: "var(--text-heading)" }}>{weeklyEarnings} <span style={{ fontSize: "16px", color: "var(--text-muted)" }}>TND</span></h3>
@@ -105,14 +107,19 @@ export default async function CookDashboard() {
                             <p style={{ margin: "6px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }}>{totalEarnings} TND gagnés au total</p>
                         )}
                     </div>
+                    </Reveal>
+                    <Reveal delay={0.08} y={24}>
                     <div className="card" style={{ padding: "24px", backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-light)" }}>
                         <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Réservations confirmées</p>
                         <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: "var(--text-heading)" }}>{activeCount}</h3>
                     </div>
+                    </Reveal>
+                    <Reveal delay={0.16} y={24}>
                     <div className="card" style={{ padding: "24px", backgroundColor: pendingCount > 0 ? "rgba(244, 193, 47,0.08)" : "var(--bg-surface)", border: pendingCount > 0 ? "1px solid rgba(244, 193, 47,0.4)" : "1px solid var(--border-light)" }}>
                         <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>Demandes en attente</p>
                         <h3 className="heading-font" style={{ margin: 0, fontSize: "32px", fontWeight: 800, color: pendingCount > 0 ? "var(--brand-primary)" : "var(--text-heading)" }}>{pendingCount}</h3>
                     </div>
+                    </Reveal>
                 </div>
 
                 {/* Orders Area */}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import BrandMark from "@/components/BrandMark";
 import Link from "next/link";
 import { ArrowRight, User, Utensils } from "lucide-react";
@@ -31,19 +32,30 @@ export default function SignupPage() {
 
     return (
         <div style={{ minHeight: "100vh", display: "flex", backgroundColor: "var(--bg-base)" }}>
-            {/* Left Panel - Image */}
-            <div style={{ flex: 1, position: "relative" }} className="hidden md:block">
-                <img
-                    src={roleType === "family" ? "/hands-serving-couscous.jpg" : "/cook-leila.jpg"}
-                    alt="Arrière-plan d’inscription"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", transition: "all 0.5s ease" }}
-                />
+            {/* Left Panel - Image: cross-fades with a slight zoom when the role flips */}
+            <div style={{ flex: 1, position: "relative", overflow: "hidden" }} className="hidden md:block">
+                <AnimatePresence mode="popLayout">
+                    <motion.img
+                        key={roleType}
+                        src={roleType === "family" ? "/hands-serving-couscous.jpg" : "/cook-leila.jpg"}
+                        alt="Arrière-plan d’inscription"
+                        initial={{ opacity: 0, scale: 1.06 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                </AnimatePresence>
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(0,0,0,0) 0%, var(--bg-base) 100%)" }} />
             </div>
 
             {/* Right Panel - Form */}
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px" }}>
-                <div style={{ maxWidth: "420px", width: "100%" }}>
+                <motion.div
+                    initial={{ opacity: 0, y: 32 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ type: "spring", stiffness: 110, damping: 18 }}
+                    style={{ maxWidth: "420px", width: "100%" }}>
                     <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "32px", justifyContent: "center" }}>
                         <BrandMark size={56} />
                     </div>
@@ -117,7 +129,7 @@ export default function SignupPage() {
                     <p style={{ textAlign: "center", marginTop: "24px", fontSize: "14px", color: "var(--text-muted)" }}>
                         Vous avez déjà un compte ? <Link href="/login" style={{ color: "var(--brand-primary)", fontWeight: 700, textDecoration: "none" }}>Se connecter</Link>
                     </p>
-                </div>
+                </motion.div>
             </div>
         </div>
     );
