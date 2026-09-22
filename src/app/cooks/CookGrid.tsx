@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { MapPin, Check, Star } from "lucide-react";
 import Link from "next/link";
 import type { DiscoverCook } from "@/lib/types";
@@ -133,10 +134,22 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: DiscoverCook[]
                 </div>
             )}
 
-            {/* Cook Cards Grid */}
+            {/* Cook Cards Grid — Motion layout: cards spring in, reflow fluidly
+                when the distance filter adds/removes them, and lift on hover */}
             <div className="auto-grid-3">
+                <AnimatePresence mode="popLayout">
                 {filtered.length > 0 ? filtered.map((cook) => (
-                    <Link href={`/cooks/${cook.id}`} key={cook.id} className="card" style={{ cursor: "pointer", textDecoration: "none", color: "inherit", display: "block" }}>
+                    <motion.div
+                        key={cook.id}
+                        layout
+                        initial={{ opacity: 0, y: 40, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.92 }}
+                        transition={{ type: "spring", stiffness: 120, damping: 17 }}
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        whileTap={{ scale: 0.97 }}
+                    >
+                    <Link href={`/cooks/${cook.id}`} className="card" style={{ cursor: "pointer", textDecoration: "none", color: "inherit", display: "block" }}>
                         <div style={{ position: "relative", height: "240px", overflow: "hidden" }}>
                             <img src={cook.avatar_url || "/hero-tunisian-food-1.png"} alt={cook.full_name || "Cuisinier"} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }} />
                             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%)", pointerEvents: "none" }} />
@@ -166,8 +179,9 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: DiscoverCook[]
                             <p style={{ margin: 0, fontSize: "14px", color: "var(--text-body)", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{cook.bio}</p>
                         </div>
                     </Link>
+                    </motion.div>
                 )) : (
-                    <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "64px 24px", color: "var(--text-muted)" }}>
+                    <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ gridColumn: "1 / -1", textAlign: "center", padding: "64px 24px", color: "var(--text-muted)" }}>
                         <MapPin size={48} style={{ opacity: 0.2, margin: "0 auto 16px auto" }} />
                         <p style={{ fontSize: "18px", fontWeight: 600 }}>
                             {hasLocation
@@ -176,8 +190,9 @@ export default function CookGrid({ cooks, hasLocation }: { cooks: DiscoverCook[]
                                     : `Aucun cuisinier trouvé dans un rayon de ${MAX_RADIUS_KM} km autour de votre région.`
                                 : "Définissez votre région dans votre profil pour trouver des cuisiniers près de chez vous."}
                         </p>
-                    </div>
+                    </motion.div>
                 )}
+                </AnimatePresence>
             </div>
         </>
     );

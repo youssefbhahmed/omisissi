@@ -5,6 +5,7 @@ import { animate, motion, useInView } from "motion/react";
 import SiteNav from "@/components/SiteNav";
 import SmoothScroll from "@/components/SmoothScroll";
 import TunisiaMap from "@/components/TunisiaMap";
+import { Magnetic, ScrollProgressBar } from "@/components/motion-bits";
 import Link from "next/link";
 import {
   Star,
@@ -275,6 +276,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
   return (
     <div style={{ backgroundColor: "var(--bg-base)", color: "var(--text-body)", overflowX: "hidden" }}>
       <SmoothScroll />
+      <ScrollProgressBar />
 
       {/* ─────────── NAVBAR ─────────── */}
       <SiteNav variant="overlay" active="/" />
@@ -312,12 +314,16 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             </p>
 
             <div className="reveal" style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "46px" }}>
-              <Link href="/cooks" className="btn-primary" style={{ padding: "16px 32px", fontSize: "16px", textDecoration: "none" }}>
-                Réserver une cuisinière <ArrowRight size={18} />
-              </Link>
-              <Link href="/signup" style={{ padding: "16px 32px", fontSize: "16px", fontWeight: 700, background: "rgba(255,255,255,0.12)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "99px", color: "white", textDecoration: "none" }}>
-                Je veux cuisiner
-              </Link>
+              <Magnetic>
+                <Link href="/cooks" className="btn-primary" style={{ padding: "16px 32px", fontSize: "16px", textDecoration: "none" }}>
+                  Réserver une cuisinière <ArrowRight size={18} />
+                </Link>
+              </Magnetic>
+              <Magnetic strength={0.25}>
+                <Link href="/signup" style={{ padding: "16px 32px", fontSize: "16px", fontWeight: 700, background: "rgba(255,255,255,0.12)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "99px", color: "white", textDecoration: "none", display: "inline-block" }}>
+                  Je veux cuisiner
+                </Link>
+              </Magnetic>
             </div>
 
             <div className="reveal" style={{ display: "flex", gap: "14px", alignItems: "center" }}>
@@ -391,9 +397,14 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div className="photo-marquee-track">
             {Array.from({ length: 2 }).flatMap((_, r) =>
               GALLERY.map((photo, i) => (
-                <div key={`${r}-${i}`} className="photo-tile">
+                <motion.div
+                  key={`${r}-${i}`}
+                  className="photo-tile"
+                  whileHover={{ scale: 1.07, rotate: 0, zIndex: 3 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 18 }}
+                >
                   <img src={photo.src} alt={r === 0 ? photo.alt : ""} aria-hidden={r === 1} loading="lazy" />
-                </div>
+                </motion.div>
               ))
             )}
           </div>
@@ -403,11 +414,17 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       {/* ─────────── HOW IT WORKS ─────────── */}
       <Section bgVar="--bg-surface" id="how-it-works">
         <SectionHeader badge="Comment ça marche" title="De la recherche au repas en 4 étapes" subtitle="Toute l’expérience — de la recherche d’un cuisinier au paiement — se déroule simplement dans l’appli." />
-        <div className="auto-grid-4 reveal-stagger">
-          {STEPS.map((step) => {
+        <div className="auto-grid-4">
+          {STEPS.map((step, si) => {
             const Icon = step.icon;
             return (
-              <div key={step.n} className="reveal" style={{ borderTop: "2px solid var(--border-medium)", paddingTop: "24px" }}>
+              <motion.div
+                key={step.n}
+                initial={{ opacity: 0, y: 44 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ type: "spring", stiffness: 100, damping: 16, delay: si * 0.1 }}
+                style={{ borderTop: "2px solid var(--border-medium)", paddingTop: "24px" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
                   <span className="display-font" style={{ fontSize: "44px", fontWeight: 600, lineHeight: 1, color: "var(--brand-ink)" }}>
                     0{step.n}
@@ -418,7 +435,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                 </div>
                 <h3 className="heading-font" style={{ margin: "0 0 10px 0", fontSize: "18px", fontWeight: 800, color: "var(--text-heading)" }}>{step.title}</h3>
                 <p style={{ margin: 0, fontSize: "14px", lineHeight: 1.6, color: "var(--text-body)" }}>{step.desc}</p>
-              </div>
+              </motion.div>
             );
           })}
         </div>
@@ -498,11 +515,17 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           <div style={{ flex: "1 1 450px" }}>
             <SectionHeader align="left" badge="Pour les familles" title="Retrouvez vos soirées." subtitle="Ne stressez plus pour le dîner. Une maman vérifiée vient dans votre cuisine et prépare des plats frais et authentiques pour votre famille." />
 
-            <div className="reveal-stagger" style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "36px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "36px" }}>
               {FAMILY_PERKS.map((perk, i) => {
                 const Icon = perk.icon;
                 return (
-                  <div key={i} className="reveal" style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: 40 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.4 }}
+                    transition={{ type: "spring", stiffness: 110, damping: 16, delay: i * 0.09 }}
+                    style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
                     <div style={{ width: "44px", height: "44px", borderRadius: "14px", backgroundColor: "rgba(244, 193, 47,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand-primary)", flexShrink: 0 }}>
                       <Icon size={22} />
                     </div>
@@ -510,15 +533,17 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                       <h4 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 700, color: "var(--text-heading)" }}>{perk.title}</h4>
                       <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)", lineHeight: 1.5 }}>{perk.desc}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
 
             <div className="reveal">
-              <Link href="/cooks" className="btn-primary" style={{ padding: "14px 28px", textDecoration: "none" }}>
-                Parcourir les cuisiniers près de chez vous <ArrowRight size={18} />
-              </Link>
+              <Magnetic>
+                <Link href="/cooks" className="btn-primary" style={{ padding: "14px 28px", textDecoration: "none" }}>
+                  Parcourir les cuisiniers près de chez vous <ArrowRight size={18} />
+                </Link>
+              </Magnetic>
             </div>
           </div>
         </div>
@@ -572,9 +597,11 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               </div>
 
               <div className="reveal">
-                <Link href="/signup" className="btn-primary" style={{ padding: "16px 32px", textDecoration: "none" }}>
-                  Devenir cuisinière <ArrowRight size={18} />
-                </Link>
+                <Magnetic>
+                  <Link href="/signup" className="btn-primary" style={{ padding: "16px 32px", textDecoration: "none" }}>
+                    Devenir cuisinière <ArrowRight size={18} />
+                  </Link>
+                </Magnetic>
               </div>
             </div>
 
@@ -632,12 +659,16 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               et zéro vaisselle — votre première réservation ne prend que deux minutes.
             </p>
             <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap", marginBottom: "36px" }}>
-              <Link href="/cooks" className="btn-primary" style={{ padding: "16px 36px", fontSize: "16px", textDecoration: "none" }}>
-                Trouver un cuisinier près de chez vous <ArrowRight size={18} />
-              </Link>
-              <Link href="/signup" style={{ padding: "16px 32px", fontSize: "16px", fontWeight: 700, background: "rgba(255,255,255,0.1)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "99px", color: "white", textDecoration: "none" }}>
-                Je veux cuisiner
-              </Link>
+              <Magnetic>
+                <Link href="/cooks" className="btn-primary" style={{ padding: "16px 36px", fontSize: "16px", textDecoration: "none" }}>
+                  Trouver un cuisinier près de chez vous <ArrowRight size={18} />
+                </Link>
+              </Magnetic>
+              <Magnetic strength={0.25}>
+                <Link href="/signup" style={{ padding: "16px 32px", fontSize: "16px", fontWeight: 700, background: "rgba(255,255,255,0.1)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "99px", color: "white", textDecoration: "none", display: "inline-block" }}>
+                  Je veux cuisiner
+                </Link>
+              </Magnetic>
             </div>
             <div style={{ display: "flex", gap: "28px", justifyContent: "center", flexWrap: "wrap", fontSize: "14px", fontWeight: 600, color: "rgba(255,255,255,0.75)" }}>
               <span>★ 4,9 de note moyenne</span>

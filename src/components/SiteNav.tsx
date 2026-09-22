@@ -35,15 +35,23 @@ export default function SiteNav({
     dashboardHref?: string;
 }) {
     const [scrolled, setScrolled] = useState(false);
+    const [hidden, setHidden] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
-        if (variant !== "overlay") return;
-        const onScroll = () => setScrolled(window.scrollY > 24);
+        let lastY = window.scrollY;
+        const onScroll = () => {
+            const y = window.scrollY;
+            setScrolled(y > 24);
+            // Premium pattern: the bar slips away scrolling down, springs back
+            // the moment the visitor scrolls up (always shown near the top)
+            setHidden(y > 320 && y > lastY + 4);
+            if (Math.abs(y - lastY) > 4) lastY = y;
+        };
         onScroll();
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
-    }, [variant]);
+    }, []);
 
     // The full-screen menu owns the viewport while open
     useEffect(() => {
@@ -58,7 +66,10 @@ export default function SiteNav({
     return (
         <>
             {/* sticky top:-40px = the 40px announcement bar scrolls away, the bar itself sticks */}
-            <div style={{ position: variant === "overlay" ? "fixed" : "sticky", top: variant === "overlay" ? 0 : "-40px", left: 0, right: 0, zIndex: 60 }}>
+            <motion.div
+                animate={{ y: hidden && !menuOpen ? -130 : 0 }}
+                transition={{ type: "spring", stiffness: 320, damping: 32 }}
+                style={{ position: variant === "overlay" ? "fixed" : "sticky", top: variant === "overlay" ? 0 : "-40px", left: 0, right: 0, zIndex: 60 }}>
                 {/* ── Announcement bar (scrolls away) ── */}
                 <div className="announce-bar" style={{ maxHeight: transparent || variant === "solid" ? "40px" : scrolled ? "0px" : "40px" }}>
                     Des cuisinières disponibles cette semaine à Tunis, La Marsa &amp; Ariana&nbsp;
@@ -123,7 +134,7 @@ export default function SiteNav({
                         </div>
                     </div>
                 </header>
-            </div>
+            </motion.div>
 
             {/* ── Full-screen mobile menu (Comptoir style) ── */}
             <AnimatePresence>
