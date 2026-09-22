@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored third-party Claude Code skills (UI/UX Pro Max) — not app code
+    ".claude/**",
   ]),
 ]);
 
