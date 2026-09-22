@@ -640,6 +640,12 @@ html[data-theme="dark"] .logo-when-dark {
   box-shadow: var(--shadow-hover);
 }
 
+/* Cards wrapped in a Motion spring (landing featured grid): the physics own
+   the transform, the CSS lift would double up — keep only the shadow. */
+.auto-grid-3>div>.card:hover {
+  transform: none;
+}
+
 .image-card {
   position: relative;
   border-radius: 24px;

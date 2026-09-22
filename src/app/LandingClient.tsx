@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { motion } from "motion/react";
 import SiteNav from "@/components/SiteNav";
 import SmoothScroll from "@/components/SmoothScroll";
 import TunisiaMap from "@/components/TunisiaMap";
@@ -417,11 +418,22 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
           </Link>
         </div>
 
-        <div className="auto-grid-3 reveal-stagger">
+        <div className="auto-grid-3">
           {cooks.map((cook, i) => (
-            // Index keys keep the DOM nodes stable when real cooks replace the
-            // fallback cards, so the scroll-reveal "visible" class survives.
-            <Link key={i} href={cook.href} className="card reveal" style={{ cursor: "pointer", display: "block", textDecoration: "none", color: "inherit" }}>
+            // Motion springs own this grid: staggered entrance while scrolling
+            // into view, physical lift + tilt on hover, squish on press.
+            // (Index keys keep DOM nodes stable when real cooks replace the
+            // fallback cards.)
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 60, rotate: i % 2 ? 1.5 : -1.5 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ type: "spring", stiffness: 90, damping: 14, delay: i * 0.12 }}
+              whileHover={{ y: -10, rotate: i % 2 ? 0.8 : -0.8, scale: 1.025 }}
+              whileTap={{ scale: 0.97 }}
+            >
+            <Link href={cook.href} className="card" style={{ cursor: "pointer", display: "block", textDecoration: "none", color: "inherit" }}>
               <div style={{ position: "relative", height: "240px", overflow: "hidden" }}>
                 <img src={cook.img} alt={cook.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%)", pointerEvents: "none" }} />
@@ -450,6 +462,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                 <p style={{ margin: 0, fontSize: "14px", color: "var(--text-body)" }}>{cook.bio}</p>
               </div>
             </Link>
+            </motion.div>
           ))}
         </div>
       </Section>
