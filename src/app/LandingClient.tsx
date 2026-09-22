@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { motion } from "motion/react";
+import React, { useEffect, useRef, useState } from "react";
+import { animate, motion, useInView } from "motion/react";
 import SiteNav from "@/components/SiteNav";
 import SmoothScroll from "@/components/SmoothScroll";
 import TunisiaMap from "@/components/TunisiaMap";
@@ -80,6 +80,25 @@ function Stars({ n = 5 }: { n?: number }) {
       ))}
     </div>
   );
+}
+
+/** Number that counts up from 0 when it scrolls into view */
+function CountUp({ to, prefix = "", suffix = "" }: { to: number; prefix?: string; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const [val, setVal] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    const controls = animate(0, to, {
+      duration: 1.6,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => setVal(Math.round(v)),
+    });
+    return () => controls.stop();
+  }, [inView, to]);
+
+  return <span ref={ref}>{prefix}{val.toLocaleString("fr-FR")}{suffix}</span>;
 }
 
 /** One word of the headline, rising out of an overflow mask */
@@ -538,12 +557,18 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               </div>
 
               <div className="reveal" style={{ display: "flex", gap: "24px", flexWrap: "wrap", marginBottom: "36px" }}>
-                {[{ v: "900+ TND", l: "Revenu mensuel moyen" }, { v: "100%", l: "Horaires flexibles" }].map(stat => (
-                  <div key={stat.l} style={{ textAlign: "center" }}>
-                    <p className="heading-font" style={{ margin: "0 0 2px 0", fontSize: "32px", fontWeight: 800, color: "#F6EFE2" }}>{stat.v}</p>
-                    <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.6)", fontWeight: 600 }}>{stat.l}</p>
-                  </div>
-                ))}
+                <div style={{ textAlign: "center" }}>
+                  <p className="heading-font" style={{ margin: "0 0 2px 0", fontSize: "32px", fontWeight: 800, color: "#F6EFE2" }}>
+                    <CountUp to={900} suffix="+ TND" />
+                  </p>
+                  <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.6)", fontWeight: 600 }}>Revenu mensuel moyen</p>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <p className="heading-font" style={{ margin: "0 0 2px 0", fontSize: "32px", fontWeight: 800, color: "#F6EFE2" }}>
+                    <CountUp to={100} suffix="%" />
+                  </p>
+                  <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.6)", fontWeight: 600 }}>Horaires flexibles</p>
+                </div>
               </div>
 
               <div className="reveal">
@@ -565,9 +590,16 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
       {/* ─────────── TESTIMONIALS ─────────── */}
       <Section bgVar="--bg-surface" id="reviews">
         <SectionHeader badge="Témoignages" title="Adoré des familles et des cuisiniers" subtitle="Écoutez celles et ceux qui utilisent Ommi Sissi chaque semaine." />
-        <div className="auto-grid-3 reveal-stagger">
+        <div className="auto-grid-3">
           {TESTIMONIALS.map((t, i) => (
-            <div key={i} className="card reveal" style={{ padding: "28px", display: "flex", flexDirection: "column" }}>
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ type: "spring", stiffness: 90, damping: 15, delay: i * 0.1 }}
+              className="card"
+              style={{ padding: "28px", display: "flex", flexDirection: "column" }}>
               <div style={{ marginBottom: "12px" }}><Stars n={5} /></div>
               <p style={{ margin: "0 0 20px 0", fontSize: "15px", color: "var(--text-body)", lineHeight: 1.65, flexGrow: 1 }}>&ldquo;{t.text}&rdquo;</p>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", borderTop: "1px solid var(--border-light)", paddingTop: "16px" }}>
@@ -579,7 +611,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                   <p style={{ margin: 0, fontSize: "12px", color: "var(--text-muted)" }}>{t.role}</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </Section>

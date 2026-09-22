@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import BrandMark from "@/components/BrandMark";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -125,48 +126,66 @@ export default function SiteNav({
             </div>
 
             {/* ── Full-screen mobile menu (Comptoir style) ── */}
-            {menuOpen && (
-                <div className="mobile-menu" role="dialog" aria-modal="true">
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "76px", flexShrink: 0 }}>
-                        <BrandMark size={44} />
-                        <button type="button" className="nav-burger" aria-label="Fermer le menu" onClick={() => setMenuOpen(false)}>
-                            <X size={28} />
-                        </button>
-                    </div>
+            <AnimatePresence>
+                {menuOpen && (
+                    <motion.div
+                        className="mobile-menu"
+                        role="dialog"
+                        aria-modal="true"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.22 }}
+                    >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "76px", flexShrink: 0 }}>
+                            <BrandMark size={44} />
+                            <button type="button" className="nav-burger" aria-label="Fermer le menu" onClick={() => setMenuOpen(false)}>
+                                <X size={28} />
+                            </button>
+                        </div>
 
-                    <nav style={{ display: "flex", flexDirection: "column", marginTop: "24px", flexGrow: 1 }}>
-                        {NAV_LINKS.map((l, i) => (
-                            <Link
-                                key={l.href}
-                                href={l.href}
-                                className="mobile-menu-link"
-                                style={{ animationDelay: `${0.05 + i * 0.05}s` }}
-                                onClick={() => setMenuOpen(false)}
-                            >
-                                {l.label}
-                                <ArrowRight size={22} style={{ opacity: 0.35 }} />
-                            </Link>
-                        ))}
-                    </nav>
+                        <nav style={{ display: "flex", flexDirection: "column", marginTop: "24px", flexGrow: 1 }}>
+                            {NAV_LINKS.map((l, i) => (
+                                <motion.div
+                                    key={l.href}
+                                    initial={{ opacity: 0, x: -28 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -16 }}
+                                    transition={{ type: "spring", stiffness: 320, damping: 26, delay: 0.05 + i * 0.055 }}
+                                >
+                                    <Link href={l.href} className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
+                                        {l.label}
+                                        <ArrowRight size={22} style={{ opacity: 0.35 }} />
+                                    </Link>
+                                </motion.div>
+                            ))}
+                        </nav>
 
-                    <div style={{ display: "flex", flexDirection: "column", gap: "12px", paddingBottom: "32px" }}>
-                        {authed ? (
-                            <Link href={dashboardHref} className="btn-primary" style={{ padding: "16px", fontSize: "16px", textDecoration: "none" }} onClick={() => setMenuOpen(false)}>
-                                Mon espace
-                            </Link>
-                        ) : (
-                            <>
-                                <Link href="/cooks" className="btn-primary" style={{ padding: "16px", fontSize: "16px", textDecoration: "none" }} onClick={() => setMenuOpen(false)}>
-                                    Réserver une cuisinière <ArrowRight size={18} />
+                        <motion.div
+                            initial={{ opacity: 0, y: 24 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 16 }}
+                            transition={{ type: "spring", stiffness: 260, damping: 24, delay: 0.3 }}
+                            style={{ display: "flex", flexDirection: "column", gap: "12px", paddingBottom: "32px" }}
+                        >
+                            {authed ? (
+                                <Link href={dashboardHref} className="btn-primary" style={{ padding: "16px", fontSize: "16px", textDecoration: "none" }} onClick={() => setMenuOpen(false)}>
+                                    Mon espace
                                 </Link>
-                                <Link href="/login" className="mobile-menu-secondary" onClick={() => setMenuOpen(false)}>
-                                    Se connecter
-                                </Link>
-                            </>
-                        )}
-                    </div>
-                </div>
-            )}
+                            ) : (
+                                <>
+                                    <Link href="/cooks" className="btn-primary" style={{ padding: "16px", fontSize: "16px", textDecoration: "none" }} onClick={() => setMenuOpen(false)}>
+                                        Réserver une cuisinière <ArrowRight size={18} />
+                                    </Link>
+                                    <Link href="/login" className="mobile-menu-secondary" onClick={() => setMenuOpen(false)}>
+                                        Se connecter
+                                    </Link>
+                                </>
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 }
