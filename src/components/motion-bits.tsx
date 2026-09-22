@@ -1,7 +1,59 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion, useMotionValue, useScroll, useSpring } from "motion/react";
+import { motion, useMotionTemplate, useMotionValue, useScroll, useSpring } from "motion/react";
+
+/** Generic viewport reveal: fades and rises with a spring when scrolled into
+ *  view. Client component, safe to drop inside server pages. */
+export function Reveal({ children, delay = 0, y = 40 }: { children: React.ReactNode; delay?: number; y?: number }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ type: "spring", stiffness: 100, damping: 17, delay }}
+        >
+            {children}
+        </motion.div>
+    );
+}
+
+/** 3D tilt with a moving glare: the card leans toward the cursor like a
+ *  physical card and a soft light sweep follows the pointer. */
+export function TiltCard({ children, max = 7 }: { children: React.ReactNode; max?: number }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const rx = useMotionValue(0);
+    const ry = useMotionValue(0);
+    const srx = useSpring(rx, { stiffness: 200, damping: 20 });
+    const sry = useSpring(ry, { stiffness: 200, damping: 20 });
+    const gx = useMotionValue(50);
+    const gy = useMotionValue(50);
+    const glare = useMotionTemplate`radial-gradient(circle at ${gx}% ${gy}%, rgba(255,255,255,0.16), transparent 62%)`;
+
+    return (
+        <motion.div
+            ref={ref}
+            style={{ rotateX: srx, rotateY: sry, transformPerspective: 900, position: "relative" }}
+            onPointerMove={(e) => {
+                const r = ref.current?.getBoundingClientRect();
+                if (!r) return;
+                const px = (e.clientX - r.x) / r.width;
+                const py = (e.clientY - r.y) / r.height;
+                ry.set((px - 0.5) * 2 * max);
+                rx.set(-(py - 0.5) * 2 * max);
+                gx.set(px * 100);
+                gy.set(py * 100);
+            }}
+            onPointerLeave={() => {
+                rx.set(0);
+                ry.set(0);
+            }}
+        >
+            {children}
+            <motion.div aria-hidden="true" style={{ position: "absolute", inset: 0, background: glare, pointerEvents: "none", borderRadius: "24px", opacity: 0.9 }} />
+        </motion.div>
+    );
+}
 
 /** Thin saffron progress bar pinned above everything, driven by page scroll. */
 export function ScrollProgressBar() {

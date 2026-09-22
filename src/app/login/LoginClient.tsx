@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "motion/react";
 import BrandMark from "@/components/BrandMark";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -22,15 +23,24 @@ export default function LoginClient({ initialError, next }: { initialError: stri
 
     return (
         <div style={{ minHeight: "100vh", display: "flex", backgroundColor: "var(--bg-base)" }}>
-            {/* Left Panel - Image */}
-            <div style={{ flex: 1, position: "relative" }} className="hidden md:block">
-                <div style={{ position: "absolute", inset: 0, backgroundImage: "url('/tunisian-feast-platter.jpg')", backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.9)" }} />
+            {/* Left Panel - Image, slow Ken Burns drift */}
+            <div style={{ flex: 1, position: "relative", overflow: "hidden" }} className="hidden md:block">
+                <motion.div
+                    initial={{ scale: 1 }}
+                    animate={{ scale: 1.09 }}
+                    transition={{ duration: 22, ease: "linear", repeat: Infinity, repeatType: "mirror" }}
+                    style={{ position: "absolute", inset: 0, backgroundImage: "url('/tunisian-feast-platter.jpg')", backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.9)" }}
+                />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(0,0,0,0) 0%, var(--bg-base) 100%)" }} />
             </div>
 
             {/* Right Panel - Form */}
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px" }}>
-                <div style={{ maxWidth: "400px", width: "100%" }}>
+                <motion.div
+                    initial={{ opacity: 0, y: 32 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ type: "spring", stiffness: 110, damping: 18 }}
+                    style={{ maxWidth: "400px", width: "100%" }}>
                     <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "40px", justifyContent: "center" }}>
                         <BrandMark size={56} />
                     </div>
@@ -68,7 +78,7 @@ export default function LoginClient({ initialError, next }: { initialError: stri
                     <p style={{ textAlign: "center", marginTop: "32px", fontSize: "14px", color: "var(--text-muted)" }}>
                         Besoin d’un compte ? <Link href="/signup" style={{ color: "var(--brand-primary)", fontWeight: 700, textDecoration: "none" }}>S’inscrire</Link>
                     </p>
-                </div>
+                </motion.div>
             </div>
         </div>
     );

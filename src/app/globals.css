@@ -531,17 +531,7 @@ html[data-theme="dark"] .logo-when-dark {
   margin-bottom: -0.12em;
 }
 
-.word-rise {
-  display: inline-block;
-  transform: translateY(110%);
-  animation: word-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes word-rise {
-  to {
-    transform: translateY(0);
-  }
-}
+/* (word rise + blur-in now lives in Motion — see Rise in LandingClient.tsx) */
 
 /* ─── Curtain image reveal on scroll (pairs with .reveal / .visible) ─── */
 .reveal-img {

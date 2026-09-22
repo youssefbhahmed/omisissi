@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { MapPin, Check, ArrowLeft, ChefHat, Star, Clock, Settings } from "lucide-react";
 import Link from "next/link";
 import BookingWidget from "./BookingWidget";
+import { Reveal } from "@/components/motion-bits";
 import { normalizeStringArray, type Dish, type Review } from "@/lib/types";
 import { categoryFr } from "@/lib/labels";
 
@@ -124,6 +125,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
             <div style={{ gap: "40px" }} className="grid grid-cols-1 lg:grid-cols-[1fr_340px]">
                 {/* Left Column */}
                 <div>
+                    <Reveal y={28}>
                     <div style={{ position: "relative", height: "320px", borderRadius: "24px", overflow: "hidden", marginBottom: "32px", border: "1px solid var(--border-light)" }}>
                         <img src={cook.img} alt={cook.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%)" }} />
@@ -141,12 +143,16 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                             <h1 className="heading-font" style={{ fontSize: "42px", fontWeight: 800, color: "white", margin: 0, letterSpacing: "-1px" }}>{cook.name}</h1>
                         </div>
                     </div>
+                    </Reveal>
 
+                    <Reveal delay={0.08}>
                     <div style={{ marginBottom: "40px", paddingBottom: "32px", borderBottom: "1px solid var(--border-light)" }}>
                         <h2 className="heading-font" style={{ fontSize: "24px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "16px" }}>À propos de {cook.name.split(' ')[0]}</h2>
                         <p style={{ fontSize: "16px", lineHeight: 1.7, color: "var(--text-body)" }}>{cook.bio}</p>
                     </div>
+                    </Reveal>
 
+                    <Reveal delay={0.05}>
                     <div style={{ marginBottom: "40px", paddingBottom: "32px", borderBottom: "1px solid var(--border-light)" }}>
                         <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "16px" }}>Spécialités</h2>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
@@ -157,7 +163,9 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                             ))}
                         </div>
                     </div>
+                    </Reveal>
 
+                    <Reveal>
                     <div style={{ marginBottom: "40px", paddingBottom: "32px", borderBottom: "1px solid var(--border-light)" }}>
                         <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "16px" }}>
                             Tous les plats {rawDishes && rawDishes.length > 0 && <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--text-muted)" }}>({rawDishes.length})</span>}
@@ -209,7 +217,9 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                             </div>
                         )}
                     </div>
+                    </Reveal>
 
+                    <Reveal>
                     <div>
                         <h2 className="heading-font" style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-heading)", marginBottom: "16px", display: "flex", alignItems: "center", gap: "10px" }}>
                             Avis ({cook.reviews})
@@ -246,6 +256,7 @@ export default async function CookDetailsPage({ params }: { params: Promise<{ id
                             </div>
                         )}
                     </div>
+                    </Reveal>
                 </div>
 
                 {/* Right Column: Booking Widget (or profile tools when it's your own page) */}

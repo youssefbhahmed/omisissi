@@ -5,7 +5,7 @@ import { animate, motion, useInView } from "motion/react";
 import SiteNav from "@/components/SiteNav";
 import SmoothScroll from "@/components/SmoothScroll";
 import TunisiaMap from "@/components/TunisiaMap";
-import { Magnetic, ScrollProgressBar } from "@/components/motion-bits";
+import { Magnetic, ScrollProgressBar, TiltCard } from "@/components/motion-bits";
 import Link from "next/link";
 import {
   Star,
@@ -102,11 +102,19 @@ function CountUp({ to, prefix = "", suffix = "" }: { to: number; prefix?: string
   return <span ref={ref}>{prefix}{val.toLocaleString("fr-FR")}{suffix}</span>;
 }
 
-/** One word of the headline, rising out of an overflow mask */
+/** One word of the headline, rising out of an overflow mask while
+ *  sharpening from a blur — Motion version of the old CSS keyframe. */
 function Rise({ children, d = 0 }: { children: React.ReactNode; d?: number }) {
   return (
     <span className="word-mask">
-      <span className="word-rise" style={{ animationDelay: `${d}s` }}>{children}</span>
+      <motion.span
+        style={{ display: "inline-block" }}
+        initial={{ y: "112%", opacity: 0.4, filter: "blur(7px)" }}
+        animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+        transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1], delay: d }}
+      >
+        {children}
+      </motion.span>
     </span>
   );
 }
@@ -386,9 +394,15 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
             className="logo-when-dark"
             style={{ width: "min(190px, 45vw)", height: "auto", margin: "0 auto 44px auto" }}
           />
-          <p className="display-font statement">
+          <motion.p
+            className="display-font statement"
+            initial={{ opacity: 0, y: 46, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          >
             Un plat partagé,<br />un souvenir <em className="display-italic-ink">créé</em>.
-          </p>
+          </motion.p>
           <p className="eyebrow" style={{ marginTop: "28px" }}>— La table tunisienne, chez vous —</p>
         </div>
 
@@ -466,9 +480,9 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
               whileInView={{ opacity: 1, y: 0, rotate: 0 }}
               viewport={{ once: true, amount: 0.25 }}
               transition={{ type: "spring", stiffness: 90, damping: 14, delay: i * 0.12 }}
-              whileHover={{ y: -10, rotate: i % 2 ? 0.8 : -0.8, scale: 1.025 }}
               whileTap={{ scale: 0.97 }}
             >
+            <TiltCard>
             <Link href={cook.href} className="card" style={{ cursor: "pointer", display: "block", textDecoration: "none", color: "inherit" }}>
               <div style={{ position: "relative", height: "240px", overflow: "hidden" }}>
                 <img src={cook.img} alt={cook.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }} />
@@ -498,6 +512,7 @@ export default function LandingClient({ cooks }: { cooks: LandingCook[] }) {
                 <p style={{ margin: 0, fontSize: "14px", color: "var(--text-body)" }}>{cook.bio}</p>
               </div>
             </Link>
+            </TiltCard>
             </motion.div>
           ))}
         </div>
